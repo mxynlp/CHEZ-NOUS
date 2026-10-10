@@ -251,13 +251,16 @@ function allExp() {
   return (_ae = out);
 }
 const isShared = e => e._loc !== 'priv' && e.mode !== 'perso';
+/* charge fixe = générée automatiquement, ou reconnue à son identifiant / sa catégorie (même si l'étiquette a été perdue en la modifiant à la main) */
+const FX_CATS = ['rent', 'energy', 'internet', 'subs'];
+const isFx = e => !!e && (!!e.auto || !!e.fixedId || /^fx_/.test(String(e.id || '')) || FX_CATS.includes(e.cat));
 function netM(only) { // > 0 : Sasha doit de l'argent à Maxym ; only = 'fixed' | 'other' pour détailler
   let n = 0;
   for (const e of allExp()) {
     if (!isShared(e)) continue;
-    if (e.auto && e.settled) continue;                 // part déjà donnée : plus rien à régler
-    if (only === 'fixed' && !e.auto) continue;
-    if (only === 'other' && e.auto) continue;
+    if (e.settled) continue;                           // part déjà donnée : plus rien à régler
+    if (only === 'fixed' && !isFx(e)) continue;
+    if (only === 'other' && isFx(e)) continue;
     if (e.kind === 'settle') { n += e.from === 'maxym' ? e.amount : -e.amount; continue; }
     const sh = e.shares || { maxym: e.amount / 2, sasha: e.amount / 2 };
     n += (e.paidBy === 'maxym' ? e.amount : 0) - (sh.maxym || 0);
