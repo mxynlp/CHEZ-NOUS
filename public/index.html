@@ -1085,11 +1085,9 @@ function vHome() {
     <div class="strip">${[0, 1, 2, 3, 4, 5, 6].map(i => { const d = addDays(w, i); return `<button class="sd1${d === t ? ' today' : ''}${i >= 5 ? ' we' : ''}" data-act="go-day" data-d="${d}" aria-label="${esc(dayLong(d))}">${DAYL[i]}<b>${pd(d).getDate()}</b>${miniRows(d)}</button>`; }).join('')}</div>
     <p class="mut sm" style="margin-top:12px">Haut : ${NAMES[PIDS[0]]} · bas : ${NAMES[PIDS[1]]}${wkTog ? ` · <b style="color:var(--accent-ink)">${wkTog} moment${wkTog > 1 ? 's' : ''} ensemble</b> à la maison` : ''}</p></div>`;
   /* budget */
-  const bal = myBalance(), nf = nextFixed(), mt = ymOf(t);
-  const balTxt = Math.abs(bal) < 0.5 ? `Vous êtes <span style="color:var(--accent-ink)">quittes</span>` : bal > 0 ? `${esc(NAMES[o])} te doit <span style="color:var(--accent-ink)">${fmt(bal)}</span>` : `Tu dois <span style="color:var(--accent-ink)">${fmt(-bal)}</span> à ${esc(NAMES[o])}`;
+  const nf = nextFixed(), mt = ymOf(t);
   const budCard = `<div class="card"><h3>${ico('wallet', 18)}Budget du mois<span class="sp"></span><button class="lk" data-act="go-bud">Ouvrir</button></h3>
-    <div class="bal"><div class="grow"><div class="big" style="font-size:27px">${balTxt}</div>${typeof balDetail === 'function' ? balDetail() : ''}<div class="mut sm" style="margin-top:6px">Dépenses communes en ${esc(fmtD(mt + '-01', { month: 'long' }))} : <b>${fmt(commonTotal(mt))}</b></div></div>${Math.abs(bal) >= 0.5 ? `<button class="btn btn-p btn-sm" data-act="settle-open">Régler</button>` : ''}</div>
-    ${fxHomeBtn(mt)}
+    <div class="bal"><div class="grow"><div class="big" style="font-size:27px">${fmt(commonTotal(mt))}</div><div class="mut sm" style="margin-top:6px">Dépenses communes en ${esc(fmtD(mt + '-01', { month: 'long' }))}</div></div></div>
     ${nf ? `<div class="li" style="margin-top:12px;border-top:1px solid var(--line)"><span class="ic sm" style="--pc:${esc(catById(nf.cat).color)}">${esc(catById(nf.cat).icon)}</span><span class="grow"><div class="t">${esc(nf.label)}</div><div class="s">Prochain prélèvement ${relDays(nf.date)} · ${esc(fmtD(nf.date, { day: 'numeric', month: 'short' }))}</div></span><span class="amount">${fmt(nf.amount)}</span></div>` : ''}</div>`;
   const notes = [];
   if (A.canWrite === false) notes.push(nt('ro', `<div class="note"><div class="grow"><b>Lecture seule</b>Demande à Maxym de t’inviter par e-mail comme éditeur (menu Partager, sans lien public) pour modifier les données.</div></div>`));
@@ -1641,18 +1639,16 @@ function balDetail() {
   return rows.length > 1 ? `<div class="sm mut" style="margin-top:6px">${rows.join('')}</div>` : '';
 }
 function budOver() {
-  const m = A.bud.month, c = cfg(), o = otherP(A.me), bal = myBalance();
+  const m = A.bud.month, c = cfg(), o = otherP(A.me);
   const shared = monthExp(m).filter(isShared), total = commonTotal(m), prevT = commonTotal(addM(m, -1));
   const byCat = {}; shared.forEach(e => { byCat[e.cat] = (byCat[e.cat] || 0) + e.amount; });
   const parts = Object.entries(byCat).map(([id, v]) => Object.assign({}, catById(id), { v: r2(v) })).sort((a, b) => b.v - a.v);
   let cmp = '';
   if (prevT > 0 && total > 0) { const pc = Math.round((total - prevT) / prevT * 100); cmp = `<span class="pill ${pc > 10 ? 'warn' : pc < 0 ? 'ok' : ''}">${pc > 0 ? '+' : ''}${pc} % par rapport à ${esc(fmtD(addM(m, -1) + '-01', { month: 'long' }))}</span>`; }
-  const balTxt = Math.abs(bal) < 0.5 ? `Vous êtes <span style="color:var(--accent-ink)">quittes</span>` : bal > 0 ? `${esc(NAMES[o])} te doit <span style="color:var(--accent-ink)">${fmt(bal)}</span>` : `Tu dois <span style="color:var(--accent-ink)">${fmt(-bal)}</span> à ${esc(NAMES[o])}`;
   const tg = Object.entries(c.targets).filter(([, v]) => v > 0), rn = c.rent, rest = Math.max(0, r2(rn.amount - rn.apl));
   const hist = [5, 4, 3, 2, 1, 0].map(i => { const mm = addM(m, -i); return { m: mm, v: commonTotal(mm) }; }), mx = Math.max(1, ...hist.map(h => h.v));
   const splitTxt = f => f.pct === 50 ? '50 / 50' : `${f.pct} / ${100 - f.pct}`;
   return `${!c.amountsOk ? `<div class="note"><div class="grow"><b>Montants d’exemple</b>Le loyer et les charges fixes sont pré-remplis avec des valeurs indicatives. Touche-les pour mettre les vrais montants.<div style="margin-top:8px"><button class="btn btn-s btn-sm" data-act="amounts-ok">C’est déjà bon</button></div></div></div>` : ''}
-    <div class="card"><h3>${ico('swap', 18)}Solde du foyer</h3><div class="bal"><div class="grow"><div class="big" style="font-size:27px">${balTxt}</div>${balDetail()}</div>${Math.abs(bal) >= 0.5 ? `<button class="btn btn-p" data-act="settle-open">Régler</button>` : `<span class="pill ok">${icoI('check', 14)}À jour</span>`}</div></div>
     <div class="card"><h3>${ico('wallet', 18)}Dépenses communes</h3>
       <div class="row" style="flex-wrap:wrap;gap:8px"><div class="big">${fmt(total)}</div><span class="grow"></span>${cmp}</div>
       ${parts.length ? `<div class="donutw" style="margin-top:14px">${donut(parts, total)}<div class="leg">${parts.map(p => `<div class="legi"><i style="background:${esc(p.color)}"></i><span class="grow">${esc(p.icon)} ${esc(p.label)}</span><b class="amount sm">${fmt(p.v)}</b><span class="mut sm" style="width:38px;text-align:right">${Math.round(p.v / total * 100)} %</span></div>`).join('')}</div></div>` : emptyH('wallet', 'Pas encore de dépense commune', 'Ajoute une dépense avec le bouton +, elle apparaîtra ici.')}</div>
@@ -1663,7 +1659,7 @@ function budOver() {
       <div class="calc"><div class="r"><span>Loyer</span><b>${fmt(rn.amount)}</b></div><div class="r"><span>APL déduite</span><b>− ${fmt(rn.apl)}</b></div><div class="r t"><span>Reste à charge</span><b>${fmt(rest)}</b></div><div class="r sub"><span>Part de chacun (50 / 50)</span><b>${fmt(rest / 2)}</b></div></div>
       <p class="mut sm" style="margin-top:10px">Prélevé le ${rn.day}</p></div></div>
     <div class="card"><h3>${ico('repeat', 18)}Charges fixes<span class="sp"></span><button class="lk" data-act="fx-edit" data-id="">Ajouter</button></h3>
-      ${c.fixed.map(f => { const cat = catById(f.cat); return `<button class="li" data-act="fx-edit" data-id="${esc(f.id)}"><span class="ic sm" style="--pc:${esc(cat.color)}">${esc(cat.icon)}</span><span class="grow"><div class="t">${esc(f.label)}</div><div class="s">Le ${f.day} · ${splitTxt(f)}</div></span><span class="amtc"><span class="amount">${fmt(f.amount)}</span><span class="owe">${esc(fxPart(f))}</span></span></button>`; }).join('') || '<p class="mut sm">Aucune charge fixe.</p>'}${fxMonthBtn(m)}</div>
+      ${c.fixed.map(f => { const cat = catById(f.cat); return `<button class="li" data-act="fx-edit" data-id="${esc(f.id)}"><span class="ic sm" style="--pc:${esc(cat.color)}">${esc(cat.icon)}</span><span class="grow"><div class="t">${esc(f.label)}</div><div class="s">Le ${f.day} · ${splitTxt(f)}</div></span><span class="amtc"><span class="amount">${fmt(f.amount)}</span><span class="owe">${esc(fxPart(f))}</span></span></button>`; }).join('') || '<p class="mut sm">Aucune charge fixe.</p>'}</div>
     <div class="card"><h3>${ico('cal', 18)}Historique</h3><div class="bars">${hist.map(h => `<button class="${h.m === m ? 'on' : ''}" data-act="bud-month" data-m="${h.m}" aria-label="${esc(monthLabel(h.m) + ' : ' + fmt(h.v))}"><span>${h.v ? Math.round(h.v) : ''}</span><i style="height:${Math.round(h.v / mx * 70) + 4}px"></i><span>${esc(fmtD(h.m + '-01', { month: 'short' }).replace('.', ''))}</span></button>`).join('')}</div></div>
     <div class="btns"><button class="btn btn-s btn-b" data-act="bud-csv">${ico('download', 20)}Exporter ${esc(fmtD(m + '-01', { month: 'long' }))} en CSV</button></div>`;
 }
@@ -1681,17 +1677,16 @@ function txFiltered() {
 /* ce que l'autre doit : part de celui qui n'a pas payé */
 function oweTxt(e) {
   if (e.kind === 'settle' || !isShared(e) || !(e.amount > 0)) return '';
-  if (e.settled) return 'Part réglée ✓';
   const sh = e.shares || { maxym: e.amount / 2, sasha: e.amount / 2 }, other = otherP(e.paidBy), v = r2(sh[other] || 0);
   if (v < 0.01) return '';
-  return e.paidBy === A.me ? NAMES[other] + ' te doit ' + fmt(v) : 'Tu dois ' + fmt(v);
+  return e.paidBy === A.me ? 'Part de ' + NAMES[other] + ' ' + fmt(v) : 'Ta part ' + fmt(v);
 }
 function updOwe() {
   const n = document.getElementById('ex-owe'); if (!n) return;
   const a = num(val('ex-amt')) || 0, pct = num(val('ex-pct')), mode = F.mode;
   if (mode === 'perso' || !(a > 0)) { n.textContent = mode === 'perso' ? 'Dépense perso : rien à partager.' : ''; return; }
   const sh = buildShares(a, mode, F.paidBy, isFinite(pct) ? pct : 50), other = otherP(F.paidBy), v = r2(sh[other] || 0);
-  n.textContent = v < 0.01 ? '' : F.paidBy === A.me ? NAMES[other] + ' te doit ' + fmt(v) : 'Tu dois ' + fmt(v) + ' à ' + NAMES[F.paidBy];
+  n.textContent = v < 0.01 ? '' : F.paidBy === A.me ? 'Part de ' + NAMES[other] + ' : ' + fmt(v) : 'Ta part : ' + fmt(v);
 }
 /* Sasha règle toutes les charges fixes : on montre simplement la part de Maxym à lui donner */
 function fxPart(f) { const v = r2(f.amount * (f.pct == null ? 50 : f.pct) / 100); return (A.me === 'maxym' ? 'Ta part ' : 'Part de ' + NAMES.maxym + ' ') + fmt(v); }
@@ -1795,7 +1790,6 @@ function openExpense(id, pre) {
     <div class="row" style="align-items:flex-start"><div class="grow">${lbl('Date')}<input class="inp" type="date" id="ex-date" value="${esc(ex ? ex.date : (pre.date || today()))}"></div></div>
     ${lbl('Note')}<input class="inp" id="ex-note" maxlength="80" placeholder="Facultatif" value="${esc(ex ? ex.note || '' : '')}" autocomplete="off">
     ${rcptField(ex)}
-    ${ex && ex.kind !== 'settle' && isShared(ex) ? `<div class="btns"><button class="btn btn-s btn-b" data-act="fx-paid" data-id="${esc(id)}">${ex.settled ? 'Part réglée : remettre à régler' : (ex.paidBy === A.me ? NAMES[otherP(A.me)] + ' m’a donné sa part' : 'J’ai donné ma part')}</button></div>` : ''}
     <div class="btns ${ex ? 'two' : ''}">${ex ? `<button class="btn btn-d" data-act="exp-del-ask" data-id="${esc(id)}">Supprimer</button>` : ''}<button class="btn btn-p" data-act="exp-save">${ex ? 'Enregistrer' : 'Ajouter'}</button></div>`, { focus: ex ? '' : 'ex-amt' });
   setTimeout(() => { updatePct('ex-pct'); updOwe(); }, 40);
 }

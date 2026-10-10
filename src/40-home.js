@@ -27,11 +27,9 @@ function vHome() {
     <div class="strip">${[0, 1, 2, 3, 4, 5, 6].map(i => { const d = addDays(w, i); return `<button class="sd1${d === t ? ' today' : ''}${i >= 5 ? ' we' : ''}" data-act="go-day" data-d="${d}" aria-label="${esc(dayLong(d))}">${DAYL[i]}<b>${pd(d).getDate()}</b>${miniRows(d)}</button>`; }).join('')}</div>
     <p class="mut sm" style="margin-top:12px">Haut : ${NAMES[PIDS[0]]} · bas : ${NAMES[PIDS[1]]}${wkTog ? ` · <b style="color:var(--accent-ink)">${wkTog} moment${wkTog > 1 ? 's' : ''} ensemble</b> à la maison` : ''}</p></div>`;
   /* budget */
-  const bal = myBalance(), nf = nextFixed(), mt = ymOf(t);
-  const balTxt = Math.abs(bal) < 0.5 ? `Vous êtes <span style="color:var(--accent-ink)">quittes</span>` : bal > 0 ? `${esc(NAMES[o])} te doit <span style="color:var(--accent-ink)">${fmt(bal)}</span>` : `Tu dois <span style="color:var(--accent-ink)">${fmt(-bal)}</span> à ${esc(NAMES[o])}`;
+  const nf = nextFixed(), mt = ymOf(t);
   const budCard = `<div class="card"><h3>${ico('wallet', 18)}Budget du mois<span class="sp"></span><button class="lk" data-act="go-bud">Ouvrir</button></h3>
-    <div class="bal"><div class="grow"><div class="big" style="font-size:27px">${balTxt}</div>${typeof balDetail === 'function' ? balDetail() : ''}<div class="mut sm" style="margin-top:6px">Dépenses communes en ${esc(fmtD(mt + '-01', { month: 'long' }))} : <b>${fmt(commonTotal(mt))}</b></div></div>${Math.abs(bal) >= 0.5 ? `<button class="btn btn-p btn-sm" data-act="settle-open">Régler</button>` : ''}</div>
-    ${fxHomeBtn(mt)}
+    <div class="bal"><div class="grow"><div class="big" style="font-size:27px">${fmt(commonTotal(mt))}</div><div class="mut sm" style="margin-top:6px">Dépenses communes en ${esc(fmtD(mt + '-01', { month: 'long' }))}</div></div></div>
     ${nf ? `<div class="li" style="margin-top:12px;border-top:1px solid var(--line)"><span class="ic sm" style="--pc:${esc(catById(nf.cat).color)}">${esc(catById(nf.cat).icon)}</span><span class="grow"><div class="t">${esc(nf.label)}</div><div class="s">Prochain prélèvement ${relDays(nf.date)} · ${esc(fmtD(nf.date, { day: 'numeric', month: 'short' }))}</div></span><span class="amount">${fmt(nf.amount)}</span></div>` : ''}</div>`;
   const notes = [];
   if (A.canWrite === false) notes.push(nt('ro', `<div class="note"><div class="grow"><b>Lecture seule</b>Demande à Maxym de t’inviter par e-mail comme éditeur (menu Partager, sans lien public) pour modifier les données.</div></div>`));
