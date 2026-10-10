@@ -251,10 +251,13 @@ function allExp() {
   return (_ae = out);
 }
 const isShared = e => e._loc !== 'priv' && e.mode !== 'perso';
-function netM() { // > 0 : Sasha doit de l'argent à Maxym
+function netM(only) { // > 0 : Sasha doit de l'argent à Maxym ; only = 'fixed' | 'other' pour détailler
   let n = 0;
   for (const e of allExp()) {
     if (!isShared(e)) continue;
+    if (e.auto && e.settled) continue;                 // part déjà donnée : plus rien à régler
+    if (only === 'fixed' && !e.auto) continue;
+    if (only === 'other' && e.auto) continue;
     if (e.kind === 'settle') { n += e.from === 'maxym' ? e.amount : -e.amount; continue; }
     const sh = e.shares || { maxym: e.amount / 2, sasha: e.amount / 2 };
     n += (e.paidBy === 'maxym' ? e.amount : 0) - (sh.maxym || 0);
@@ -262,6 +265,7 @@ function netM() { // > 0 : Sasha doit de l'argent à Maxym
   return r2(n);
 }
 const myBalance = () => A.me === 'maxym' ? netM() : -netM();
+const myPart = k => A.me === 'maxym' ? netM(k) : -netM(k);
 const monthExp = m => allExp().filter(e => e.kind !== 'settle' && e.date && e.date.slice(0, 7) === m);
 const commonTotal = m => r2(monthExp(m).filter(isShared).reduce((a, e) => a + e.amount, 0));
 function buildShares(amount, mode, paidBy, pct) {
