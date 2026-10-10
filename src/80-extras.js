@@ -40,7 +40,7 @@ ACT['tpl-save'] = async () => {
 };
 ACT['tpl-del'] = d => { const prev = D.templates[d.id]; act(() => del('templates', d.id, true), 'Modèle supprimé').then(() => { if (prev) offerUndo(() => put('templates', d.id, prev), 'Modèle supprimé'); }); };
 ACT['tpl-apply-week'] = d => { closeSheet(); const w = monday(A.plan.date); applyTpl(d.id, [0, 1, 2, 3, 4, 5, 6].map(i => addDays(w, i))); };
-ACT['tpl-apply-sel'] = d => { const days = selRange().filter(x => !(F.noWE && wdi(x) >= 5)); closeSheet(); applyTpl(d.id, days).then(() => { SEL.on = false; SEL.a = SEL.b = null; schedule(); }); };
+ACT['tpl-apply-sel'] = d => { const days = selDays().filter(x => !(F.noWE && wdi(x) >= 5)); closeSheet(); applyTpl(d.id, days).then(() => { selReset(); schedule(); }); };
 const tplChips = () => { const l = tplList(); return l.length ? `${lbl('Ou appliquer un modèle')}<div class="chips scroll">${l.map(t => `<button type="button" class="chip" data-act="tpl-apply-sel" data-id="${esc(t.id)}">${esc(t.name)}</button>`).join('')}</div>` : ''; };
 
 /* --- Tâches du foyer --- */

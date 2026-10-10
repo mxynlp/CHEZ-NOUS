@@ -384,4 +384,22 @@ textarea.inp{padding:12px 14px;min-height:84px;resize:vertical}
 .chk:active{background:var(--sage);border-color:var(--sage);color:var(--on-sage);transform:scale(.9)}
 .chk.late{border-color:var(--warn)}
 .wkrow{flex-wrap:wrap}
+#selbar{position:fixed;left:0;right:0;bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px) + 10px);z-index:45;display:none;justify-content:center;padding:0 12px;pointer-events:none}
+#selbar.on{display:flex}
+.selbar-in{pointer-events:auto;display:flex;align-items:center;gap:10px;width:100%;max-width:540px;padding:10px;border-radius:28px;background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(1.6);backdrop-filter:blur(24px) saturate(1.6);box-shadow:0 12px 36px rgba(20,50,38,.22);border:1px solid var(--line);animation:fade .25s var(--ease)}
+.selbar-t{flex:1;min-width:0;display:flex;flex-direction:column;text-align:center;line-height:1.2}
+.selbar-t b{font-size:16px}.selbar-t span{font-size:12px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.selbar-in .btn{min-height:46px;padding:0 16px;flex:none}
+body.selmode #fab{display:none}
+body.selmode .page{padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px) + 130px)}
+.selm{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.month.selm{grid-template-columns:30px repeat(7,minmax(0,1fr))}
+.mw,.mh[data-act]{border-radius:10px;font-size:12px;font-weight:700;color:var(--accent-ink);background:color-mix(in srgb,var(--mint) 55%,transparent);display:grid;place-items:center;min-height:30px}
+.mw{min-height:66px;font-size:11px}
+.mh[data-act]{min-height:34px}
+.mc.sel,.dh.sel{box-shadow:inset 0 0 0 2.5px var(--sage)}
+@media (min-width:920px){#selbar{left:236px;bottom:22px}}
+.selcard{padding:12px 14px}
+.selcard .chip{padding:0 13px;min-height:38px;font-size:14px}
+.selcard .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
 </style>

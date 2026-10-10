@@ -104,7 +104,7 @@ function render() {
   const V ={ home: vHome, plan: vPlan, meal: vMeal, bud: vBud };
   let html;
   try { html = V[A.tab](); } catch (e) { console.error(e); html = `<div class="page">${hdr('Oups', '')}<div class="content"><div class="note"><div class="grow"><b>Un affichage a échoué</b>Recharge la page. (${esc(e.message)})</div></div></div></div>`; }
-  setView(html); updateFab(); refreshSheet();
+  setView(html); updateFab(); refreshSheet(); if (typeof renderSelBar === 'function') renderSelBar();
 }
 
 /* ---------- 12. Événements globaux ---------- */
@@ -136,7 +136,7 @@ function updatePct(id) {
 /* gestes : balayage horizontal pour changer de semaine / mois / jour */
 let tx0 = null;
 const swipeOK = t => !t.closest('input,textarea,select,.chips.scroll,.bars');
-document.addEventListener('touchstart', e => { const v = e.target.closest('#view'); if (!v || !swipeOK(e.target) || SH) { tx0 = null; return; } tx0 = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }, { passive: true });
+document.addEventListener('touchstart', e => { const v = e.target.closest('#view'); if (!v || !swipeOK(e.target) || SH || (typeof SEL !== 'undefined' && SEL.on)) { tx0 = null; return; } tx0 = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }, { passive: true });
 document.addEventListener('touchend', e => {
   if (!tx0) return; const t = e.changedTouches[0], dx = t.clientX - tx0.x, dy = t.clientY - tx0.y; tx0 = null;
   if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.7) return;

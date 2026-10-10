@@ -1,18 +1,63 @@
 
 /* ---------- 9. Planning de présence : Mois > Semaine > Jour ---------- */
-/* sélection de plusieurs jours (comme l'app Calendrier) */
-const SEL = { on: false, a: null, b: null };
-const selRange = () => { if (!SEL.a) return []; const x = SEL.a, y = SEL.b || SEL.a, lo = x < y ? x : y, hi = x < y ? y : x, out = []; for (let d = lo; d <= hi && out.length < 400; d = addDays(d, 1)) out.push(d); return out; };
-const selCls = d => { if (!SEL.on || !SEL.a) return ''; const r = selRange(); return r.includes(d) ? ' sel' + (d === r[0] ? ' s0' : '') + (d === r[r.length - 1] ? ' s1' : '') : ''; };
-const selBtn = () => `<button class="${SEL.on ? 'chip on' : 'ib'}" data-act="sel-toggle" aria-label="Sélectionner plusieurs jours">${SEL.on ? 'Terminer' : ico('check', 22)}</button>`;
+/* ---- Sélection de plusieurs jours (comme l'app Calendrier) ----
+   Un ensemble de dates : touche pour (dé)sélectionner, glisse pour peindre, appui long pour démarrer.
+   Touche un numéro de semaine (S41) ou une lettre (L, M…) pour tout choisir d'un coup. Persiste d'un mois / d'une semaine à l'autre. */
+const SEL = { on: false, set: new Set() };
+const selDays = () => [...SEL.set].sort();
+const selCls = d => SEL.on && SEL.set.has(d) ? ' sel' : '';
+const selReset = () => { SEL.on = false; SEL.set.clear(); };
+const selBtn = () => `<button class="chip${SEL.on ? ' on' : ''}" data-act="sel-toggle">${SEL.on ? 'Terminer' : ico('check', 16, 2.6) + 'Sélectionner'}</button>`;
+function selSummary() {
+  const r = selDays(), n = r.length; if (!n) return 'Touche ou fais glisser';
+  const f = d => fmtD(d, { weekday: 'short', day: 'numeric', month: 'short' });
+  if (diffDays(r[0], r[n - 1]) === n - 1) return n === 1 ? f(r[0]) : f(r[0]) + ' → ' + f(r[n - 1]);
+  const wk = new Set(r.map(d => monday(d))).size; return 'sur ' + wk + ' semaine' + (wk > 1 ? 's' : '');
+}
 function selCard() {
   if (!SEL.on) return '';
-  const r = selRange(), n = r.length;
-  const lab = n ? `${n} jour${n > 1 ? 's' : ''} · ${fmtD(r[0], { day: 'numeric', month: 'short' })}${n > 1 ? ' → ' + fmtD(r[n - 1], { day: 'numeric', month: 'short' }) : ''}` : 'Aucun jour choisi';
-  return `<div class="card selcard"><div class="row"><b class="grow">${esc(lab)}</b>${n ? `<button class="lk" data-act="sel-clear">Vider</button>` : ''}</div>
-    <p class="mut sm" style="margin:6px 0 12px">${n ? 'Touche un autre jour pour étendre, ou touche-le de nouveau pour recommencer.' : 'Touche le premier jour, puis le dernier. Pour une semaine entière, touche son lundi puis son dimanche.'}</p>
-    <div class="btns two"><button class="btn btn-s" data-act="sel-expand"${n ? '' : ' disabled'}>Semaines entières</button><button class="btn btn-p" data-act="sel-open"${n ? '' : ' disabled'}>Définir où</button></div></div>`;
+  const wk = A.plan.level === 'week';
+  return `<div class="card selcard"><div class="sm" style="font-weight:600">${wk ? 'Touche les jours. Les flèches changent de semaine sans perdre ta sélection.' : 'Touche ou fais glisser. Touche un numéro de semaine ou une lettre pour tout choisir.'}</div>
+    <div class="chips" style="margin-top:8px">${wk ? `<button class="chip" data-act="sel-weekview">Toute la semaine</button>` : `<button class="chip" data-act="sel-month">Tout le mois</button>`}<button class="chip" data-act="sel-expand">Semaines entières</button><button class="chip" data-act="sel-clear">Effacer</button></div></div>`;
 }
+function selBarHtml() {
+  const n = SEL.set.size;
+  return `<div class="selbar-in"><button class="btn btn-g" data-act="sel-cancel">Annuler</button><div class="selbar-t"><b>${n ? n + ' jour' + (n > 1 ? 's' : '') : 'Aucun jour'}</b><span>${esc(selSummary())}</span></div><button class="btn btn-p" data-act="sel-open"${n ? '' : ' disabled'}>Définir</button></div>`;
+}
+function renderSelBar() {
+  const el = document.getElementById('selbar'); if (!el) return;
+  if (SEL.on && A.tab !== 'plan') selReset();
+  document.body.classList.toggle('selmode', SEL.on);
+  el.classList.toggle('on', SEL.on); el.innerHTML = SEL.on ? selBarHtml() : '';
+}
+function selPaint(d, on) {
+  if (on) SEL.set.add(d); else SEL.set.delete(d);
+  document.querySelectorAll('[data-d="' + d + '"].mc, [data-d="' + d + '"].dh').forEach(x => x.classList.toggle('sel', on));
+  renderSelBar();
+}
+const selCells = '.mc[data-d],.dh[data-d]';
+let DRAG = null, LP = null, LPS = false;
+document.addEventListener('pointerdown', e => {
+  const c = e.target.closest && e.target.closest(selCells); if (!c || (e.button && e.button > 0)) return;
+  const d = c.dataset.d;
+  if (SEL.on) { DRAG = { on: !SEL.set.has(d), last: d }; selPaint(d, DRAG.on); return; }
+  if (A.tab === 'plan' && A.plan.level !== 'day' && !SH) {
+    LP = { x: e.clientX, y: e.clientY, d, t: setTimeout(() => { if (!LP) return; LP.fired = true; LPS = true; setTimeout(() => { LPS = false; }, 700); SEL.on = true; SEL.set.add(d); if (navigator.vibrate) { try { navigator.vibrate(10); } catch (er) { /* */ } } schedule(); }, 420) };
+  }
+});
+document.addEventListener('pointermove', e => {
+  if (DRAG) {
+    const el = document.elementFromPoint(e.clientX, e.clientY), c = el && el.closest && el.closest(selCells);
+    if (c && c.dataset.d !== DRAG.last) { const a = DRAG.last, b = c.dataset.d, lo = a < b ? a : b, hi = a < b ? b : a; for (let x = lo, i = 0; x <= hi && i < 120; x = addDays(x, 1), i++) selPaint(x, DRAG.on); DRAG.last = b; }
+  } else if (LP && !LP.fired && Math.hypot(e.clientX - LP.x, e.clientY - LP.y) > 10) { clearTimeout(LP.t); LP = null; }
+});
+const endPtr = () => { if (DRAG) { DRAG = null; schedule(); } if (LP) { clearTimeout(LP.t); LP = null; } };
+document.addEventListener('pointerup', endPtr); document.addEventListener('pointercancel', endPtr);
+document.addEventListener('click', e => {
+  if (LPS) { LPS = false; e.stopPropagation(); e.preventDefault(); return; }
+  if (!SEL.on || e.detail !== 0) return;               // clic clavier (Entrée / Espace) : le pointeur gère déjà souris et doigt
+  const c = e.target.closest && e.target.closest(selCells); if (c) { selPaint(c.dataset.d, !SEL.set.has(c.dataset.d)); schedule(); }
+}, true);
 const slotLbl = k => SLOTS.find(s => s.k === k).l;
 function vPlan() { const l = A.plan.level; return l === 'month' ? planMonth() : l === 'week' ? planWeek() : planDay(); }
 const levelSeg = () => `<div class="seg">${[['month', 'Mois'], ['week', 'Semaine'], ['day', 'Jour']].map(([k, l]) => `<button class="${A.plan.level === k ? 'on' : ''}" data-act="plan-level" data-v="${k}">${l}</button>`).join('')}</div>`;
@@ -26,23 +71,25 @@ function slotBtn(p, d, k) {
 
 /* --- vue Mois --- */
 function planMonth() {
-  const m = A.plan.month, t = today(), first = m + '-01', start = addDays(first, -wdi(first)), rows = Math.ceil((wdi(first) + dim(m)) / 7);
+  const m = A.plan.month, t = today(), first = m + '-01', start = addDays(first, -wdi(first)), rows = Math.ceil((wdi(first) + dim(m)) / 7), sm = SEL.on;
   let cells = '';
   for (let i = 0; i < rows * 7; i++) {
     const d = addDays(start, i), inM = ymOf(d) === m;
-    cells += `<button class="mc${inM ? '' : ' out'}${wdi(d) >= 5 ? ' we' : ''}${d === t ? ' today' : ''}${togetherCount(d) ? ' tg' : ''}${selCls(d)}" data-act="${SEL.on ? 'sel-day' : 'plan-week-of'}" data-d="${d}" aria-label="${esc(dayLong(d))}"><span class="n">${pd(d).getDate()}</span>${miniRows(d)}<span class="dots">${dotsFor(eventsOn(d))}</span></button>`;
+    if (sm && i % 7 === 0) cells += `<button class="mw" data-act="sel-week" data-d="${d}" aria-label="Semaine ${isoWeek(d)}">${isoWeek(d)}</button>`;
+    cells += `<button class="mc${inM ? '' : ' out'}${wdi(d) >= 5 ? ' we' : ''}${d === t ? ' today' : ''}${togetherCount(d) ? ' tg' : ''}${selCls(d)}"${sm ? '' : ' data-act="plan-week-of"'} data-d="${d}" aria-label="${esc(dayLong(d))}"><span class="n">${pd(d).getDate()}</span>${miniRows(d)}<span class="dots">${dotsFor(eventsOn(d))}</span></button>`;
   }
+  const mhead = sm ? `<div class="mh"></div>` + DAYL.map((l, i) => `<button class="mh" data-act="sel-wd" data-i="${i}">${l}</button>`).join('') : DAYL.map(l => `<div class="mh">${l}</div>`).join('');
   return `<div class="page">${hdr('Planning', '', { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', monthLabel(m)) })}<div class="content">${selCard()}
-    <div class="card" style="padding:12px 10px"><div class="month">${DAYL.map(l => `<div class="mh">${l}</div>`).join('')}${cells}</div></div>
+    <div class="card" style="padding:12px 10px"><div class="month${sm ? ' selm' : ''}">${mhead}${cells}</div></div>
     <div class="legend"><span>${av('maxym', 18)}en haut</span><span>${av('sasha', 18)}en bas</span><span>trois segments : matin, après-midi, soir</span><span><i style="--pc:var(--mint);border-radius:50%"></i>cadre vert : ensemble à la maison</span></div>
-    ${legendH()}<p class="mut sm" style="margin-top:14px">${SEL.on ? '' : 'Touche un jour pour voir sa semaine. Le bouton ✓ en haut permet de choisir plusieurs jours d’un coup.'}</p></div></div>`;
+    ${legendH()}<p class="mut sm" style="margin-top:14px">${SEL.on ? '' : 'Touche un jour pour voir sa semaine. Pour en choisir plusieurs : « Sélectionner », ou appui long sur un jour.'}</p></div></div>`;
 }
 
 /* --- vue Semaine --- */
 function planWeek() {
   const w = monday(A.plan.date), t = today(), end = addDays(w, 6), days = [0, 1, 2, 3, 4, 5, 6].map(i => addDays(w, i)), order = [A.me, otherP(A.me)];
   const label = `${pd(w).getDate()}${ymOf(w) !== ymOf(end) ? ' ' + fmtD(w, { month: 'short' }) : ''} – ${fmtD(end, { day: 'numeric', month: 'long' })}`;
-  let g = `<div class="wk"><span></span>${days.map((d, i) => `<button class="dh${d === t ? ' today' : ''}${i >= 5 ? ' we' : ''}${selCls(d)}" data-act="${SEL.on ? 'sel-day' : 'plan-day-of'}" data-d="${d}" aria-label="${esc(dayLong(d))}">${DAYS[i]}<b>${pd(d).getDate()}</b><span class="dd">${dotsFor(eventsOn(d))}</span></button>`).join('')}`;
+  let g = `<div class="wk${SEL.on ? ' selm' : ''}"><span></span>${days.map((d, i) => `<button class="dh${d === t ? ' today' : ''}${i >= 5 ? ' we' : ''}${selCls(d)}"${SEL.on ? '' : ' data-act="plan-day-of"'} data-d="${d}" aria-label="${esc(dayLong(d))}">${DAYS[i]}<b>${pd(d).getDate()}</b><span class="dd">${dotsFor(eventsOn(d))}</span></button>`).join('')}`;
   order.forEach(p => { g += `<div class="pl">${av(p, 30)}</div>` + days.map((d, i) => `<div class="c3${i >= 5 ? ' we' : ''}">${SLOTS.map(s => slotBtn(p, d, s.k)).join('')}</div>`).join('') + '<div class="sp6"></div>'; });
   g += '</div>';
   let tog = 0; days.forEach(d => { tog += togetherCount(d); });
@@ -83,6 +130,7 @@ ACT['plan-prev'] = () => planStep(-1);
 ACT['plan-next'] = () => planStep(1);
 ACT['plan-today'] = () => { A.plan.date = today(); A.plan.month = ymOf(today()); A.anim = 'a-fade'; schedule(); };
 ACT['plan-level'] = d => {
+  if (d.v === 'day' && SEL.on) selReset();
   const P = A.plan, ord = { month: 0, week: 1, day: 2 }, v = d.v; if (v === P.level) return;
   if (v === 'month') P.month = ymOf(P.date);
   else if (P.level === 'month' && ymOf(P.date) !== P.month) P.date = ymOf(today()) === P.month ? today() : P.month + '-01';
@@ -165,20 +213,21 @@ ACT['ev-save'] = async () => {
 ACT['ev-del'] = async () => { const id = F.id; closeSheet(); await act(() => del('events', id), 'Événement supprimé'); };
 
 /* --- sélection multiple : actions --- */
-ACT['sel-toggle'] = () => { SEL.on = !SEL.on; SEL.a = SEL.b = null; if (SEL.on && A.plan.level === 'day') ACT['plan-level']({ v: 'week' }); else schedule(); };
-ACT['sel-clear'] = () => { SEL.a = SEL.b = null; schedule(); };
-ACT['sel-day'] = d => {
-  if (!SEL.a || (SEL.a && SEL.b)) { if (SEL.a && SEL.b && selRange().length === 1 && SEL.a === d.d) { SEL.a = SEL.b = null; } else { SEL.a = d.d; SEL.b = null; } }
-  else { SEL.b = d.d; }
-  schedule();
-};
-ACT['sel-expand'] = () => { const r = selRange(); if (!r.length) return; SEL.a = monday(r[0]); SEL.b = addDays(monday(r[r.length - 1]), 6); schedule(); };
+ACT['sel-toggle'] = () => { if (SEL.on) selReset(); else { SEL.on = true; SEL.set.clear(); if (A.plan.level === 'day') { A.plan.level = 'week'; } } schedule(); };
+ACT['sel-cancel'] = () => { selReset(); schedule(); };
+ACT['sel-clear'] = () => { SEL.set.clear(); schedule(); };
+const toggleMany = days => { const all = days.every(d => SEL.set.has(d)); days.forEach(d => { if (all) SEL.set.delete(d); else SEL.set.add(d); }); schedule(); };
+ACT['sel-week'] = d => toggleMany([0, 1, 2, 3, 4, 5, 6].map(i => addDays(d.d, i)));
+ACT['sel-weekview'] = () => { const w = monday(A.plan.date); toggleMany([0, 1, 2, 3, 4, 5, 6].map(i => addDays(w, i))); };
+ACT['sel-month'] = () => { const m = A.plan.month; toggleMany(Array.from({ length: dim(m) }, (_, i) => m + '-' + pad(i + 1))); };
+ACT['sel-wd'] = d => { const m = A.plan.month; toggleMany(Array.from({ length: dim(m) }, (_, i) => m + '-' + pad(i + 1)).filter(x => wdi(x) === +d.i)); };
+ACT['sel-expand'] = () => { const r = selDays(); if (!r.length) return; new Set(r.map(x => monday(x))).forEach(w => { for (let i = 0; i < 7; i++) SEL.set.add(addDays(w, i)); }); schedule(); };
 ACT['sel-open'] = () => {
-  const days = selRange(); if (!days.length) return;
+  const days = selDays(); if (!days.length) return;
   resetF({ who: 'both', s_m: true, s_a: true, s_s: true, noWE: false });
   openSheet(() => {
     const n = days.length, we = days.filter(d => wdi(d) >= 5).length;
-    return `<div class="st">${n} jour${n > 1 ? 's' : ''} d’un coup</div><div class="ss">${esc(fmtD(days[0], { weekday: 'short', day: 'numeric', month: 'long' }))}${n > 1 ? ' → ' + esc(fmtD(days[n - 1], { weekday: 'short', day: 'numeric', month: 'long' })) : ''}</div>
+    return `<div class="st">${n} jour${n > 1 ? 's' : ''} d’un coup</div><div class="ss">${esc(selSummary())}</div>
     ${lbl('Pour qui ?')}${segH('who', whoOpts(true), F.who)}
     ${lbl('Quels moments ?')}<div class="chips">${SLOTS.map(s => `<button type="button" class="chip${F['s_' + s.k.charAt(0)] ? ' on' : ''}" data-toggle-chip="s_${s.k.charAt(0)}">${s.l}</button>`).join('')}</div>
     ${we ? `<div style="margin-top:8px">${swH('noWE', 'Ignorer les week-ends (' + we + ')', F.noWE)}</div>` : ''}
@@ -195,11 +244,11 @@ ACT['sel-apply'] = async d => {
   const place = d.v, slots = SLOTS.filter(s => F['s_' + s.k.charAt(0)]).map(s => s.k);
   if (!slots.length) return toast('Choisis au moins un moment', 'err');
   const persons = F.who === 'both' ? PIDS.slice() : [F.who];
-  const days = selRange().filter(x => !(F.noWE && wdi(x) >= 5));
+  const days = selDays().filter(x => !(F.noWE && wdi(x) >= 5));
   if (!days.length) return toast('Aucun jour à modifier', 'err');
   closeSheet(); const snap = snapPresence(days);
   const ok = await act(async () => {
     for (let i = 0; i < days.length; i += 6) await Promise.all(days.slice(i, i + 6).map(day => { const upd = { date: day }; persons.forEach(p => { upd[p] = {}; slots.forEach(s => { upd[p][s] = place; }); }); return patch('presence', day, upd); }));
   }, place ? days.length + ' jour' + (days.length > 1 ? 's' : '') + ' mis à jour' : 'Créneaux effacés');
-  if (ok) { SEL.on = false; SEL.a = SEL.b = null; schedule(); offerUndo(restorePresence(snap), days.length + ' jour' + (days.length > 1 ? 's' : '') + ' modifié' + (days.length > 1 ? 's' : '')); }
+  if (ok) { selReset(); schedule(); offerUndo(restorePresence(snap), days.length + ' jour' + (days.length > 1 ? 's' : '') + ' modifié' + (days.length > 1 ? 's' : '')); }
 };
