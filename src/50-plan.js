@@ -1,5 +1,18 @@
 
 /* ---------- 9. Planning de présence : Mois > Semaine > Jour ---------- */
+/* sélection de plusieurs jours (comme l'app Calendrier) */
+const SEL = { on: false, a: null, b: null };
+const selRange = () => { if (!SEL.a) return []; const x = SEL.a, y = SEL.b || SEL.a, lo = x < y ? x : y, hi = x < y ? y : x, out = []; for (let d = lo; d <= hi && out.length < 400; d = addDays(d, 1)) out.push(d); return out; };
+const selCls = d => { if (!SEL.on || !SEL.a) return ''; const r = selRange(); return r.includes(d) ? ' sel' + (d === r[0] ? ' s0' : '') + (d === r[r.length - 1] ? ' s1' : '') : ''; };
+const selBtn = () => `<button class="${SEL.on ? 'chip on' : 'ib'}" data-act="sel-toggle" aria-label="Sélectionner plusieurs jours">${SEL.on ? 'Terminer' : ico('check', 22)}</button>`;
+function selCard() {
+  if (!SEL.on) return '';
+  const r = selRange(), n = r.length;
+  const lab = n ? `${n} jour${n > 1 ? 's' : ''} · ${fmtD(r[0], { day: 'numeric', month: 'short' })}${n > 1 ? ' → ' + fmtD(r[n - 1], { day: 'numeric', month: 'short' }) : ''}` : 'Aucun jour choisi';
+  return `<div class="card selcard"><div class="row"><b class="grow">${esc(lab)}</b>${n ? `<button class="lk" data-act="sel-clear">Vider</button>` : ''}</div>
+    <p class="mut sm" style="margin:6px 0 12px">${n ? 'Touche un autre jour pour étendre, ou touche-le de nouveau pour recommencer.' : 'Touche le premier jour, puis le dernier. Pour une semaine entière, touche son lundi puis son dimanche.'}</p>
+    <div class="btns two"><button class="btn btn-s" data-act="sel-expand"${n ? '' : ' disabled'}>Semaines entières</button><button class="btn btn-p" data-act="sel-open"${n ? '' : ' disabled'}>Définir où</button></div></div>`;
+}
 const slotLbl = k => SLOTS.find(s => s.k === k).l;
 function vPlan() { const l = A.plan.level; return l === 'month' ? planMonth() : l === 'week' ? planWeek() : planDay(); }
 const levelSeg = () => `<div class="seg">${[['month', 'Mois'], ['week', 'Semaine'], ['day', 'Jour']].map(([k, l]) => `<button class="${A.plan.level === k ? 'on' : ''}" data-act="plan-level" data-v="${k}">${l}</button>`).join('')}</div>`;
@@ -17,25 +30,25 @@ function planMonth() {
   let cells = '';
   for (let i = 0; i < rows * 7; i++) {
     const d = addDays(start, i), inM = ymOf(d) === m;
-    cells += `<button class="mc${inM ? '' : ' out'}${wdi(d) >= 5 ? ' we' : ''}${d === t ? ' today' : ''}${togetherCount(d) ? ' tg' : ''}" data-act="plan-week-of" data-d="${d}" aria-label="${esc(dayLong(d))}"><span class="n">${pd(d).getDate()}</span>${miniRows(d)}<span class="dots">${dotsFor(eventsOn(d))}</span></button>`;
+    cells += `<button class="mc${inM ? '' : ' out'}${wdi(d) >= 5 ? ' we' : ''}${d === t ? ' today' : ''}${togetherCount(d) ? ' tg' : ''}${selCls(d)}" data-act="${SEL.on ? 'sel-day' : 'plan-week-of'}" data-d="${d}" aria-label="${esc(dayLong(d))}"><span class="n">${pd(d).getDate()}</span>${miniRows(d)}<span class="dots">${dotsFor(eventsOn(d))}</span></button>`;
   }
-  return `<div class="page">${hdr('Planning', '', { right: todayChip, extra: levelSeg() + navRow('plan-prev', 'plan-next', monthLabel(m)) })}<div class="content">
+  return `<div class="page">${hdr('Planning', '', { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', monthLabel(m)) })}<div class="content">${selCard()}
     <div class="card" style="padding:12px 10px"><div class="month">${DAYL.map(l => `<div class="mh">${l}</div>`).join('')}${cells}</div></div>
     <div class="legend"><span>${av('maxym', 18)}en haut</span><span>${av('sasha', 18)}en bas</span><span>trois segments : matin, après-midi, soir</span><span><i style="--pc:var(--mint);border-radius:50%"></i>cadre vert : ensemble à la maison</span></div>
-    ${legendH()}<p class="mut sm" style="margin-top:14px">Touche un jour pour voir sa semaine.</p></div></div>`;
+    ${legendH()}<p class="mut sm" style="margin-top:14px">${SEL.on ? '' : 'Touche un jour pour voir sa semaine. Le bouton ✓ en haut permet de choisir plusieurs jours d’un coup.'}</p></div></div>`;
 }
 
 /* --- vue Semaine --- */
 function planWeek() {
   const w = monday(A.plan.date), t = today(), end = addDays(w, 6), days = [0, 1, 2, 3, 4, 5, 6].map(i => addDays(w, i)), order = [A.me, otherP(A.me)];
   const label = `${pd(w).getDate()}${ymOf(w) !== ymOf(end) ? ' ' + fmtD(w, { month: 'short' }) : ''} – ${fmtD(end, { day: 'numeric', month: 'long' })}`;
-  let g = `<div class="wk"><span></span>${days.map((d, i) => `<button class="dh${d === t ? ' today' : ''}${i >= 5 ? ' we' : ''}" data-act="plan-day-of" data-d="${d}" aria-label="${esc(dayLong(d))}">${DAYS[i]}<b>${pd(d).getDate()}</b><span class="dd">${dotsFor(eventsOn(d))}</span></button>`).join('')}`;
+  let g = `<div class="wk"><span></span>${days.map((d, i) => `<button class="dh${d === t ? ' today' : ''}${i >= 5 ? ' we' : ''}${selCls(d)}" data-act="${SEL.on ? 'sel-day' : 'plan-day-of'}" data-d="${d}" aria-label="${esc(dayLong(d))}">${DAYS[i]}<b>${pd(d).getDate()}</b><span class="dd">${dotsFor(eventsOn(d))}</span></button>`).join('')}`;
   order.forEach(p => { g += `<div class="pl">${av(p, 30)}</div>` + days.map((d, i) => `<div class="c3${i >= 5 ? ' we' : ''}">${SLOTS.map(s => slotBtn(p, d, s.k)).join('')}</div>`).join('') + '<div class="sp6"></div>'; });
   g += '</div>';
   let tog = 0; days.forEach(d => { tog += togetherCount(d); });
   const evs = []; days.forEach(d => eventsOn(d).forEach(e => evs.push(e)));
   const nRec = Object.keys(D.recurring).length;
-  return `<div class="page">${hdr('Planning', 'Semaine ' + isoWeek(w), { right: todayChip, extra: levelSeg() + navRow('plan-prev', 'plan-next', label) })}<div class="content">
+  return `<div class="page">${hdr('Planning', 'Semaine ' + isoWeek(w), { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', label) })}<div class="content">${selCard()}
     <div class="card" style="padding:12px 10px">${g}
       <div class="legend" style="padding:0 6px"><span>De haut en bas : matin, après-midi, soir</span>${tog ? `<span class="pill ok">${ico('heart', 13)}${tog} moment${tog > 1 ? 's' : ''} ensemble</span>` : ''}</div></div>
     <button class="wehl" data-act="weekend" data-d="${addDays(w, 5)}">${ico('sparkle', 22)}Programme du week-end<span class="grow"></span>${ico('chevR', 20)}</button>
@@ -150,3 +163,42 @@ ACT['ev-save'] = async () => {
   closeSheet(); await act(() => put('events', id, o), fid ? 'Événement modifié' : 'Événement ajouté');
 };
 ACT['ev-del'] = async () => { const id = F.id; closeSheet(); await act(() => del('events', id), 'Événement supprimé'); };
+
+/* --- sélection multiple : actions --- */
+ACT['sel-toggle'] = () => { SEL.on = !SEL.on; SEL.a = SEL.b = null; if (SEL.on && A.plan.level === 'day') ACT['plan-level']({ v: 'week' }); else schedule(); };
+ACT['sel-clear'] = () => { SEL.a = SEL.b = null; schedule(); };
+ACT['sel-day'] = d => {
+  if (!SEL.a || (SEL.a && SEL.b)) { if (SEL.a && SEL.b && selRange().length === 1 && SEL.a === d.d) { SEL.a = SEL.b = null; } else { SEL.a = d.d; SEL.b = null; } }
+  else { SEL.b = d.d; }
+  schedule();
+};
+ACT['sel-expand'] = () => { const r = selRange(); if (!r.length) return; SEL.a = monday(r[0]); SEL.b = addDays(monday(r[r.length - 1]), 6); schedule(); };
+ACT['sel-open'] = () => {
+  const days = selRange(); if (!days.length) return;
+  resetF({ who: 'both', s_m: true, s_a: true, s_s: true, noWE: false });
+  openSheet(() => {
+    const n = days.length, we = days.filter(d => wdi(d) >= 5).length;
+    return `<div class="st">${n} jour${n > 1 ? 's' : ''} d’un coup</div><div class="ss">${esc(fmtD(days[0], { weekday: 'short', day: 'numeric', month: 'long' }))}${n > 1 ? ' → ' + esc(fmtD(days[n - 1], { weekday: 'short', day: 'numeric', month: 'long' })) : ''}</div>
+    ${lbl('Pour qui ?')}${segH('who', whoOpts(true), F.who)}
+    ${lbl('Quels moments ?')}<div class="chips">${SLOTS.map(s => `<button type="button" class="chip${F['s_' + s.k.charAt(0)] ? ' on' : ''}" data-toggle-chip="s_${s.k.charAt(0)}">${s.l}</button>`).join('')}</div>
+    ${we ? `<div style="margin-top:8px">${swH('noWE', 'Ignorer les week-ends (' + we + ')', F.noWE)}</div>` : ''}
+    ${lbl('Où ?')}<div class="pgrid">${cfg().places.map(p => `<button data-act="sel-apply" data-v="${esc(p.id)}" style="--pc:${esc(p.color)}"><b>${esc(p.icon)}</b><span>${esc(p.label)}</span></button>`).join('')}</div>
+    <div class="btns two"><button class="btn btn-s" data-act="sel-apply" data-v="">Effacer ces créneaux</button><button class="btn btn-g" data-act="items-open" data-k="places">Gérer les lieux</button></div>`;
+  }, { live: true });
+};
+document.addEventListener('click', e => {
+  const c = e.target.closest('[data-toggle-chip]'); if (!c) return;
+  const k = c.dataset.toggleChip; F[k] = !F[k]; c.classList.toggle('on', !!F[k]);
+});
+ACT['sel-apply'] = async d => {
+  const place = d.v, slots = SLOTS.filter(s => F['s_' + s.k.charAt(0)]).map(s => s.k);
+  if (!slots.length) return toast('Choisis au moins un moment', 'err');
+  const persons = F.who === 'both' ? PIDS.slice() : [F.who];
+  const days = selRange().filter(x => !(F.noWE && wdi(x) >= 5));
+  if (!days.length) return toast('Aucun jour à modifier', 'err');
+  closeSheet();
+  const ok = await act(async () => {
+    for (let i = 0; i < days.length; i += 6) await Promise.all(days.slice(i, i + 6).map(day => { const upd = { date: day }; persons.forEach(p => { upd[p] = {}; slots.forEach(s => { upd[p][s] = place; }); }); return patch('presence', day, upd); }));
+  }, place ? days.length + ' jour' + (days.length > 1 ? 's' : '') + ' mis à jour' : 'Créneaux effacés');
+  if (ok) { SEL.on = false; SEL.a = SEL.b = null; schedule(); }
+};
