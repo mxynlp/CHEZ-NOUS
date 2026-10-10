@@ -40,7 +40,9 @@ function vHome() {
     ${notes.join('')}
     <div class="qa"><button data-act="ev-new"><span class="qi">${ico('cal', 20)}</span>Événement</button><button data-act="exp-new"><span class="qi">${ico('wallet', 20)}</span>Dépense</button><button data-act="meal-new"><span class="qi">${ico('meal', 20)}</span>Repas</button></div>
     ${todayCard}
+    ${aheadCard()}
     <div class="grid2">${weekCard}${budCard}</div>
+    ${choresCard()}
     <p class="sync-note">${esc(syncText())}</p></div></div>`;
 }
 ACT['go-day'] = d => { A.tab = 'plan'; A.plan.level = 'day'; A.plan.date = d.d; A.plan.month = ymOf(d.d); A.anim = 'a-zin'; A.resetScroll = true; schedule(); };

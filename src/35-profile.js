@@ -33,8 +33,8 @@ ACT.profile = () => {
 ACT['reset-ask'] = () => confirmSheet({ title: 'Repartir de zéro ?', text: 'Les plannings, repas, plats, dépenses et objectifs d’exemple seront supprimés pour vous deux. Vos réglages (lieux, loyer, charges fixes) sont conservés.', ok: 'Tout supprimer', danger: true, onOk: resetDemo });
 async function resetDemo() {
   const jobs = [];
-  for (const col of SHARED) for (const [id, d] of Object.entries(D[col])) if (d && d.demo) jobs.push(() => del(col, id));
-  for (const [id, d] of Object.entries(D.priv)) if (d && d.demo) jobs.push(() => del('priv', id));
+  for (const col of SHARED) for (const [id, d] of Object.entries(D[col])) if (d && d.demo) jobs.push(() => del(col, id, true));
+  for (const [id, d] of Object.entries(D.priv)) if (d && d.demo) jobs.push(() => del('priv', id, true));
   await act(async () => { for (let i = 0; i < jobs.length; i += 6) await Promise.all(jobs.slice(i, i + 6).map(f => f())); await patch('settings', 'main', { demo: false }); }, 'Vous repartez de zéro');
 }
 

@@ -55,7 +55,7 @@ function planWeek() {
     <div class="card"><h3>${ico('clock', 18)}Événements<span class="sp"></span><button class="lk" data-act="ev-new">Ajouter</button></h3>
       ${evs.length ? evs.map(e => { const pl = placeById(e.place); return `<button class="evrow" data-act="ev-edit" data-id="${esc(e.id)}"><span class="evd"><small>${esc(DAYS[wdi(e.date)])}</small><b>${pd(e.date).getDate()}</b></span><span class="grow"><div class="t" style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.title)}</div><div class="s sm mut">${e.time ? esc(e.time) : 'Toute la journée'}${pl ? ' · ' + esc(pl.icon) + ' ' + esc(pl.label) : ''}</div></span>${avs(whoList(e.who || 'both'))}</button>`; }).join('') : emptyH('cal', 'Rien de prévu cette semaine', 'Ajoute un dîner, un rendez-vous ou un week-end.', `<br><button class="btn btn-s btn-sm" data-act="ev-new">${ico('plus', 18)}Nouvel événement</button>`)}</div>
     ${legendH()}
-    <div class="wkrow"><button class="btn btn-s btn-sm" data-act="rec-open">${ico('repeat', 18)}Répétitions${nRec ? ' (' + nRec + ')' : ''}</button><button class="btn btn-s btn-sm" data-act="items-open" data-k="places">${ico('sliders', 18)}Lieux</button></div></div></div>`;
+    <div class="wkrow"><button class="btn btn-s btn-sm" data-act="rec-open">${ico('repeat', 18)}Répétitions${nRec ? ' (' + nRec + ')' : ''}</button><button class="btn btn-s btn-sm" data-act="tpl-open">${ico('copy', 18)}Modèles</button><button class="btn btn-s btn-sm" data-act="free-open">${ico('heart', 18)}À deux</button><button class="btn btn-s btn-sm" data-act="items-open" data-k="places">${ico('sliders', 18)}Lieux</button></div></div></div>`;
 }
 
 /* --- vue Jour --- */
@@ -182,6 +182,7 @@ ACT['sel-open'] = () => {
     ${lbl('Pour qui ?')}${segH('who', whoOpts(true), F.who)}
     ${lbl('Quels moments ?')}<div class="chips">${SLOTS.map(s => `<button type="button" class="chip${F['s_' + s.k.charAt(0)] ? ' on' : ''}" data-toggle-chip="s_${s.k.charAt(0)}">${s.l}</button>`).join('')}</div>
     ${we ? `<div style="margin-top:8px">${swH('noWE', 'Ignorer les week-ends (' + we + ')', F.noWE)}</div>` : ''}
+    ${tplChips()}
     ${lbl('Où ?')}<div class="pgrid">${cfg().places.map(p => `<button data-act="sel-apply" data-v="${esc(p.id)}" style="--pc:${esc(p.color)}"><b>${esc(p.icon)}</b><span>${esc(p.label)}</span></button>`).join('')}</div>
     <div class="btns two"><button class="btn btn-s" data-act="sel-apply" data-v="">Effacer ces créneaux</button><button class="btn btn-g" data-act="items-open" data-k="places">Gérer les lieux</button></div>`;
   }, { live: true });
@@ -196,9 +197,9 @@ ACT['sel-apply'] = async d => {
   const persons = F.who === 'both' ? PIDS.slice() : [F.who];
   const days = selRange().filter(x => !(F.noWE && wdi(x) >= 5));
   if (!days.length) return toast('Aucun jour à modifier', 'err');
-  closeSheet();
+  closeSheet(); const snap = snapPresence(days);
   const ok = await act(async () => {
     for (let i = 0; i < days.length; i += 6) await Promise.all(days.slice(i, i + 6).map(day => { const upd = { date: day }; persons.forEach(p => { upd[p] = {}; slots.forEach(s => { upd[p][s] = place; }); }); return patch('presence', day, upd); }));
   }, place ? days.length + ' jour' + (days.length > 1 ? 's' : '') + ' mis à jour' : 'Créneaux effacés');
-  if (ok) { SEL.on = false; SEL.a = SEL.b = null; schedule(); }
+  if (ok) { SEL.on = false; SEL.a = SEL.b = null; schedule(); offerUndo(restorePresence(snap), days.length + ' jour' + (days.length > 1 ? 's' : '') + ' modifié' + (days.length > 1 ? 's' : '')); }
 };

@@ -42,6 +42,7 @@ function qtyStr(q) { return Number.isInteger(q) ? String(q) : String(r2(q)).repl
 
 /* ---------- 2. Icônes (trait fin et arrondi, façon SF Symbols) ---------- */
 const IC = {
+  camera: 'M4 8.5h3.2L8.6 6h6.8l1.4 2.5H20V19H4zM12 16.4a3.3 3.3 0 1 0 0-6.6 3.3 3.3 0 0 0 0 6.6z',
   home: 'M3.5 10.8 12 3.5l8.5 7.3M5.5 9.5V20h4.5v-5.5h4V20h4.5V9.5',
   cal: 'M6.5 5h11A2.5 2.5 0 0 1 20 7.5v10a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-10A2.5 2.5 0 0 1 6.5 5ZM8 3v4M16 3v4M4 10h16',
   meal: 'M7 3.5v7M4.5 3.5v4.5a2.5 2.5 0 0 0 5 0V3.5M7 11v9.5M17 20.5v-17c-2.4 1.3-3.5 4-3.5 7V13H17',
@@ -154,8 +155,8 @@ const A = { me: null, tab: 'home', ready: false, sync: 'boot', hide: false, anim
   meal: { sub: 'week', week: monday(today()), level: 'week', date: today(), cat: '' },
   bud: { sub: 'over', month: ymOf(today()), f: { q: '', cat: '', who: '', per: 'month' } } };
 let DB = null, UID = null;
-const D = { settings: null, presence: {}, events: {}, meals: {}, recipes: {}, expenses: {}, shopitems: {}, shopchecks: {}, recurring: {}, goals: {}, contribs: {}, months: {}, priv: {} };
-const SHARED = ['presence', 'events', 'meals', 'recipes', 'expenses', 'shopitems', 'shopchecks', 'recurring', 'goals', 'contribs', 'months'];
+const D = { templates: {}, chores: {}, settings: null, presence: {}, events: {}, meals: {}, recipes: {}, expenses: {}, shopitems: {}, shopchecks: {}, recurring: {}, goals: {}, contribs: {}, months: {}, priv: {} };
+const SHARED = ['templates', 'chores', 'presence', 'events', 'meals', 'recipes', 'expenses', 'shopitems', 'shopchecks', 'recurring', 'goals', 'contribs', 'months'];
 const LSK = 'chez-nous-local-v1';
 const UNS = [];
 const useDb = col => !!DB && (col !== 'priv' || !!UID);
@@ -186,10 +187,11 @@ function patch(col, id, data) {
   const p = pth(col, id);
   return chain(p, async () => { try { await dbDo(() => DB.doc(p).update(data)); } catch (e) { if (e && e.code === 'invalid_argument') await dbDo(() => DB.doc(p).set(data)); else throw e; } });
 }
-function del(col, id) {
-  if (!useDb(col)) { localApply(col, id, null, false, true); return Promise.resolve(); }
+function del(col, id, quiet) {
+  const prev = col === 'settings' ? null : (D[col] || {})[id], und = () => { if (!quiet && prev && typeof offerUndo === 'function') offerUndo(() => put(col, id, clean(prev)), 'Supprimé'); };
+  if (!useDb(col)) { localApply(col, id, null, false, true); und(); return Promise.resolve(); }
   const p = pth(col, id);
-  return chain(p, () => dbDo(() => DB.doc(p).delete()));
+  return chain(p, () => dbDo(() => DB.doc(p).delete())).then(r => { und(); return r; });
 }
 let lastErr = 0;
 function writeErr(e) {

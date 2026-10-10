@@ -76,7 +76,7 @@ function openMeal(d, k, pre) {
   openSheet(() => `<div class="st">${mkLbl(k)} · ${esc(dayLong(d))}</div>
     ${lbl('Plat')}<input class="inp" id="ml-name" maxlength="70" placeholder="Ex. Pâtes au pesto" value="${esc(name)}" autocomplete="off">
     ${recs.length ? `<div class="chips scroll" style="margin-top:10px">${recs.map(r => `<button type="button" class="chip" data-act="ml-pick" data-id="${esc(r.id)}">${r.fav ? '♥ ' : ''}${esc(r.name)}</button>`).join('')}</div>` : ''}
-    <div style="margin-top:8px"><button type="button" class="btn btn-s btn-sm" data-act="ml-idea">${ico('sparkle', 18)}Idée repas</button></div>
+    <div class="row" style="margin-top:8px;flex-wrap:wrap;gap:8px"><button type="button" class="btn btn-s btn-sm" data-act="ml-idea">${ico('sparkle', 18)}Idée repas</button><button type="button" class="btn btn-s btn-sm" data-act="ml-stock">${ico('cart', 18)}Avec nos achats</button><button type="button" class="btn btn-s btn-sm" data-act="ml-leftover">${ico('repeat', 18)}Restes ${k === 'dinner' ? 'demain midi' : 'ce soir'}</button></div>
     ${lbl('Qui mange')}${segH('who', [{ id: 'both', l: 'Nous deux' }, { id: A.me, l: 'Moi' }, { id: otherP(A.me), l: NAMES[otherP(A.me)] }], F.who)}
     ${lbl('Où')}${chipsH('where', MEAL_WHERE, F.where).replace('class="chips"', 'class="chips scroll"')}
     ${lbl('Note')}<input class="inp" id="ml-note" maxlength="100" placeholder="Facultatif" value="${esc(ex ? ex.note || '' : '')}">
@@ -102,7 +102,7 @@ ACT['ml-save'] = async () => {
   const { d, k } = F, obj = { name, recipeId: rid, who: F.who, where: F.where, note: val('ml-note').trim() };
   closeSheet(); await saveMeal(d, k, obj);
 };
-ACT['ml-del'] = async () => { const { d, k } = F; closeSheet(); await act(() => patch('meals', d, { [k]: null }), 'Repas retiré'); };
+ACT['ml-del'] = async () => { const { d, k } = F, prev = mealOf(d, k) ? clean(mealOf(d, k)) : null; closeSheet(); const ok = await act(() => patch('meals', d, { [k]: null }), 'Repas retiré'); if (ok && prev) offerUndo(() => patch('meals', d, { date: d, [k]: prev }), 'Repas retiré'); };
 ACT['ml-copy'] = async () => {
   const src = mealOf(F.d, F.k), cd = val('ml-copy-d'); if (!src || !cd) return toast('Choisis une date', 'err');
   const ck = F.copyK; closeSheet(); await saveMeal(cd, ck, Object.assign({}, src), 'Repas copié au ' + dayShort(cd));
@@ -172,7 +172,7 @@ function mealShop() {
   const ck = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const manDone = rows.filter(r => r.man && r.done).length;
   return `<div class="page">${hdr('Repas', 'Semaine ' + isoWeek(w), { right: mealToday, extra: mealSeg() + navRow('meal-prev', 'meal-next', weekLabel(w)) })}<div class="content">
-    <div class="card"><div class="addrow"><input class="inp" id="shop-new" placeholder="Ajouter un article (ex. 2 yaourts)" autocomplete="off" enterkeyhint="done"><button class="btn btn-p" data-act="shop-add" aria-label="Ajouter">${ico('plus', 22, 2.2)}</button></div>
+    <div class="card"><div class="addrow"><input class="inp" id="shop-new" placeholder="Ajouter un article (ex. 2 yaourts)" autocomplete="off" enterkeyhint="done"><button class="btn btn-p" data-act="shop-add" aria-label="Ajouter">${ico('plus', 22, 2.2)}</button></div>${freqChips()}
       ${total ? `<div class="row" style="margin-top:14px"><b class="grow">${done} sur ${total} dans le panier</b><span class="mut sm">${Math.round(done / total * 100)} %</span></div><div class="prog"><i style="width:${Math.round(done / total * 100)}%"></i></div>` : ''}</div>
     ${groups.length ? `<div class="card">${groups.map(g => `<div class="aisle">${esc(g.a.l)}</div>${g.items.map(r => `<button class="shop${r.done ? ' done' : ''}" data-act="shop-toggle" data-k="${esc(r.k)}"><span class="ck">${ck}</span><span class="grow" style="min-width:0"><span class="t" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</span>${r.from ? `<span class="s sm mut" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.from)}</span>` : ''}</span><span class="q">${esc(r.q)}</span></button>`).join('')}`).join('')}</div>
       <div class="btns"><button class="btn btn-p btn-b" data-act="shop-pay">${ico('wallet', 20)}Enregistrer le passage en caisse</button>${manDone ? `<button class="btn btn-s btn-b" data-act="shop-clear">Retirer mes articles cochés</button>` : ''}</div>`

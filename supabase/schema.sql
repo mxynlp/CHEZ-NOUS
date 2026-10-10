@@ -47,3 +47,23 @@ insert into public.members (email) values
   ('maxym.nelaupe@gmail.com'),
   ('EMAIL_DE_SASHA@exemple.com')
 on conflict do nothing;
+
+-- ===== Tickets de caisse (photos compressées, stockage privé) =====
+insert into storage.buckets (id, name, public) values ('receipts', 'receipts', false) on conflict do nothing;
+drop policy if exists receipts_all on storage.objects;
+create policy receipts_all on storage.objects for all to authenticated
+  using (bucket_id = 'receipts' and public.is_member())
+  with check (bucket_id = 'receipts' and public.is_member());
+
+-- ===== Notifications push : abonnements par appareil =====
+create table if not exists public.push_subs (
+  endpoint text primary key,
+  uid uuid not null default auth.uid(),
+  sub jsonb not null,
+  prefs jsonb not null default '{"meals":true,"charges":true,"chores":true,"week":true}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+alter table public.push_subs enable row level security;
+drop policy if exists push_own on public.push_subs;
+create policy push_own on public.push_subs for all to authenticated
+  using (public.is_member() and uid = auth.uid()) with check (public.is_member() and uid = auth.uid());

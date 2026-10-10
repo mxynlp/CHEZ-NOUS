@@ -389,6 +389,12 @@ textarea.inp{padding:12px 14px;min-height:84px;resize:vertical}
 .selcard{background:color-mix(in srgb,var(--mint) 70%,var(--card))}
 .btn[disabled]{opacity:.45;pointer-events:none}
 .lvrow{display:flex;align-items:center;gap:10px}.lvrow .seg{flex:1;min-width:0}.lvrow .chip,.lvrow .ib{flex:none}
+.toast.undo{pointer-events:auto}
+.tundo{margin-left:6px;padding:6px 10px;border-radius:12px;font-weight:800;color:var(--mint);min-height:32px}
+.chk{width:36px;height:36px;border-radius:50%;border:2px solid var(--line-2);color:transparent;display:grid;place-items:center;flex:none;transition:background .2s,border-color .2s,color .2s,transform .15s}
+.chk:active{background:var(--sage);border-color:var(--sage);color:var(--on-sage);transform:scale(.9)}
+.chk.late{border-color:var(--warn)}
+.wkrow{flex-wrap:wrap}
 
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
@@ -461,6 +467,7 @@ function qtyStr(q) { return Number.isInteger(q) ? String(q) : String(r2(q)).repl
 
 /* ---------- 2. Icônes (trait fin et arrondi, façon SF Symbols) ---------- */
 const IC = {
+  camera: 'M4 8.5h3.2L8.6 6h6.8l1.4 2.5H20V19H4zM12 16.4a3.3 3.3 0 1 0 0-6.6 3.3 3.3 0 0 0 0 6.6z',
   home: 'M3.5 10.8 12 3.5l8.5 7.3M5.5 9.5V20h4.5v-5.5h4V20h4.5V9.5',
   cal: 'M6.5 5h11A2.5 2.5 0 0 1 20 7.5v10a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-10A2.5 2.5 0 0 1 6.5 5ZM8 3v4M16 3v4M4 10h16',
   meal: 'M7 3.5v7M4.5 3.5v4.5a2.5 2.5 0 0 0 5 0V3.5M7 11v9.5M17 20.5v-17c-2.4 1.3-3.5 4-3.5 7V13H17',
@@ -573,8 +580,8 @@ const A = { me: null, tab: 'home', ready: false, sync: 'boot', hide: false, anim
   meal: { sub: 'week', week: monday(today()), level: 'week', date: today(), cat: '' },
   bud: { sub: 'over', month: ymOf(today()), f: { q: '', cat: '', who: '', per: 'month' } } };
 let DB = null, UID = null;
-const D = { settings: null, presence: {}, events: {}, meals: {}, recipes: {}, expenses: {}, shopitems: {}, shopchecks: {}, recurring: {}, goals: {}, contribs: {}, months: {}, priv: {} };
-const SHARED = ['presence', 'events', 'meals', 'recipes', 'expenses', 'shopitems', 'shopchecks', 'recurring', 'goals', 'contribs', 'months'];
+const D = { templates: {}, chores: {}, settings: null, presence: {}, events: {}, meals: {}, recipes: {}, expenses: {}, shopitems: {}, shopchecks: {}, recurring: {}, goals: {}, contribs: {}, months: {}, priv: {} };
+const SHARED = ['templates', 'chores', 'presence', 'events', 'meals', 'recipes', 'expenses', 'shopitems', 'shopchecks', 'recurring', 'goals', 'contribs', 'months'];
 const LSK = 'chez-nous-local-v1';
 const UNS = [];
 const useDb = col => !!DB && (col !== 'priv' || !!UID);
@@ -605,10 +612,11 @@ function patch(col, id, data) {
   const p = pth(col, id);
   return chain(p, async () => { try { await dbDo(() => DB.doc(p).update(data)); } catch (e) { if (e && e.code === 'invalid_argument') await dbDo(() => DB.doc(p).set(data)); else throw e; } });
 }
-function del(col, id) {
-  if (!useDb(col)) { localApply(col, id, null, false, true); return Promise.resolve(); }
+function del(col, id, quiet) {
+  const prev = col === 'settings' ? null : (D[col] || {})[id], und = () => { if (!quiet && prev && typeof offerUndo === 'function') offerUndo(() => put(col, id, clean(prev)), 'Supprimé'); };
+  if (!useDb(col)) { localApply(col, id, null, false, true); und(); return Promise.resolve(); }
   const p = pth(col, id);
-  return chain(p, () => dbDo(() => DB.doc(p).delete()));
+  return chain(p, () => dbDo(() => DB.doc(p).delete())).then(r => { und(); return r; });
 }
 let lastErr = 0;
 function writeErr(e) {
@@ -907,8 +915,8 @@ ACT.profile = () => {
 ACT['reset-ask'] = () => confirmSheet({ title: 'Repartir de zéro ?', text: 'Les plannings, repas, plats, dépenses et objectifs d’exemple seront supprimés pour vous deux. Vos réglages (lieux, loyer, charges fixes) sont conservés.', ok: 'Tout supprimer', danger: true, onOk: resetDemo });
 async function resetDemo() {
   const jobs = [];
-  for (const col of SHARED) for (const [id, d] of Object.entries(D[col])) if (d && d.demo) jobs.push(() => del(col, id));
-  for (const [id, d] of Object.entries(D.priv)) if (d && d.demo) jobs.push(() => del('priv', id));
+  for (const col of SHARED) for (const [id, d] of Object.entries(D[col])) if (d && d.demo) jobs.push(() => del(col, id, true));
+  for (const [id, d] of Object.entries(D.priv)) if (d && d.demo) jobs.push(() => del('priv', id, true));
   await act(async () => { for (let i = 0; i < jobs.length; i += 6) await Promise.all(jobs.slice(i, i + 6).map(f => f())); await patch('settings', 'main', { demo: false }); }, 'Vous repartez de zéro');
 }
 
@@ -988,7 +996,9 @@ function vHome() {
     ${notes.join('')}
     <div class="qa"><button data-act="ev-new"><span class="qi">${ico('cal', 20)}</span>Événement</button><button data-act="exp-new"><span class="qi">${ico('wallet', 20)}</span>Dépense</button><button data-act="meal-new"><span class="qi">${ico('meal', 20)}</span>Repas</button></div>
     ${todayCard}
+    ${aheadCard()}
     <div class="grid2">${weekCard}${budCard}</div>
+    ${choresCard()}
     <p class="sync-note">${esc(syncText())}</p></div></div>`;
 }
 ACT['go-day'] = d => { A.tab = 'plan'; A.plan.level = 'day'; A.plan.date = d.d; A.plan.month = ymOf(d.d); A.anim = 'a-zin'; A.resetScroll = true; schedule(); };
@@ -1054,7 +1064,7 @@ function planWeek() {
     <div class="card"><h3>${ico('clock', 18)}Événements<span class="sp"></span><button class="lk" data-act="ev-new">Ajouter</button></h3>
       ${evs.length ? evs.map(e => { const pl = placeById(e.place); return `<button class="evrow" data-act="ev-edit" data-id="${esc(e.id)}"><span class="evd"><small>${esc(DAYS[wdi(e.date)])}</small><b>${pd(e.date).getDate()}</b></span><span class="grow"><div class="t" style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.title)}</div><div class="s sm mut">${e.time ? esc(e.time) : 'Toute la journée'}${pl ? ' · ' + esc(pl.icon) + ' ' + esc(pl.label) : ''}</div></span>${avs(whoList(e.who || 'both'))}</button>`; }).join('') : emptyH('cal', 'Rien de prévu cette semaine', 'Ajoute un dîner, un rendez-vous ou un week-end.', `<br><button class="btn btn-s btn-sm" data-act="ev-new">${ico('plus', 18)}Nouvel événement</button>`)}</div>
     ${legendH()}
-    <div class="wkrow"><button class="btn btn-s btn-sm" data-act="rec-open">${ico('repeat', 18)}Répétitions${nRec ? ' (' + nRec + ')' : ''}</button><button class="btn btn-s btn-sm" data-act="items-open" data-k="places">${ico('sliders', 18)}Lieux</button></div></div></div>`;
+    <div class="wkrow"><button class="btn btn-s btn-sm" data-act="rec-open">${ico('repeat', 18)}Répétitions${nRec ? ' (' + nRec + ')' : ''}</button><button class="btn btn-s btn-sm" data-act="tpl-open">${ico('copy', 18)}Modèles</button><button class="btn btn-s btn-sm" data-act="free-open">${ico('heart', 18)}À deux</button><button class="btn btn-s btn-sm" data-act="items-open" data-k="places">${ico('sliders', 18)}Lieux</button></div></div></div>`;
 }
 
 /* --- vue Jour --- */
@@ -1181,6 +1191,7 @@ ACT['sel-open'] = () => {
     ${lbl('Pour qui ?')}${segH('who', whoOpts(true), F.who)}
     ${lbl('Quels moments ?')}<div class="chips">${SLOTS.map(s => `<button type="button" class="chip${F['s_' + s.k.charAt(0)] ? ' on' : ''}" data-toggle-chip="s_${s.k.charAt(0)}">${s.l}</button>`).join('')}</div>
     ${we ? `<div style="margin-top:8px">${swH('noWE', 'Ignorer les week-ends (' + we + ')', F.noWE)}</div>` : ''}
+    ${tplChips()}
     ${lbl('Où ?')}<div class="pgrid">${cfg().places.map(p => `<button data-act="sel-apply" data-v="${esc(p.id)}" style="--pc:${esc(p.color)}"><b>${esc(p.icon)}</b><span>${esc(p.label)}</span></button>`).join('')}</div>
     <div class="btns two"><button class="btn btn-s" data-act="sel-apply" data-v="">Effacer ces créneaux</button><button class="btn btn-g" data-act="items-open" data-k="places">Gérer les lieux</button></div>`;
   }, { live: true });
@@ -1195,11 +1206,11 @@ ACT['sel-apply'] = async d => {
   const persons = F.who === 'both' ? PIDS.slice() : [F.who];
   const days = selRange().filter(x => !(F.noWE && wdi(x) >= 5));
   if (!days.length) return toast('Aucun jour à modifier', 'err');
-  closeSheet();
+  closeSheet(); const snap = snapPresence(days);
   const ok = await act(async () => {
     for (let i = 0; i < days.length; i += 6) await Promise.all(days.slice(i, i + 6).map(day => { const upd = { date: day }; persons.forEach(p => { upd[p] = {}; slots.forEach(s => { upd[p][s] = place; }); }); return patch('presence', day, upd); }));
   }, place ? days.length + ' jour' + (days.length > 1 ? 's' : '') + ' mis à jour' : 'Créneaux effacés');
-  if (ok) { SEL.on = false; SEL.a = SEL.b = null; schedule(); }
+  if (ok) { SEL.on = false; SEL.a = SEL.b = null; schedule(); offerUndo(restorePresence(snap), days.length + ' jour' + (days.length > 1 ? 's' : '') + ' modifié' + (days.length > 1 ? 's' : '')); }
 };
 
 /* ---------- 10. Repas : grille, plats, courses partagées ---------- */
@@ -1279,7 +1290,7 @@ function openMeal(d, k, pre) {
   openSheet(() => `<div class="st">${mkLbl(k)} · ${esc(dayLong(d))}</div>
     ${lbl('Plat')}<input class="inp" id="ml-name" maxlength="70" placeholder="Ex. Pâtes au pesto" value="${esc(name)}" autocomplete="off">
     ${recs.length ? `<div class="chips scroll" style="margin-top:10px">${recs.map(r => `<button type="button" class="chip" data-act="ml-pick" data-id="${esc(r.id)}">${r.fav ? '♥ ' : ''}${esc(r.name)}</button>`).join('')}</div>` : ''}
-    <div style="margin-top:8px"><button type="button" class="btn btn-s btn-sm" data-act="ml-idea">${ico('sparkle', 18)}Idée repas</button></div>
+    <div class="row" style="margin-top:8px;flex-wrap:wrap;gap:8px"><button type="button" class="btn btn-s btn-sm" data-act="ml-idea">${ico('sparkle', 18)}Idée repas</button><button type="button" class="btn btn-s btn-sm" data-act="ml-stock">${ico('cart', 18)}Avec nos achats</button><button type="button" class="btn btn-s btn-sm" data-act="ml-leftover">${ico('repeat', 18)}Restes ${k === 'dinner' ? 'demain midi' : 'ce soir'}</button></div>
     ${lbl('Qui mange')}${segH('who', [{ id: 'both', l: 'Nous deux' }, { id: A.me, l: 'Moi' }, { id: otherP(A.me), l: NAMES[otherP(A.me)] }], F.who)}
     ${lbl('Où')}${chipsH('where', MEAL_WHERE, F.where).replace('class="chips"', 'class="chips scroll"')}
     ${lbl('Note')}<input class="inp" id="ml-note" maxlength="100" placeholder="Facultatif" value="${esc(ex ? ex.note || '' : '')}">
@@ -1305,7 +1316,7 @@ ACT['ml-save'] = async () => {
   const { d, k } = F, obj = { name, recipeId: rid, who: F.who, where: F.where, note: val('ml-note').trim() };
   closeSheet(); await saveMeal(d, k, obj);
 };
-ACT['ml-del'] = async () => { const { d, k } = F; closeSheet(); await act(() => patch('meals', d, { [k]: null }), 'Repas retiré'); };
+ACT['ml-del'] = async () => { const { d, k } = F, prev = mealOf(d, k) ? clean(mealOf(d, k)) : null; closeSheet(); const ok = await act(() => patch('meals', d, { [k]: null }), 'Repas retiré'); if (ok && prev) offerUndo(() => patch('meals', d, { date: d, [k]: prev }), 'Repas retiré'); };
 ACT['ml-copy'] = async () => {
   const src = mealOf(F.d, F.k), cd = val('ml-copy-d'); if (!src || !cd) return toast('Choisis une date', 'err');
   const ck = F.copyK; closeSheet(); await saveMeal(cd, ck, Object.assign({}, src), 'Repas copié au ' + dayShort(cd));
@@ -1375,7 +1386,7 @@ function mealShop() {
   const ck = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const manDone = rows.filter(r => r.man && r.done).length;
   return `<div class="page">${hdr('Repas', 'Semaine ' + isoWeek(w), { right: mealToday, extra: mealSeg() + navRow('meal-prev', 'meal-next', weekLabel(w)) })}<div class="content">
-    <div class="card"><div class="addrow"><input class="inp" id="shop-new" placeholder="Ajouter un article (ex. 2 yaourts)" autocomplete="off" enterkeyhint="done"><button class="btn btn-p" data-act="shop-add" aria-label="Ajouter">${ico('plus', 22, 2.2)}</button></div>
+    <div class="card"><div class="addrow"><input class="inp" id="shop-new" placeholder="Ajouter un article (ex. 2 yaourts)" autocomplete="off" enterkeyhint="done"><button class="btn btn-p" data-act="shop-add" aria-label="Ajouter">${ico('plus', 22, 2.2)}</button></div>${freqChips()}
       ${total ? `<div class="row" style="margin-top:14px"><b class="grow">${done} sur ${total} dans le panier</b><span class="mut sm">${Math.round(done / total * 100)} %</span></div><div class="prog"><i style="width:${Math.round(done / total * 100)}%"></i></div>` : ''}</div>
     ${groups.length ? `<div class="card">${groups.map(g => `<div class="aisle">${esc(g.a.l)}</div>${g.items.map(r => `<button class="shop${r.done ? ' done' : ''}" data-act="shop-toggle" data-k="${esc(r.k)}"><span class="ck">${ck}</span><span class="grow" style="min-width:0"><span class="t" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</span>${r.from ? `<span class="s sm mut" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.from)}</span>` : ''}</span><span class="q">${esc(r.q)}</span></button>`).join('')}`).join('')}</div>
       <div class="btns"><button class="btn btn-p btn-b" data-act="shop-pay">${ico('wallet', 20)}Enregistrer le passage en caisse</button>${manDone ? `<button class="btn btn-s btn-b" data-act="shop-clear">Retirer mes articles cochés</button>` : ''}</div>`
@@ -1465,6 +1476,7 @@ function budOver() {
     <div class="card"><h3>${ico('wallet', 18)}Dépenses communes</h3>
       <div class="row" style="flex-wrap:wrap;gap:8px"><div class="big">${fmt(total)}</div><span class="grow"></span>${cmp}</div>
       ${parts.length ? `<div class="donutw" style="margin-top:14px">${donut(parts, total)}<div class="leg">${parts.map(p => `<div class="legi"><i style="background:${esc(p.color)}"></i><span class="grow">${esc(p.icon)} ${esc(p.label)}</span><b class="amount sm">${fmt(p.v)}</b><span class="mut sm" style="width:38px;text-align:right">${Math.round(p.v / total * 100)} %</span></div>`).join('')}</div></div>` : emptyH('wallet', 'Pas encore de dépense commune', 'Ajoute une dépense avec le bouton +, elle apparaîtra ici.')}</div>
+    ${paidCard(m)}
     <div class="grid2">
     <div class="card"><h3>${ico('target', 18)}Budgets cibles<span class="sp"></span><button class="lk" data-act="tgt-edit" data-id="">Ajouter</button></h3>
       ${tg.length ? tg.map(([id, v]) => { const cat = catById(id), spent = r2(byCat[id] || 0), r = spent / v; return `<button class="tgt" data-act="tgt-edit" data-id="${esc(id)}"><div class="row"><span class="ic sm" style="--pc:${esc(cat.color)}">${esc(cat.icon)}</span><span class="grow t" style="font-weight:600">${esc(cat.label)}</span><span class="amount sm">${fmt(spent)} / ${fmt(v)}</span></div><div class="pg"><i style="width:${Math.min(100, Math.round(r * 100))}%;background:${pgColor(r)}"></i></div>${r > 1 ? `<div class="sm" style="color:var(--bad-ink);margin-top:6px">Dépassé de ${fmt(spent - v)}</div>` : ''}</button>`; }).join('') : `<p class="mut sm">Fixe un plafond mensuel par catégorie, par exemple 400 € pour les courses.</p>`}</div>
@@ -1584,6 +1596,7 @@ function openExpense(id, pre) {
     <div id="ex-custom" ${F.mode === 'custom' ? '' : 'hidden'} style="margin-top:6px"><input type="range" class="range" id="ex-pct" min="0" max="100" step="5" value="${pct}" aria-label="Part de ${NAMES.maxym}"><div class="sm mut" id="ex-pct-t"></div></div>
     <div class="row" style="align-items:flex-start"><div class="grow">${lbl('Date')}<input class="inp" type="date" id="ex-date" value="${esc(ex ? ex.date : (pre.date || today()))}"></div></div>
     ${lbl('Note')}<input class="inp" id="ex-note" maxlength="80" placeholder="Facultatif" value="${esc(ex ? ex.note || '' : '')}" autocomplete="off">
+    ${rcptField(ex)}
     <div class="btns ${ex ? 'two' : ''}">${ex ? `<button class="btn btn-d" data-act="exp-del-ask" data-id="${esc(id)}">Supprimer</button>` : ''}<button class="btn btn-p" data-act="exp-save">${ex ? 'Enregistrer' : 'Ajouter'}</button></div>`, { focus: ex ? '' : 'ex-amt' });
   setTimeout(() => updatePct('ex-pct'), 40);
 }
@@ -1592,11 +1605,13 @@ ACT['exp-new-d'] = d => openExpense('', { date: d.d });
 ACT['exp-save'] = async () => {
   const amount = num(val('ex-amt')); if (!(amount > 0)) return toast('Saisis un montant', 'err');
   const a = r2(amount), mode = F.mode, paidBy = mode === 'perso' ? A.me : F.paidBy, pct = num(val('ex-pct')), fid = F.id;
-  const o = { kind: 'expense', amount: a, cat: F.cat, paidBy, mode, shares: buildShares(a, mode, paidBy, isFinite(pct) ? pct : 50), date: val('ex-date') || today(), note: val('ex-note').trim(), createdBy: A.me, ts: Date.now() };
+  const rb = F.rcptBlob, o = { kind: 'expense', amount: a, cat: F.cat, paidBy, mode, shares: buildShares(a, mode, paidBy, isFinite(pct) ? pct : 50), date: val('ex-date') || today(), note: val('ex-note').trim(), createdBy: A.me, ts: Date.now() };
   const old = fid ? allExp().find(e => e.id === fid) : null, loc = mode === 'perso' ? 'priv' : 'shared';
   const id = fid && old && old._loc === loc ? fid : (loc === 'priv' ? 'pexp_' : '') + uid();
+  if (rb && RC.upload) o.receipt = true; else if (old && old.receipt) o.receipt = true;
   lsSet('cn-lastcat', F.cat); closeSheet();
-  await act(async () => { await put(loc === 'priv' ? 'priv' : 'expenses', id, o); if (old && old._loc !== loc) await del(old._loc === 'priv' ? 'priv' : 'expenses', old.id); }, fid ? 'Dépense modifiée' : 'Dépense ajoutée');
+  const ok = await act(async () => { if (rb && RC.upload) await RC.upload(id, rb); await put(loc === 'priv' ? 'priv' : 'expenses', id, o); if (old && old._loc !== loc) await del(old._loc === 'priv' ? 'priv' : 'expenses', old.id, true); }, fid ? 'Dépense modifiée' : 'Dépense ajoutée');
+  if (ok && loc === 'expenses') budgetAlert(o.cat, o.date.slice(0, 7));
 };
 ACT['exp-del-ask'] = d => {
   const id = d.id; confirmSheet({ title: 'Supprimer cette opération ?', text: 'Le solde sera recalculé.', ok: 'Supprimer', danger: true, onOk: () => { const e = allExp().find(x => x.id === id); if (e) act(() => del(e._loc === 'priv' ? 'priv' : 'expenses', e.id), 'Supprimée'); } });
@@ -1767,6 +1782,220 @@ ACT['csv-copy'] = async () => {
   try { await navigator.clipboard.writeText(n.value); toast('Copié'); } catch (e) { toast('Sélectionné : copie avec ton clavier', 'err'); }
 };
 
+/* ---------- 14. Extras : annuler, modèles, tâches, résumé, créneaux libres, repas, budget, tickets ---------- */
+const RC = {};   // tickets de caisse : rempli par la version autonome (Supabase Storage). Vide dans l'artifact.
+
+/* --- Annuler --- */
+function offerUndo(fn, msg) {
+  const r = $('#toastRoot'), t = document.createElement('div'); t.className = 'toast undo';
+  t.innerHTML = `<span>${esc(msg || 'Modifié')}</span><button type="button" class="tundo">Annuler</button>`;
+  let done = false; const rm = () => { t.classList.add('out'); setTimeout(() => t.remove(), 300); };
+  t.querySelector('button').onclick = async () => { if (done) return; done = true; rm(); await act(fn, 'Rétabli'); };
+  r.appendChild(t); setTimeout(rm, 7000);
+}
+const snapPresence = days => days.map(x => [x, D.presence[x] ? clean(D.presence[x]) : null]);
+const restorePresence = snap => async () => { for (const [x, p] of snap) { if (p) await put('presence', x, p); else await del('presence', x, true); } };
+
+/* --- Modèles de semaine --- */
+const tplFromWeek = w => { const days = {}; for (let i = 0; i < 7; i++) { const d = addDays(w, i); days[i] = {}; PIDS.forEach(p => { days[i][p] = {}; SLOTS.forEach(s => { days[i][p][s.k] = slotPlace(p, d, s.k) || ''; }); }); } return days; };
+const tplList = () => Object.entries(D.templates).map(([id, t]) => ({ id, ...t })).sort((a, b) => String(a.name).localeCompare(String(b.name), 'fr'));
+async function applyTpl(id, days) {
+  const t = D.templates[id]; if (!t || !days.length) return;
+  const snap = snapPresence(days);
+  const ok = await act(async () => {
+    for (let i = 0; i < days.length; i += 6) await Promise.all(days.slice(i, i + 6).map(day => { const src = (t.days || {})[wdi(day)]; if (!src) return null; const upd = { date: day }; PIDS.forEach(p => { upd[p] = Object.assign({}, src[p] || {}); }); return patch('presence', day, upd); }));
+  });
+  if (ok) offerUndo(restorePresence(snap), '« ' + t.name + ' » appliqué à ' + days.length + ' jour' + (days.length > 1 ? 's' : ''));
+}
+ACT['tpl-open'] = () => {
+  resetF({});
+  openSheet(() => {
+    const list = tplList();
+    return `<div class="st">Modèles de semaine</div><div class="ss">Enregistre une semaine type (école, télétravail…), puis applique-la en un tap.</div>
+    <div style="margin-top:10px">${list.length ? list.map(t => `<div class="li"><span class="ic sm">${ico('repeat', 20)}</span><span class="grow"><div class="t">${esc(t.name)}</div></span><button class="btn btn-s btn-sm" data-act="tpl-apply-week" data-id="${esc(t.id)}">Cette semaine</button><button class="ib flat" data-act="tpl-del" data-id="${esc(t.id)}" aria-label="Supprimer">${ico('trash', 20)}</button></div>`).join('') : `<p class="mut sm">Aucun modèle pour l’instant.</p>`}</div>
+    ${lbl('Enregistrer la semaine affichée')}<div class="addrow"><input class="inp" id="tpl-name" maxlength="40" placeholder="Ex. Semaine école" autocomplete="off"><button class="btn btn-p" data-act="tpl-save">Enregistrer</button></div>
+    <p class="mut sm" style="margin-top:12px">Pour l’appliquer à plusieurs semaines : bouton ✓ du planning, sélectionne les jours, puis choisis le modèle.</p>`;
+  }, { live: true });
+};
+ACT['tpl-save'] = async () => {
+  const name = val('tpl-name').trim(); if (!name) return toast('Donne un nom au modèle', 'err');
+  await act(() => put('templates', uid(), { name, days: tplFromWeek(monday(A.plan.date)), ts: Date.now() }), 'Modèle enregistré');
+};
+ACT['tpl-del'] = d => { const prev = D.templates[d.id]; act(() => del('templates', d.id, true), 'Modèle supprimé').then(() => { if (prev) offerUndo(() => put('templates', d.id, prev), 'Modèle supprimé'); }); };
+ACT['tpl-apply-week'] = d => { closeSheet(); const w = monday(A.plan.date); applyTpl(d.id, [0, 1, 2, 3, 4, 5, 6].map(i => addDays(w, i))); };
+ACT['tpl-apply-sel'] = d => { const days = selRange().filter(x => !(F.noWE && wdi(x) >= 5)); closeSheet(); applyTpl(d.id, days).then(() => { SEL.on = false; SEL.a = SEL.b = null; schedule(); }); };
+const tplChips = () => { const l = tplList(); return l.length ? `${lbl('Ou appliquer un modèle')}<div class="chips scroll">${l.map(t => `<button type="button" class="chip" data-act="tpl-apply-sel" data-id="${esc(t.id)}">${esc(t.name)}</button>`).join('')}</div>` : ''; };
+
+/* --- Tâches du foyer --- */
+const CH_EVERY = [{ id: '1', l: 'Chaque jour' }, { id: '3', l: 'Tous les 3 jours' }, { id: '7', l: 'Chaque semaine' }, { id: '14', l: '2 semaines' }, { id: '30', l: 'Chaque mois' }];
+const CH_SUGG = [['🗑️', 'Sortir les poubelles', 3], ['🧹', 'Passer l’aspirateur', 7], ['🧺', 'Faire la lessive', 7], ['🚿', 'Nettoyer la salle de bain', 14], ['🍽️', 'Vider le lave-vaisselle', 2], ['🛏️', 'Changer les draps', 14]];
+const chWho = c => c.who === 'rotate' ? (c.turn || PIDS[0]) : (c.who || PIDS[0]);
+const chDue = c => (c.last && c.last.date) ? addDays(c.last.date, c.every || 7) : (c.start || today());
+const chRel = due => { const n = diffDays(today(), due); return n < 0 ? 'en retard de ' + (-n) + ' j' : n === 0 ? 'aujourd’hui' : n === 1 ? 'demain' : 'dans ' + n + ' j'; };
+const chList = () => Object.entries(D.chores).map(([id, c]) => ({ id, ...c, due: chDue(c), to: chWho(c) })).sort((a, b) => a.due.localeCompare(b.due));
+function choresCard() {
+  const all = chList(), t = today(), soon = all.filter(c => diffDays(t, c.due) <= 2);
+  const row = c => `<div class="li"><button class="chk${diffDays(t, c.due) < 0 ? ' late' : ''}" data-act="chore-done" data-id="${esc(c.id)}" aria-label="Fait : ${esc(c.title)}">${ico('check', 18, 3)}</button><span class="grow"><div class="t">${esc(c.icon || '✨')} ${esc(c.title)}</div><div class="s" style="${diffDays(t, c.due) < 0 ? 'color:var(--warn)' : ''}">${esc(chRel(c.due))}</div></span>${av(c.to, 26)}</div>`;
+  return `<div class="card"><h3>${ico('check', 18)}Tâches du foyer<span class="sp"></span><button class="lk" data-act="chores-open">${all.length ? 'Gérer' : 'Ajouter'}</button></h3>
+    ${soon.length ? soon.slice(0, 5).map(row).join('') : all.length ? `<p class="mut sm">Rien d’urgent. Prochaine : ${esc(all[0].title)} ${esc(chRel(all[0].due))}.</p>` : `<p class="mut sm">Répartissez le ménage : chaque tâche passe à l’autre quand elle est faite.</p>`}</div>`;
+}
+ACT['chore-done'] = async d => {
+  const c = D.chores[d.id]; if (!c) return; const prev = clean(c);
+  const turn = c.who === 'rotate' ? otherP(c.turn || PIDS[0]) : (c.turn || '');
+  const ok = await act(() => patch('chores', d.id, { last: { date: today(), by: A.me }, turn }), 'Bien joué');
+  if (ok) offerUndo(() => put('chores', d.id, prev), c.title + ' : fait');
+};
+ACT['chores-open'] = () => {
+  resetF({});
+  openSheet(() => {
+    const l = chList();
+    return `<div class="st">Tâches du foyer</div><div class="ss">Chaque tâche revient à intervalle régulier, au tour de chacun ou toujours à la même personne.</div>
+    <div style="margin-top:10px">${l.map(c => `<button class="li" data-act="chore-edit" data-id="${esc(c.id)}"><span class="ic sm">${esc(c.icon || '✨')}</span><span class="grow"><div class="t">${esc(c.title)}</div><div class="s">${esc(CH_EVERY.find(e => e.id === String(c.every))?.l || 'Tous les ' + c.every + ' j')} · ${c.who === 'rotate' ? 'tour à tour' : esc(NAMES[c.who] || '')} · ${esc(chRel(c.due))}</div></span>${av(c.to, 26)}</button>`).join('')}</div>
+    <div class="btns"><button class="btn btn-p" data-act="chore-edit" data-id="">${ico('plus', 20, 2.2)}Nouvelle tâche</button></div>`;
+  }, { live: true });
+};
+ACT['chore-edit'] = d => {
+  const c = d.id ? D.chores[d.id] : null;
+  resetF({ id: d.id || '', every: String(c ? c.every : 7), who: c ? c.who : 'rotate', icon: c ? c.icon || '✨' : '✨' });
+  openSheet(() => `<div class="st">${c ? 'Modifier la tâche' : 'Nouvelle tâche'}</div>
+    ${!c ? `<div class="chips scroll" style="margin-top:10px">${CH_SUGG.map(s => `<button type="button" class="chip" data-act="chore-sugg" data-t="${esc(s[1])}" data-i="${esc(s[0])}" data-e="${s[2]}">${s[0]} ${esc(s[1])}</button>`).join('')}</div>` : ''}
+    ${lbl('Tâche')}<input class="inp" id="ch-title" maxlength="50" placeholder="Ex. Sortir les poubelles" value="${esc(c ? c.title : '')}" autocomplete="off">
+    ${lbl('Fréquence')}${chipsH('every', CH_EVERY, F.every).replace('class="chips"', 'class="chips scroll"')}
+    ${lbl('Qui ?')}${segH('who', [{ id: 'rotate', l: 'Tour à tour' }, { id: A.me, l: 'Moi' }, { id: otherP(A.me), l: NAMES[otherP(A.me)] }], F.who)}
+    <div class="btns ${c ? 'two' : ''}">${c ? `<button class="btn btn-d" data-act="chore-del" data-id="${esc(d.id)}">Supprimer</button>` : ''}<button class="btn btn-p" data-act="chore-save">Enregistrer</button></div>`, { focus: c ? '' : 'ch-title' });
+};
+ACT['chore-sugg'] = d => { const n = document.getElementById('ch-title'); if (n) n.value = d.t; F.icon = d.i; F.every = d.e; $$('[data-pick="every"]').forEach(x => x.classList.toggle('on', x.dataset.val === String(d.e))); };
+ACT['chore-save'] = async () => {
+  const title = val('ch-title').trim(); if (!title) return toast('Donne un nom à la tâche', 'err');
+  const old = F.id ? D.chores[F.id] : null, id = F.id || uid();
+  const o = { title, icon: F.icon || '✨', every: parseInt(F.every, 10) || 7, who: F.who, turn: F.who === 'rotate' ? ((old && old.turn) || A.me) : '', last: old && old.last ? old.last : { date: '', by: '' }, start: old ? old.start || today() : today(), ts: Date.now() };
+  closeSheet(); await act(() => put('chores', id, o), old ? 'Tâche modifiée' : 'Tâche ajoutée');
+};
+ACT['chore-del'] = d => { const prev = D.chores[d.id]; closeSheet(); act(() => del('chores', d.id, true), 'Tâche supprimée').then(() => { if (prev) offerUndo(() => put('chores', d.id, prev), 'Tâche supprimée'); }); };
+
+/* --- Résumé de la semaine à venir --- */
+function aheadStart() { const t = today(), late = new Date().getHours() >= 17; return (wdi(t) >= 5 || (wdi(t) === 4 && late)) ? addDays(monday(t), 7) : monday(t); }
+function fixedIn(a, b) {
+  const c = cfg(), out = [], list = [{ label: 'Loyer', amount: Math.max(0, c.rent.amount - c.rent.apl), day: c.rent.day }].concat(c.fixed.map(f => ({ label: f.label, amount: f.amount, day: f.day })));
+  for (let d = a; d <= b; d = addDays(d, 1)) { const m = ymOf(d); list.forEach(f => { if (pd(d).getDate() === Math.min(f.day, dim(m))) out.push({ ...f, date: d }); }); }
+  return out;
+}
+function aheadCard() {
+  const w = aheadStart(), nxt = w !== monday(today()), tg = [0, 1, 2, 3, 4, 5, 6].reduce((n, i) => n + togetherCount(addDays(w, i)), 0);
+  return `<button class="wehl" data-act="ahead-open">${ico('sparkle', 22)}${nxt ? 'Ta semaine à venir' : 'Résumé de la semaine'}<span class="grow"></span><small class="mut" style="font-weight:600">${tg ? tg + ' moment' + (tg > 1 ? 's' : '') + ' ensemble' : ''}</small>${ico('chevR', 20)}</button>`;
+}
+ACT['ahead-open'] = () => {
+  resetF({});
+  openSheet(() => {
+    const w = aheadStart(), days = [0, 1, 2, 3, 4, 5, 6].map(i => addDays(w, i)), end = days[6];
+    const tgDays = days.map(d => ({ d, s: SLOTS.filter(s => together(d, s.k)) })).filter(x => x.s.length);
+    const evs = []; days.forEach(d => eventsOn(d).forEach(e => evs.push(e)));
+    const noDinner = days.filter(d => !mealOf(d, 'dinner')), planned = days.length - noDinner.length;
+    const fx = fixedIn(w, end), ch = chList().filter(c => c.due <= end);
+    const sec = (ic, t, body) => `<div class="card" style="margin-top:12px"><h3>${ico(ic, 18)}${t}</h3>${body}</div>`;
+    return `<div class="st">Semaine du ${esc(fmtD(w, { day: 'numeric', month: 'long' }))}</div><div class="ss">Au ${esc(fmtD(end, { day: 'numeric', month: 'long' }))}</div>
+    ${sec('heart', 'Moments ensemble', tgDays.length ? tgDays.map(x => `<div class="li"><span class="grow"><div class="t">${esc(dayLong(x.d))}</div><div class="s">${x.s.map(s => s.l.toLowerCase()).join(', ')}</div></span></div>`).join('') : `<p class="mut sm">Rien de prévu à la maison à deux.</p>`)}
+    ${sec('cal', 'Événements', evs.length ? evs.map(e => `<div class="li"><span class="grow"><div class="t">${esc(e.title)}</div><div class="s">${esc(dayLong(e.date))}${e.time ? ' · ' + esc(e.time) : ''}</div></span>${avs(whoList(e.who || 'both'))}</div>`).join('') : `<p class="mut sm">Aucun événement.</p>`)}
+    ${sec('meal', 'Repas', `<p class="sm">${planned} dîner${planned > 1 ? 's' : ''} sur 7 prévu${planned > 1 ? 's' : ''}.</p>${noDinner.length && noDinner.length < 7 ? `<p class="mut sm" style="margin-top:4px">Sans dîner : ${noDinner.map(d => DAYL[wdi(d)].toLowerCase()).join(', ')}.</p>` : ''}<div class="btns"><button class="btn btn-s" data-act="ahead-meals" data-d="${w}">Planifier les repas</button></div>`)}
+    ${fx.length ? sec('wallet', 'Prélèvements', fx.map(f => `<div class="li"><span class="grow"><div class="t">${esc(f.label)}</div><div class="s">${esc(dayLong(f.date))}</div></span><span class="amount">${fmt(f.amount)}</span></div>`).join('')) : ''}
+    ${ch.length ? sec('check', 'Tâches à faire', ch.map(c => `<div class="li"><span class="grow"><div class="t">${esc(c.icon || '✨')} ${esc(c.title)}</div><div class="s">${esc(chRel(c.due))}</div></span>${av(c.to, 26)}</div>`).join('')) : ''}
+    <div class="btns"><button class="btn btn-s" data-act="free-open">Trouver un créneau à deux</button></div>`;
+  }, { live: true });
+};
+ACT['ahead-meals'] = d => { closeSheet(); A.tab = 'meal'; A.meal.sub = 'week'; A.meal.level = 'week'; A.meal.week = d.d; A.anim = 'a-zin'; A.resetScroll = true; schedule(); };
+
+/* --- Créneaux libres à deux --- */
+const evSlot = e => { if (!e.time) return SLOTS.map(s => s.k); const h = parseInt(e.time.slice(0, 2), 10); return [h < 12 ? SLOTS[0].k : h < 18 ? SLOTS[1].k : SLOTS[2].k]; };
+function slotFree(p, d, k) {
+  const pl = slotPlace(p, d, k); if (['office', 'remote', 'away', 'trip'].includes(pl)) return false;
+  return !eventsOn(d).some(e => whoList(e.who || 'both').includes(p) && evSlot(e).includes(k));
+}
+ACT['free-open'] = () => {
+  resetF({});
+  openSheet(() => {
+    const t = today(), out = [];
+    for (let i = 0; i < 21 && out.length < 8; i++) {
+      const d = addDays(t, i), we = wdi(d) >= 5;
+      SLOTS.forEach(s => { if (d === t && s.k === SLOTS[0].k) return; if (!we && s.k !== SLOTS[2].k) return; if (PIDS.every(p => slotFree(p, d, s.k))) out.push({ d, s }); });
+    }
+    return `<div class="st">Créneaux libres à deux</div><div class="ss">Soirs en semaine et week-ends où ni l’un ni l’autre n’êtes pris (travail, déplacement, événement).</div>
+    <div style="margin-top:10px">${out.length ? out.slice(0, 8).map(x => `<button class="li" data-act="ev-new-d" data-d="${x.d}"><span class="ic sm">${ico('heart', 20)}</span><span class="grow"><div class="t">${esc(dayLong(x.d))}</div><div class="s">${esc(x.s.l)}${together(x.d, x.s.k) ? ' · déjà ensemble à la maison' : ''}</div></span>${ico('chevR', 18)}</button>`).join('') : `<p class="mut sm">Pas de créneau libre commun dans les 3 prochaines semaines.</p>`}</div>
+    <p class="mut sm" style="margin-top:10px">Touche un créneau pour y créer un événement.</p>`;
+  }, { live: true });
+};
+
+/* --- Repas : restes, idée selon les achats, articles habituels --- */
+function boughtSet() {
+  const w = A.meal.week, chk = (D.shopchecks[w] && D.shopchecks[w].checked) || {}, s = new Set();
+  groceryItems(w).forEach(i => { if (chk[i.key]) s.add(norm(i.name)); });
+  Object.values(D.shopitems).forEach(x => { if (x.week === w && x.done) s.add(norm(x.name)); });
+  return s;
+}
+ACT['ml-stock'] = () => {
+  const have = boughtSet(); if (!have.size) return toast('Coche d’abord des articles dans la liste de courses', 'err');
+  const recent = new Set(); for (let i = -10; i <= 0; i++) { const m = D.meals[addDays(today(), i)]; if (m) MK.forEach(k => { if (m[k]) { if (m[k].recipeId) recent.add(m[k].recipeId); } }); }
+  const sc = recList().map(r => { const ing = r.ingredients || [], hit = ing.filter(x => have.has(norm(x.n))).length; return { r, hit, f: ing.length ? hit / ing.length : 0 }; }).filter(x => x.hit > 0 && x.r.id !== F._idea);
+  if (!sc.length) return toast('Aucun plat ne correspond à ce que vous avez acheté', 'err');
+  sc.sort((a, b) => (b.f - a.f) || (recent.has(a.r.id) - recent.has(b.r.id)) || (b.hit - a.hit));
+  const pick = sc[Math.floor(Math.random() * Math.min(3, sc.length))].r;
+  F._idea = pick.id; F.recipeId = pick.id; const n = document.getElementById('ml-name'); if (n) n.value = pick.name; toast('Avec vos achats : ' + pick.name);
+};
+ACT['ml-leftover'] = async () => {
+  const name = val('ml-name').trim(); if (!name) return toast('Choisis d’abord le plat', 'err');
+  const { d, k } = F, nd = k === 'dinner' ? addDays(d, 1) : d, nk = k === 'dinner' ? 'lunch' : 'dinner';
+  if (mealOf(nd, nk)) return toast('Ce repas est déjà prévu', 'err');
+  const base = name.replace(/^Restes\s*:\s*/i, '');
+  await act(() => patch('meals', nd, { date: nd, [nk]: { name: 'Restes : ' + base, recipeId: '', who: F.who, where: 'home', note: '', leftover: true } }), 'Restes prévus ' + (k === 'dinner' ? 'demain midi' : 'ce soir'));
+};
+function freqChips() {
+  const w = A.meal.week, cur = new Set(Object.values(D.shopitems).filter(x => x.week === w && !x.done).map(x => norm(x.name))), cnt = {};
+  Object.values(D.shopitems).forEach(x => { if (x.name) { const k = norm(x.name); (cnt[k] || (cnt[k] = { n: x.name, c: 0, x })).c++; } });
+  const top = Object.entries(cnt).filter(([k]) => !cur.has(k)).sort((a, b) => b[1].c - a[1].c).slice(0, 8).map(([, v]) => v);
+  return top.length ? `<div class="chips scroll" style="margin-top:10px">${top.map(v => `<button type="button" class="chip" data-act="shop-quick" data-n="${esc(v.n)}" data-a="${esc(v.x.aisle || '')}">+ ${esc(v.n)}</button>`).join('')}</div>` : '';
+}
+ACT['shop-quick'] = d => act(() => put('shopitems', uid(), { week: A.meal.week, name: d.n, qty: null, unit: '', aisle: d.a || guessAisle(d.n), done: false, by: A.me, ts: Date.now() }));
+
+/* --- Budget : plafonds, avancé par chacun, tickets --- */
+function budgetAlert(cat, m) {
+  const tg = (cfg().targets || {})[cat]; if (!(tg > 0)) return;
+  const spent = monthExp(m).filter(e => isShared(e) && e.cat === cat).reduce((s, e) => s + e.amount, 0), r = spent / tg, c = catById(cat);
+  if (r >= 1) toast(`${c.label} : budget dépassé (${fmt(spent)} sur ${fmt(tg)})`, 'err', 4200);
+  else if (r >= 0.8) toast(`${c.label} : ${Math.round(r * 100)} % du budget du mois`, null, 3600);
+}
+function paidCard(m) {
+  const ex = monthExp(m).filter(e => isShared(e) && e.kind !== 'settle'), by = { maxym: 0, sasha: 0 }, n = { maxym: 0, sasha: 0 };
+  ex.forEach(e => { if (by[e.paidBy] != null) { by[e.paidBy] += e.amount; n[e.paidBy]++; } });
+  const tot = by.maxym + by.sasha; if (!(tot > 0)) return '';
+  return `<div class="card"><h3>${ico('swap', 18)}Qui a avancé quoi</h3>${PIDS.map(p => `<div class="li" style="flex-wrap:wrap">${av(p, 28)}<span class="grow"><div class="t">${esc(NAMES[p])}</div><div class="s">${n[p]} dépense${n[p] > 1 ? 's' : ''}</div></span><b class="amount">${fmt(by[p])}</b><div class="pg" style="flex-basis:100%;margin-top:8px"><i style="width:${Math.round(by[p] / tot * 100)}%;background:var(--${p})"></i></div></div>`).join('')}</div>`;
+}
+async function compressImg(file, max = 1100, q = .62) {
+  const bm = await createImageBitmap(file), k = Math.min(1, max / Math.max(bm.width, bm.height)), c = document.createElement('canvas');
+  c.width = Math.round(bm.width * k); c.height = Math.round(bm.height * k); c.getContext('2d').drawImage(bm, 0, 0, c.width, c.height);
+  return new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error('image')), 'image/jpeg', q));
+}
+const rcptField = ex => !RC.upload ? '' : `${lbl('Ticket de caisse')}<input type="file" id="rc-file" accept="image/*" hidden><div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-s btn-sm" id="rc-btn" data-act="rcpt-pick">${ico('camera', 18)}${ex && ex.receipt ? 'Remplacer la photo' : 'Joindre une photo'}</button>${ex && ex.receipt ? `<button type="button" class="btn btn-g btn-sm" data-act="rcpt-view" data-id="${esc(ex.id)}">Voir le ticket</button>` : ''}</div>`;
+ACT['rcpt-pick'] = () => { const f = document.getElementById('rc-file'); if (f) f.click(); };
+document.addEventListener('change', async e => {
+  if (!e.target || e.target.id !== 'rc-file' || !e.target.files[0]) return;
+  const b = document.getElementById('rc-btn');
+  try { if (b) b.textContent = 'Compression…'; F.rcptBlob = await compressImg(e.target.files[0]); if (b) b.textContent = 'Photo prête (' + Math.round(F.rcptBlob.size / 1024) + ' Ko)'; }
+  catch (er) { F.rcptBlob = null; if (b) b.textContent = 'Photo illisible'; }
+});
+ACT['rcpt-view'] = async d => {
+  const u = RC.url ? await RC.url(d.id) : null; if (!u) return toast('Ticket introuvable', 'err');
+  resetF({}); openSheet(() => `<div class="st">Ticket de caisse</div><img src="${esc(u)}" alt="Ticket" style="width:100%;border-radius:16px;margin-top:12px">`);
+};
+
+/* --- Raccourcis (appui long sur l'icône) --- */
+function runShortcut() {
+  let a = ''; try { a = new URLSearchParams(location.search).get('a') || ''; history.replaceState(null, '', location.pathname); } catch (e) { /* */ }
+  if (!a || !A.me) return;
+  if (a === 'exp') openExpense('');
+  else if (a === 'shop') { A.tab = 'meal'; A.meal.sub = 'shop'; schedule(); }
+  else if (a === 'plan') { A.tab = 'plan'; schedule(); }
+  else if (a === 'meal') { A.tab = 'meal'; A.meal.sub = 'week'; schedule(); }
+}
+
 /* ---------- Supabase : adaptateur qui imite l'interface « db » utilisée par l'appli ----------
    Table unique `docs` (path, col, id, data jsonb). Temps réel via postgres_changes.        */
 function makeDB(sb) {
@@ -1870,13 +2099,48 @@ async function startApp(session) {
   }
   authEl().classList.remove('on'); authEl().innerHTML = '';
   caps.downloads = { async save({ filename, data }) { const u = URL.createObjectURL(new Blob([data], { type: 'text/csv;charset=utf-8' })); const a = document.createElement('a'); a.href = u; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); } };
+  RC.upload = async (id, blob) => { const { error } = await SB.storage.from('receipts').upload(id + '.jpg', blob, { upsert: true, contentType: 'image/jpeg' }); if (error) throw error; };
+  RC.url = async id => { const { data, error } = await SB.storage.from('receipts').createSignedUrl(id + '.jpg', 600); return error ? null : data.signedUrl; };
   loadLocal();
   try { await Promise.race([subscribeAll(), sleep(8000)]); } catch (e) { console.error(e); }
   if (!A.me) { const p = D.priv.profile; if (p && (p.me === 'maxym' || p.me === 'sasha')) { A.me = p.me; lsSet('cn-me', A.me); } }
-  A.ready = true; render();
+  A.ready = true; render(); runShortcut();
 }
 ACT['sign-out'] = async () => { try { UNS.forEach(u => { try { u(); } catch (e) { /* */ } }); await SB.auth.signOut(); } finally { location.reload(); } };
-const signOutLi = () => `<button class="li" data-act="sign-out"><span class="ic sm">${ico('swap', 20)}</span><span class="grow"><div class="t">Se déconnecter</div><div class="s">${esc(A.userEmail || '')}</div></span></button>`;
+const signOutLi = () => `<button class="li" data-act="push-open"><span class="ic sm">${ico('bell', 20)}</span><span class="grow"><div class="t">Notifications</div><div class="s">Rappels repas, prélèvements, tâches</div></span>${ico('chevR', 18)}</button><button class="li" data-act="sign-out"><span class="ic sm">${ico('swap', 20)}</span><span class="grow"><div class="t">Se déconnecter</div><div class="s">${esc(A.userEmail || '')}</div></span></button>`;
+
+/* --- Notifications push (gratuites : Web Push + fonction Supabase planifiée) --- */
+const PUSH = { prefs: { meals: true, charges: true, chores: true, week: true }, on: false, ok: false };
+const PUSH_L = { meals: 'Le soir : repas de demain pas prévu', charges: 'Le matin : prélèvement du jour', chores: 'Le matin : tâche qui t’attend', week: 'Dimanche soir : résumé de la semaine' };
+const b64u8 = b => { const p = '='.repeat((4 - b.length % 4) % 4), r = atob((b + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from([...r].map(c => c.charCodeAt(0))); };
+async function pushLoad() {
+  PUSH.ok = !!(CFG.vapidKey && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window);
+  if (!PUSH.ok) return;
+  const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription();
+  PUSH.on = !!sub && Notification.permission === 'granted';
+  if (sub) { const { data } = await SB.from('push_subs').select('prefs').eq('endpoint', sub.endpoint).maybeSingle(); if (data && data.prefs) Object.assign(PUSH.prefs, data.prefs); }
+}
+async function pushSave() { const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription(); if (!sub) return; const { error } = await SB.from('push_subs').upsert({ endpoint: sub.endpoint, uid: UID, sub: sub.toJSON(), prefs: PUSH.prefs }); if (error) throw error; }
+ACT['push-open'] = async () => {
+  try { await pushLoad(); } catch (e) { console.error(e); }
+  resetF({});
+  openSheet(() => `<div class="st">Notifications</div><div class="ss">Gratuites, envoyées sur ce téléphone seulement.</div>
+    ${!PUSH.ok ? `<div class="note" style="margin-top:12px"><div class="grow"><b>Pas disponible ici</b>Sur iPhone, ajoute d’abord l’appli à l’écran d’accueil (Safari, Partager), puis rouvre-la depuis l’icône. Il faut iOS 16.4 ou plus. Vérifie aussi que la clé de notification est dans config.js.</div></div>` : `
+    <div class="btns"><button class="btn ${PUSH.on ? 'btn-s' : 'btn-p'}" data-act="${PUSH.on ? 'push-off' : 'push-on'}">${PUSH.on ? 'Désactiver sur cet appareil' : 'Activer sur cet appareil'}</button></div>
+    ${PUSH.on ? `<div style="margin-top:8px">${Object.keys(PUSH_L).map(k => `<button type="button" class="swr" data-act="push-pref" data-k="${k}"><span>${esc(PUSH_L[k])}</span><i class="sw${PUSH.prefs[k] ? ' on' : ''}"></i></button>`).join('')}</div>` : ''}`}`, { live: true });
+};
+ACT['push-on'] = async () => {
+  try {
+    const perm = await Notification.requestPermission(); if (perm !== 'granted') return toast('Autorise les notifications dans les réglages du téléphone', 'err', 4200);
+    const reg = await navigator.serviceWorker.ready; let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u8(CFG.vapidKey) });
+    PUSH.on = true; await pushSave(); toast('Notifications activées'); schedule();
+  } catch (e) { console.error(e); toast('Activation impossible', 'err'); }
+};
+ACT['push-off'] = async () => {
+  try { const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription(); if (sub) { await SB.from('push_subs').delete().eq('endpoint', sub.endpoint); await sub.unsubscribe(); } PUSH.on = false; toast('Notifications désactivées'); schedule(); } catch (e) { console.error(e); }
+};
+ACT['push-pref'] = async d => { PUSH.prefs[d.k] = !PUSH.prefs[d.k]; schedule(); try { await pushSave(); } catch (e) { toast('Enregistrement impossible', 'err'); } };
 
 (async function bootPwa() {
   A.hide = lsGet('cn-hide') === '1';

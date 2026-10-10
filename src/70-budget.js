@@ -54,6 +54,7 @@ function budOver() {
     <div class="card"><h3>${ico('wallet', 18)}Dépenses communes</h3>
       <div class="row" style="flex-wrap:wrap;gap:8px"><div class="big">${fmt(total)}</div><span class="grow"></span>${cmp}</div>
       ${parts.length ? `<div class="donutw" style="margin-top:14px">${donut(parts, total)}<div class="leg">${parts.map(p => `<div class="legi"><i style="background:${esc(p.color)}"></i><span class="grow">${esc(p.icon)} ${esc(p.label)}</span><b class="amount sm">${fmt(p.v)}</b><span class="mut sm" style="width:38px;text-align:right">${Math.round(p.v / total * 100)} %</span></div>`).join('')}</div></div>` : emptyH('wallet', 'Pas encore de dépense commune', 'Ajoute une dépense avec le bouton +, elle apparaîtra ici.')}</div>
+    ${paidCard(m)}
     <div class="grid2">
     <div class="card"><h3>${ico('target', 18)}Budgets cibles<span class="sp"></span><button class="lk" data-act="tgt-edit" data-id="">Ajouter</button></h3>
       ${tg.length ? tg.map(([id, v]) => { const cat = catById(id), spent = r2(byCat[id] || 0), r = spent / v; return `<button class="tgt" data-act="tgt-edit" data-id="${esc(id)}"><div class="row"><span class="ic sm" style="--pc:${esc(cat.color)}">${esc(cat.icon)}</span><span class="grow t" style="font-weight:600">${esc(cat.label)}</span><span class="amount sm">${fmt(spent)} / ${fmt(v)}</span></div><div class="pg"><i style="width:${Math.min(100, Math.round(r * 100))}%;background:${pgColor(r)}"></i></div>${r > 1 ? `<div class="sm" style="color:var(--bad-ink);margin-top:6px">Dépassé de ${fmt(spent - v)}</div>` : ''}</button>`; }).join('') : `<p class="mut sm">Fixe un plafond mensuel par catégorie, par exemple 400 € pour les courses.</p>`}</div>
@@ -173,6 +174,7 @@ function openExpense(id, pre) {
     <div id="ex-custom" ${F.mode === 'custom' ? '' : 'hidden'} style="margin-top:6px"><input type="range" class="range" id="ex-pct" min="0" max="100" step="5" value="${pct}" aria-label="Part de ${NAMES.maxym}"><div class="sm mut" id="ex-pct-t"></div></div>
     <div class="row" style="align-items:flex-start"><div class="grow">${lbl('Date')}<input class="inp" type="date" id="ex-date" value="${esc(ex ? ex.date : (pre.date || today()))}"></div></div>
     ${lbl('Note')}<input class="inp" id="ex-note" maxlength="80" placeholder="Facultatif" value="${esc(ex ? ex.note || '' : '')}" autocomplete="off">
+    ${rcptField(ex)}
     <div class="btns ${ex ? 'two' : ''}">${ex ? `<button class="btn btn-d" data-act="exp-del-ask" data-id="${esc(id)}">Supprimer</button>` : ''}<button class="btn btn-p" data-act="exp-save">${ex ? 'Enregistrer' : 'Ajouter'}</button></div>`, { focus: ex ? '' : 'ex-amt' });
   setTimeout(() => updatePct('ex-pct'), 40);
 }
@@ -181,11 +183,13 @@ ACT['exp-new-d'] = d => openExpense('', { date: d.d });
 ACT['exp-save'] = async () => {
   const amount = num(val('ex-amt')); if (!(amount > 0)) return toast('Saisis un montant', 'err');
   const a = r2(amount), mode = F.mode, paidBy = mode === 'perso' ? A.me : F.paidBy, pct = num(val('ex-pct')), fid = F.id;
-  const o = { kind: 'expense', amount: a, cat: F.cat, paidBy, mode, shares: buildShares(a, mode, paidBy, isFinite(pct) ? pct : 50), date: val('ex-date') || today(), note: val('ex-note').trim(), createdBy: A.me, ts: Date.now() };
+  const rb = F.rcptBlob, o = { kind: 'expense', amount: a, cat: F.cat, paidBy, mode, shares: buildShares(a, mode, paidBy, isFinite(pct) ? pct : 50), date: val('ex-date') || today(), note: val('ex-note').trim(), createdBy: A.me, ts: Date.now() };
   const old = fid ? allExp().find(e => e.id === fid) : null, loc = mode === 'perso' ? 'priv' : 'shared';
   const id = fid && old && old._loc === loc ? fid : (loc === 'priv' ? 'pexp_' : '') + uid();
+  if (rb && RC.upload) o.receipt = true; else if (old && old.receipt) o.receipt = true;
   lsSet('cn-lastcat', F.cat); closeSheet();
-  await act(async () => { await put(loc === 'priv' ? 'priv' : 'expenses', id, o); if (old && old._loc !== loc) await del(old._loc === 'priv' ? 'priv' : 'expenses', old.id); }, fid ? 'Dépense modifiée' : 'Dépense ajoutée');
+  const ok = await act(async () => { if (rb && RC.upload) await RC.upload(id, rb); await put(loc === 'priv' ? 'priv' : 'expenses', id, o); if (old && old._loc !== loc) await del(old._loc === 'priv' ? 'priv' : 'expenses', old.id, true); }, fid ? 'Dépense modifiée' : 'Dépense ajoutée');
+  if (ok && loc === 'expenses') budgetAlert(o.cat, o.date.slice(0, 7));
 };
 ACT['exp-del-ask'] = d => {
   const id = d.id; confirmSheet({ title: 'Supprimer cette opération ?', text: 'Le solde sera recalculé.', ok: 'Supprimer', danger: true, onOk: () => { const e = allExp().find(x => x.id === id); if (e) act(() => del(e._loc === 'priv' ? 'priv' : 'expenses', e.id), 'Supprimée'); } });
