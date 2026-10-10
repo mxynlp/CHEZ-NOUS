@@ -1085,7 +1085,8 @@ function vHome() {
   const bal = myBalance(), nf = nextFixed(), mt = ymOf(t);
   const balTxt = Math.abs(bal) < 0.5 ? `Vous êtes <span style="color:var(--accent-ink)">quittes</span>` : bal > 0 ? `${esc(NAMES[o])} te doit <span style="color:var(--accent-ink)">${fmt(bal)}</span>` : `Tu dois <span style="color:var(--accent-ink)">${fmt(-bal)}</span> à ${esc(NAMES[o])}`;
   const budCard = `<div class="card"><h3>${ico('wallet', 18)}Budget du mois<span class="sp"></span><button class="lk" data-act="go-bud">Ouvrir</button></h3>
-    <div class="bal"><div class="grow"><div class="big" style="font-size:27px">${balTxt}</div><div class="mut sm" style="margin-top:6px">Dépenses communes en ${esc(fmtD(mt + '-01', { month: 'long' }))} : <b>${fmt(commonTotal(mt))}</b></div></div>${Math.abs(bal) >= 0.5 ? `<button class="btn btn-p btn-sm" data-act="settle-open">Régler</button>` : ''}</div>
+    <div class="bal"><div class="grow"><div class="big" style="font-size:27px">${balTxt}</div>${typeof balDetail === 'function' ? balDetail() : ''}<div class="mut sm" style="margin-top:6px">Dépenses communes en ${esc(fmtD(mt + '-01', { month: 'long' }))} : <b>${fmt(commonTotal(mt))}</b></div></div>${Math.abs(bal) >= 0.5 ? `<button class="btn btn-p btn-sm" data-act="settle-open">Régler</button>` : ''}</div>
+    ${fxHomeBtn(mt)}
     ${nf ? `<div class="li" style="margin-top:12px;border-top:1px solid var(--line)"><span class="ic sm" style="--pc:${esc(catById(nf.cat).color)}">${esc(catById(nf.cat).icon)}</span><span class="grow"><div class="t">${esc(nf.label)}</div><div class="s">Prochain prélèvement ${relDays(nf.date)} · ${esc(fmtD(nf.date, { day: 'numeric', month: 'short' }))}</div></span><span class="amount">${fmt(nf.amount)}</span></div>` : ''}</div>`;
   const notes = [];
   if (A.canWrite === false) notes.push(nt('ro', `<div class="note"><div class="grow"><b>Lecture seule</b>Demande à Maxym de t’inviter par e-mail comme éditeur (menu Partager, sans lien public) pour modifier les données.</div></div>`));
@@ -1621,8 +1622,12 @@ function fxMonthBtn(m) {
   const left = list.filter(e => !e.settled).length;
   return left ? `<div class="btns"><button class="btn btn-s btn-b" data-act="fx-paid-month">${A.me === 'maxym' ? 'J’ai donné ma part de ce mois' : NAMES.maxym + ' m’a donné sa part de ce mois'}</button></div>` : `<p class="mut sm" style="margin-top:10px">${ico('check', 14)} Part de ce mois réglée.</p>`;
 }
-ACT['fx-paid-month'] = async () => {
-  const m = A.bud.month, ids = Object.entries(D.expenses).filter(([, e]) => e && e.auto && !e.settled && e.date && e.date.slice(0, 7) === m).map(([id]) => id);
+function fxHomeBtn(m) {
+  const left = Object.values(D.expenses).filter(e => e && e.auto && !e.settled && e.date && e.date.slice(0, 7) === m).length;
+  return left ? `<div style="margin-top:10px"><button class="btn btn-s btn-sm" data-act="fx-paid-month" data-m="${m}">${A.me === 'maxym' ? 'J’ai déjà donné ma part des charges fixes' : NAMES.maxym + ' a déjà donné sa part des charges fixes'}</button></div>` : '';
+}
+ACT['fx-paid-month'] = async d => {
+  const m = (d && d.m) || A.bud.month, ids = Object.entries(D.expenses).filter(([, e]) => e && e.auto && !e.settled && e.date && e.date.slice(0, 7) === m).map(([id]) => id);
   await act(() => Promise.all(ids.map(id => patch('expenses', id, { settled: true }))), 'Part du mois réglée');
 };
 ACT['fx-paid'] = async d => { const e = D.expenses[d.id]; if (!e) return; closeSheet(); await act(() => patch('expenses', d.id, { settled: !e.settled }), e.settled ? 'Part de nouveau à régler' : 'Part réglée'); };

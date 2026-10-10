@@ -50,8 +50,12 @@ function fxMonthBtn(m) {
   const left = list.filter(e => !e.settled).length;
   return left ? `<div class="btns"><button class="btn btn-s btn-b" data-act="fx-paid-month">${A.me === 'maxym' ? 'J’ai donné ma part de ce mois' : NAMES.maxym + ' m’a donné sa part de ce mois'}</button></div>` : `<p class="mut sm" style="margin-top:10px">${ico('check', 14)} Part de ce mois réglée.</p>`;
 }
-ACT['fx-paid-month'] = async () => {
-  const m = A.bud.month, ids = Object.entries(D.expenses).filter(([, e]) => e && e.auto && !e.settled && e.date && e.date.slice(0, 7) === m).map(([id]) => id);
+function fxHomeBtn(m) {
+  const left = Object.values(D.expenses).filter(e => e && e.auto && !e.settled && e.date && e.date.slice(0, 7) === m).length;
+  return left ? `<div style="margin-top:10px"><button class="btn btn-s btn-sm" data-act="fx-paid-month" data-m="${m}">${A.me === 'maxym' ? 'J’ai déjà donné ma part des charges fixes' : NAMES.maxym + ' a déjà donné sa part des charges fixes'}</button></div>` : '';
+}
+ACT['fx-paid-month'] = async d => {
+  const m = (d && d.m) || A.bud.month, ids = Object.entries(D.expenses).filter(([, e]) => e && e.auto && !e.settled && e.date && e.date.slice(0, 7) === m).map(([id]) => id);
   await act(() => Promise.all(ids.map(id => patch('expenses', id, { settled: true }))), 'Part du mois réglée');
 };
 ACT['fx-paid'] = async d => { const e = D.expenses[d.id]; if (!e) return; closeSheet(); await act(() => patch('expenses', d.id, { settled: !e.settled }), e.settled ? 'Part de nouveau à régler' : 'Part réglée'); };
