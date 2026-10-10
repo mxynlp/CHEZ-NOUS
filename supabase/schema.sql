@@ -45,7 +45,7 @@ exception when duplicate_object then null; end $$;
 -- 2) Les deux membres du foyer (À MODIFIER)
 insert into public.members (email) values
   ('maxym.nelaupe@gmail.com'),
-  ('EMAIL_DE_SASHA@exemple.com')
+  ('jflaurelut@gmail.com')
 on conflict do nothing;
 
 -- ===== Tickets de caisse (photos compressées, stockage privé) =====
