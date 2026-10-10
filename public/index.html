@@ -18,13 +18,13 @@
    Palette : vert sauge #7FB89A · menthe #A8D5BA · vert profond #2F5D4A
    ===================================================================== */
 :root{
-  --bg:#F7FAF8; --card:#FFFFFF; --soft:#EAF4EE; --line:rgba(47,93,74,.11); --line-2:rgba(47,93,74,.2);
+  --bg:#CBE4D5; --bg-hi:#DDEFE4; --card:#FFFFFF; --soft:#EAF4EE; --line:rgba(47,93,74,.11); --line-2:rgba(47,93,74,.2);
   --ink:#16261E; --ink2:#5C7068; --ink3:#93A39A;
   --sage:#7FB89A; --mint:#A8D5BA; --deep:#2F5D4A; --accent-ink:#2F5D4A; --on-sage:#12301F;
   --today:#2F5D4A; --on-today:#FFFFFF;
   --maxym:#2F7D5B; --on-maxym:#FFFFFF; --sasha:#9CCB7C; --on-sasha:#1E3A22;
   --warn:#F0B27A; --bad:#E58C8C; --bad-ink:#A04545;
-  --glass:rgba(247,250,248,.78); --sheet:rgba(255,255,255,.9); --backdrop:rgba(18,32,26,.4);
+  --glass:rgba(208,230,218,.82); --sheet:rgba(255,255,255,.9); --backdrop:rgba(18,32,26,.4);
   --toast-bg:rgba(31,61,48,.95); --toast-ink:#FFFFFF;
   --shadow:0 1px 1px rgba(28,58,45,.04),0 10px 30px rgba(28,58,45,.08);
   --shadow-up:0 -12px 44px rgba(20,45,35,.2);
@@ -32,7 +32,7 @@
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter",system-ui,"Segoe UI",Roboto,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0F1A15; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
+  --bg:#0F1A15; --bg-hi:#17291F; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
   --ink:#EAF3EE; --ink2:#9DB2A7; --ink3:#6F867A; --accent-ink:#A8D5BA; --today:#A8D5BA; --on-today:#0F1A15;
   --maxym:#4FB588; --on-maxym:#07210F; --sasha:#B6DC98; --on-sasha:#18301B; --bad-ink:#F0A5A5;
   --glass:rgba(15,26,21,.78); --sheet:rgba(26,42,35,.92); --backdrop:rgba(0,0,0,.55);
@@ -40,7 +40,7 @@
   --shadow:0 1px 1px rgba(0,0,0,.2),0 10px 30px rgba(0,0,0,.28); --shadow-up:0 -12px 44px rgba(0,0,0,.5);
   color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0F1A15; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
+  --bg:#0F1A15; --bg-hi:#17291F; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
   --ink:#EAF3EE; --ink2:#9DB2A7; --ink3:#6F867A; --accent-ink:#A8D5BA; --today:#A8D5BA; --on-today:#0F1A15;
   --maxym:#4FB588; --on-maxym:#07210F; --sasha:#B6DC98; --on-sasha:#18301B; --bad-ink:#F0A5A5;
   --glass:rgba(15,26,21,.78); --sheet:rgba(26,42,35,.92); --backdrop:rgba(0,0,0,.55);
@@ -50,7 +50,7 @@
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.35;overflow:hidden;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+body{background:linear-gradient(180deg,var(--bg-hi) 0,var(--bg) 380px),var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.35;overflow:hidden;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;touch-action:manipulation;text-align:inherit}
 button:active:not(:disabled){transform:scale(.97)}
 button,.ib,.chip,.btn{transition:transform .12s var(--ease),background .2s,box-shadow .2s,opacity .2s}
@@ -413,6 +413,48 @@ body.selmode .page{padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom,
 .selcard{padding:12px 14px}
 .selcard .chip{padding:0 13px;min-height:38px;font-size:14px}
 .selcard .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+/* ---------- densité & confort (inspiré Notion / Apple) ---------- */
+.hdr{padding:10px 16px 8px;transition:box-shadow .2s}
+.title{font-size:30px;transition:font-size .2s var(--ease)}
+.title .sub{transition:opacity .15s,max-height .2s;max-height:24px;overflow:hidden}
+.hdr.compact{box-shadow:0 1px 0 var(--line)}
+.hdr.compact .title{font-size:20px}
+.hdr.compact .title .sub{opacity:0;max-height:0}
+.navrow{margin-top:6px}
+.navrow .ib{width:38px;height:38px}
+.navt b{font-size:18px}
+.hdr .seg{margin-top:8px}
+.seg button{min-height:38px}
+.hdr .ib.sm{width:40px;height:40px;box-shadow:none;background:color-mix(in srgb,var(--card) 70%,transparent)}
+.me-btn{width:40px;height:40px}
+.card{padding:16px;margin-top:12px}
+.card h3{margin-bottom:10px}
+.tc{min-height:46px;padding:5px 3px}
+.tc b{font-size:17px}
+.m2{padding:8px 12px}
+.meals2{margin-top:10px}
+.qa{gap:8px;margin-top:10px}
+.qa{grid-template-columns:repeat(3,minmax(0,1fr))}
+.qa button{min-height:66px;gap:4px;border-radius:18px;font-size:13.5px;padding:6px 4px;min-width:0}
+.qa .qi{width:30px;height:30px;border-radius:10px}
+.sd1{min-height:68px;padding:6px 2px}
+.mcell{min-height:52px;padding:6px 10px}
+.mg{gap:5px}
+.note{margin-top:10px;position:relative;padding-right:34px}
+.nx{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;font-size:20px;line-height:1;color:var(--ink2);display:grid;place-items:center}
+.hcols{display:grid;grid-template-columns:minmax(0,1fr)}
+.hcol{display:contents}
+.o1{order:1}.o2{order:2}.o3{order:3}.o4{order:4}.o5{order:5}
+@media (min-width:1000px){
+  .page.wide{max-width:1120px}
+  .hcols{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0 16px;align-items:start}
+  .hcol{display:block}
+}
+.srch .inp{min-height:52px;font-size:17px}
+.srow{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:6px 4px;border-radius:14px}
+.srow:active{background:var(--soft)}
+.srow .ic{flex:none}
+.sgrp{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin:14px 4px 4px}
 
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
@@ -793,7 +835,7 @@ const emptyH = (icon, title, text, btn) => `<div class="empty"><div class="eic">
 
 /* en-tête commun (titre large, profil, synchro) */
 function hdr(title, sub, o = {}) {
-  return `<div class="hdr"><div class="hrow">${o.back ? `<button class="ib flat" data-act="${o.back}" aria-label="Retour">${ico('chevL', 24)}</button>` : ''}<div class="title">${esc(title)}${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>${o.right || ''}<button class="me-btn" data-act="profile" aria-label="Profil et réglages">${av(A.me, 36)}<i class="sd${A.sync === 'live' ? '' : ' off'}"></i></button></div>${o.extra || ''}</div>`;
+  return `<div class="hdr"><div class="hrow">${o.back ? `<button class="ib flat" data-act="${o.back}" aria-label="Retour">${ico('chevL', 24)}</button>` : ''}<div class="title">${esc(title)}${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>${o.right || ''}${o.back ? '' : `<button class="ib sm" data-act="search-open" aria-label="Rechercher (Ctrl K)">${ico('search', 20)}</button>`}<button class="me-btn" data-act="profile" aria-label="Profil et réglages">${av(A.me, 36)}<i class="sd${A.sync === 'live' ? '' : ' off'}"></i></button></div>${o.extra || ''}</div>`;
 }
 const navRow = (prev, next, label, sub) => `<div class="navrow"><button class="ib" aria-label="Précédent" data-act="${prev}">${ico('chevL')}</button><div class="navt"><b>${esc(label)}</b>${sub ? `<span>${esc(sub)}</span>` : ''}</div><button class="ib" aria-label="Suivant" data-act="${next}">${ico('chevR')}</button></div>`;
 
@@ -833,8 +875,9 @@ function setView(html) {
   focusKeep(() => { el.innerHTML = html; });
   el.scrollTop = st;
   if (A.anim) { const c = el.querySelector('.content'); if (c) c.classList.add(A.anim); A.anim = null; }
-  A.resetScroll = false;
+  A.resetScroll = false; if (window.__hdrUpd) window.__hdrUpd();
 }
+(function () { const v = document.getElementById('view'); if (!v) return; let c = false; window.__hdrUpd = () => { const h = v.querySelector('.hdr'); if (!h) return; const t = v.scrollTop; if (!c && t > 56) c = true; else if (c && t < 8) c = false; h.classList.toggle('compact', c); }; v.addEventListener('scroll', window.__hdrUpd, { passive: true }); })();
 function render() {
   if (!A.ready) { renderSkel(); return; }
   if (!A.me) { renderGate(); return; }
@@ -981,7 +1024,7 @@ function relDays(d) { const n = diffDays(today(), d); return n === 0 ? 'aujourd�
 
 function vHome() {
   const t = today(), c = cfg(), hr = new Date().getHours();
-  const g = hr < 5 ? 'Bonne nuit' : hr < 12 ? 'Bonjour' : hr < 18 ? 'Bon après-midi' : 'Bonsoir';
+  const g = hr < 5 ? 'Bonne nuit' : hr < 18 ? 'Bonjour' : 'Bonsoir';
   const o = otherP(A.me), evs = eventsOn(t), ml = mealOf(t, 'lunch'), md = mealOf(t, 'dinner');
   const tg = SLOTS.filter(s => together(t, s.k));
   const order = [A.me, o];
@@ -1008,16 +1051,14 @@ function vHome() {
     <div class="bal"><div class="grow"><div class="big" style="font-size:27px">${balTxt}</div><div class="mut sm" style="margin-top:6px">Dépenses communes en ${esc(fmtD(mt + '-01', { month: 'long' }))} : <b>${fmt(commonTotal(mt))}</b></div></div>${Math.abs(bal) >= 0.5 ? `<button class="btn btn-p btn-sm" data-act="settle-open">Régler</button>` : ''}</div>
     ${nf ? `<div class="li" style="margin-top:12px;border-top:1px solid var(--line)"><span class="ic sm" style="--pc:${esc(catById(nf.cat).color)}">${esc(catById(nf.cat).icon)}</span><span class="grow"><div class="t">${esc(nf.label)}</div><div class="s">Prochain prélèvement ${relDays(nf.date)} · ${esc(fmtD(nf.date, { day: 'numeric', month: 'short' }))}</div></span><span class="amount">${fmt(nf.amount)}</span></div>` : ''}</div>`;
   const notes = [];
-  if (A.canWrite === false) notes.push(`<div class="note"><div class="grow"><b>Lecture seule</b>Demande à Maxym de t’inviter par e-mail comme éditeur (menu Partager, sans lien public) pour modifier les données.</div></div>`);
-  if (A.sync === 'local') notes.push(`<div class="note info"><div class="grow"><b>Mode local</b>Rien n’est partagé depuis cet affichage. Ouvre le lien de l’artifact pour synchroniser avec ${esc(NAMES[o])}.</div></div>`);
-  if (c.demo) notes.push(`<div class="note info"><span style="color:var(--accent-ink)">${ico('sparkle', 22)}</span><div class="grow"><b>Données d’exemple</b>Elles servent à voir le rendu. Supprime-les quand tu es prêt.<div style="margin-top:8px"><button class="btn btn-s btn-sm" data-act="reset-ask">Repartir de zéro</button></div></div></div>`);
-  return `<div class="page">${hdr(g + ' ' + NAMES[A.me], dayLong(t))}<div class="content">
+  if (A.canWrite === false) notes.push(nt('ro', `<div class="note"><div class="grow"><b>Lecture seule</b>Demande à Maxym de t’inviter par e-mail comme éditeur (menu Partager, sans lien public) pour modifier les données.</div></div>`));
+  if (A.sync === 'local') notes.push(nt('local', `<div class="note info"><div class="grow"><b>Mode local</b>Rien n’est partagé depuis cet affichage. Ouvre le lien de l’artifact pour synchroniser avec ${esc(NAMES[o])}.</div></div>`));
+  if (c.demo) notes.push(nt('demo', `<div class="note info"><span style="color:var(--accent-ink)">${ico('sparkle', 22)}</span><div class="grow"><b>Données d’exemple</b>Elles servent à voir le rendu. Supprime-les quand tu es prêt.<div style="margin-top:8px"><button class="btn btn-s btn-sm" data-act="reset-ask">Repartir de zéro</button></div></div></div>`));
+  const cc = (h, c) => h.replace(/^<(\w+) class="/, '<$1 class="' + c + ' ');
+  return `<div class="page wide">${hdr(g + ' ' + NAMES[A.me], dayLong(t))}<div class="content">
     ${notes.join('')}
     <div class="qa"><button data-act="ev-new"><span class="qi">${ico('cal', 20)}</span>Événement</button><button data-act="exp-new"><span class="qi">${ico('wallet', 20)}</span>Dépense</button><button data-act="meal-new"><span class="qi">${ico('meal', 20)}</span>Repas</button></div>
-    ${todayCard}
-    ${aheadCard()}
-    <div class="grid2">${weekCard}${budCard}</div>
-    ${choresCard()}
+    <div class="hcols"><div class="hcol">${cc(todayCard, 'o1')}${cc(choresCard(), 'o5')}</div><div class="hcol">${cc(aheadCard(), 'o2')}${cc(weekCard, 'o3')}${cc(budCard, 'o4')}</div></div>
     <p class="sync-note">${esc(syncText())}</p></div></div>`;
 }
 ACT['go-day'] = d => { A.tab = 'plan'; A.plan.level = 'day'; A.plan.date = d.d; A.plan.month = ymOf(d.d); A.anim = 'a-zin'; A.resetScroll = true; schedule(); };
@@ -1026,6 +1067,9 @@ ACT['go-bud'] = () => { A.tab = 'bud'; A.bud.sub = 'over'; A.anim = 'a-zin'; A.r
 ACT['ev-new'] = () => openEvent({ date: today() });
 ACT['exp-new'] = () => openExpense('');
 ACT['meal-new'] = () => openMealNext();
+
+const nt = (k, html) => lsGet('cn-dis-' + k) === '1' ? '' : html.replace(/<\/div>$/, `<button class="nx" data-act="note-x" data-k="${k}" aria-label="Masquer">×</button></div>`);
+ACT['note-x'] = d => { lsSet('cn-dis-' + d.k, '1'); schedule(); };
 
 /* ---------- 9. Planning de présence : Mois > Semaine > Jour ---------- */
 /* ---- Sélection de plusieurs jours (comme l'app Calendrier) ----
@@ -1107,7 +1151,7 @@ function planMonth() {
     cells += `<button class="mc${inM ? '' : ' out'}${wdi(d) >= 5 ? ' we' : ''}${d === t ? ' today' : ''}${togetherCount(d) ? ' tg' : ''}${selCls(d)}"${sm ? '' : ' data-act="plan-week-of"'} data-d="${d}" aria-label="${esc(dayLong(d))}"><span class="n">${pd(d).getDate()}</span>${miniRows(d)}<span class="dots">${dotsFor(eventsOn(d))}</span></button>`;
   }
   const mhead = sm ? `<div class="mh"></div>` + DAYL.map((l, i) => `<button class="mh" data-act="sel-wd" data-i="${i}">${l}</button>`).join('') : DAYL.map(l => `<div class="mh">${l}</div>`).join('');
-  return `<div class="page">${hdr('Planning', '', { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', monthLabel(m)) })}<div class="content">${selCard()}
+  return `<div class="page wide">${hdr('Planning', '', { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', monthLabel(m)) })}<div class="content">${selCard()}
     <div class="card" style="padding:12px 10px"><div class="month${sm ? ' selm' : ''}">${mhead}${cells}</div></div>
     <div class="legend"><span>${av('maxym', 18)}en haut</span><span>${av('sasha', 18)}en bas</span><span>trois segments : matin, après-midi, soir</span><span><i style="--pc:var(--mint);border-radius:50%"></i>cadre vert : ensemble à la maison</span></div>
     ${legendH()}<p class="mut sm" style="margin-top:14px">${SEL.on ? '' : 'Touche un jour pour voir sa semaine. Pour en choisir plusieurs : « Sélectionner », ou appui long sur un jour.'}</p></div></div>`;
@@ -1123,7 +1167,7 @@ function planWeek() {
   let tog = 0; days.forEach(d => { tog += togetherCount(d); });
   const evs = []; days.forEach(d => eventsOn(d).forEach(e => evs.push(e)));
   const nRec = Object.keys(D.recurring).length;
-  return `<div class="page">${hdr('Planning', 'Semaine ' + isoWeek(w), { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', label) })}<div class="content">${selCard()}
+  return `<div class="page wide">${hdr('Planning', 'Semaine ' + isoWeek(w), { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', label) })}<div class="content">${selCard()}
     <div class="card" style="padding:12px 10px">${g}
       <div class="legend" style="padding:0 6px"><span>De haut en bas : matin, après-midi, soir</span>${tog ? `<span class="pill ok">${ico('heart', 13)}${tog} moment${tog > 1 ? 's' : ''} ensemble</span>` : ''}</div></div>
     <button class="wehl" data-act="weekend" data-d="${addDays(w, 5)}">${ico('sparkle', 22)}Programme du week-end<span class="grow"></span>${ico('chevR', 20)}</button>
@@ -1141,7 +1185,7 @@ function planDay() {
   const gro = r2(exps.filter(e => e.cat === 'groceries').reduce((a, e) => a + e.amount, 0));
   const pres = `<div class="pres">${order.map(p => `<div class="presc"><div class="ph">${av(p, 28)}${esc(NAMES[p])}${p === A.me ? '<span class="mut sm" style="font-weight:500">(toi)</span>' : ''}</div>${SLOTS.map(s => { const pl = placeById(slotPlace(p, d, s.k)); return `<button class="pb${together(d, s.k) ? ' tg' : ''}"${pl ? ` style="--pc:${esc(pl.color)}"` : ''} data-act="slot" data-p="${p}" data-d="${d}" data-s="${s.k}"><small>${s.k === 'a' ? 'Après-m.' : s.l}</small><span class="e">${pl ? esc(pl.icon) : '＋'}</span><b>${pl ? esc(pl.label) : 'À définir'}</b></button>`; }).join('')}</div>`).join('')}</div>`;
   const mealRow = (k, l) => { const m = mealOf(d, k); return `<button class="li" data-act="meal-edit" data-d="${d}" data-k="${k}"><span class="ic sm">${ico('meal', 18)}</span><span class="grow"><div class="t">${m ? esc(m.name) : 'Pas encore prévu'}</div><div class="s">${l}${m ? ' · ' + esc(whoName(m.who)) : ''}</div></span>${ico('chevR', 18)}</button>`; };
-  return `<div class="page">${hdr(dayLong(d), rel, { back: 'plan-up', right: todayChip, extra: levelSeg() + navRow('plan-prev', 'plan-next', DAYN[wdi(d)].replace(/^./, c => c.toUpperCase()), fmtD(d, { day: 'numeric', month: 'long', year: 'numeric' })) })}<div class="content">
+  return `<div class="page wide">${hdr(dayLong(d), rel, { back: 'plan-up', right: todayChip, extra: levelSeg() + navRow('plan-prev', 'plan-next', DAYN[wdi(d)].replace(/^./, c => c.toUpperCase()), fmtD(d, { day: 'numeric', month: 'long', year: 'numeric' })) })}<div class="content">
     ${pres}
     ${tgs.length ? `<div class="note info" style="margin-top:12px"><span style="color:var(--accent-ink)">${ico('heart', 22)}</span><div class="grow"><b>Ensemble à la maison</b>${tgs.map(s => s.l.toLowerCase()).join(', ')}</div></div>` : ''}
     <div class="card"><h3>${ico('clock', 18)}Au programme<span class="sp"></span><button class="lk" data-act="ev-new-d" data-d="${d}">Ajouter</button></h3>
@@ -1304,7 +1348,7 @@ function mealWeek() {
   const grid = `<div class="mg"><span></span><div class="mgh">Midi</div><div class="mgh">Soir</div>${days.map((d, i) => `<button class="md${d === t ? ' today' : ''}${i >= 5 ? ' we' : ''}" data-act="meal-day" data-d="${d}" aria-label="Voir ${esc(dayLong(d))}">${DAYS[i]}<b>${pd(d).getDate()}</b></button>${MK.map(k => mealCell(d, k)).join('')}`).join('')}</div>`;
   const recs = recList();
   const panel = `<aside class="rpanel card" style="margin-top:0"><h3>${ico('heart', 16)}Mes plats</h3><p class="mut sm">Glisse un plat sur un repas.</p>${recs.length ? recs.map(r => `<div class="rcard" draggable="true" data-drag="${esc(JSON.stringify({ t: 'r', id: r.id }))}"><span>${REC_EMO[r.cat] || '🍽️'}</span><b>${esc(r.name)}</b></div>`).join('') : '<p class="mut sm" style="margin-top:10px">Ajoute des plats dans l’onglet Plats.</p>'}</aside>`;
-  return `<div class="page">${hdr('Repas', 'Semaine ' + isoWeek(w), { right: mealToday, extra: mealSeg() + navRow('meal-prev', 'meal-next', weekLabel(w)) })}<div class="content">
+  return `<div class="page wide">${hdr('Repas', 'Semaine ' + isoWeek(w), { right: mealToday, extra: mealSeg() + navRow('meal-prev', 'meal-next', weekLabel(w)) })}<div class="content">
     <div class="mealwrap"><div><div class="card" style="padding:12px 10px">${grid}</div>
       <div class="row" style="margin-top:14px;flex-wrap:wrap"><span class="pill ok">${n} repas sur 14 planifiés</span><span class="grow"></span><button class="btn btn-s btn-sm" data-act="meal-copy-week">${ico('copy', 18)}Copier la semaine précédente</button></div>
       ${n === 0 ? emptyH('meal', 'Semaine à planifier', 'Touche un repas pour choisir un plat, ou copie la semaine précédente.') : ''}</div>${panel}</div></div></div>`;
@@ -1322,7 +1366,7 @@ function mealDay() {
       <div class="btns two"><button class="btn btn-s" data-act="meal-edit" data-d="${d}" data-k="${k}">Modifier</button><button class="btn btn-s" data-act="meal-idea-day" data-d="${d}" data-k="${k}">${ico('sparkle', 18)}Autre idée</button></div>`
       : `<p class="mut">Rien de prévu pour ce repas.</p><div class="btns two"><button class="btn btn-p" data-act="meal-edit" data-d="${d}" data-k="${k}">Choisir un plat</button><button class="btn btn-s" data-act="meal-idea-day" data-d="${d}" data-k="${k}">${ico('sparkle', 18)}Idée repas</button></div>`}</div>`;
   };
-  return `<div class="page">${hdr(dayLong(d), d === today() ? 'Aujourd’hui' : '', { back: 'meal-up', right: mealToday, extra: navRow('meal-prev', 'meal-next', DAYN[wdi(d)].replace(/^./, c => c.toUpperCase()), fmtD(d, { day: 'numeric', month: 'long' })) })}<div class="content">${card('lunch')}${card('dinner')}</div></div>`;
+  return `<div class="page wide">${hdr(dayLong(d), d === today() ? 'Aujourd’hui' : '', { back: 'meal-up', right: mealToday, extra: navRow('meal-prev', 'meal-next', DAYN[wdi(d)].replace(/^./, c => c.toUpperCase()), fmtD(d, { day: 'numeric', month: 'long' })) })}<div class="content">${card('lunch')}${card('dinner')}</div></div>`;
 }
 
 /* --- navigation --- */
@@ -1409,7 +1453,7 @@ function dropMeal(raw, d, k) {
 function mealRecipes() {
   const cat = A.meal.cat, list = recList().filter(r => !cat || r.cat === cat), diet = cfg().diet, hasDiet = PIDS.some(p => diet[p]);
   const catChips = `<div class="chips scroll" style="margin-top:6px">${[{ id: '', l: 'Tous' }].concat(REC_CATS).map(c => `<button class="chip${cat === c.id ? ' on' : ''}" data-act="rec-cat" data-v="${c.id}">${c.l}</button>`).join('')}</div>`;
-  return `<div class="page">${hdr('Repas', '', { extra: mealSeg() })}<div class="content">${catChips}
+  return `<div class="page wide">${hdr('Repas', '', { extra: mealSeg() })}<div class="content">${catChips}
     <div class="card"><h3>${ico('heart', 18)}Mes plats<span class="sp"></span><button class="lk" data-act="rec-new">Ajouter</button></h3>
       ${list.length ? list.map(r => { const n = (r.ingredients || []).length, cl = (REC_CATS.find(c => c.id === r.cat) || {}).l || 'Autre'; return `<div class="rrow"><button class="main" data-act="rec-edit" data-id="${esc(r.id)}"><span class="ic" style="--pc:var(--sage)">${REC_EMO[r.cat] || '🍽️'}</span><span class="grow"><div class="t" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</div><div class="s sm mut">${esc(cl)}${r.time ? ' · ' + r.time + ' min' : ''}${n ? ` · ${n} ingrédient${n > 1 ? 's' : ''}` : ''}</div></span></button><button class="hb${r.fav ? ' on' : ''}" data-act="rec-fav" data-id="${esc(r.id)}" aria-label="Favori">${ico('heart', 22)}</button></div>`; }).join('')
         : emptyH('meal', cat ? 'Aucun plat dans cette catégorie' : 'Votre bibliothèque est vide', 'Ajoutez les plats que vous cuisinez souvent, avec leurs ingrédients. Les courses se génèrent toutes seules.', `<br><button class="btn btn-p" data-act="rec-new">${ico('plus', 20)}Ajouter un plat</button>`)}</div>
@@ -1453,7 +1497,7 @@ function mealShop() {
   const groups = AISLES.map(a => ({ a, items: rows.filter(r => r.aisle === a.id).sort((x, y) => (x.done - y.done) || x.name.localeCompare(y.name, 'fr')) })).filter(g => g.items.length);
   const ck = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const manDone = rows.filter(r => r.man && r.done).length;
-  return `<div class="page">${hdr('Repas', 'Semaine ' + isoWeek(w), { right: mealToday, extra: mealSeg() + navRow('meal-prev', 'meal-next', weekLabel(w)) })}<div class="content">
+  return `<div class="page wide">${hdr('Repas', 'Semaine ' + isoWeek(w), { right: mealToday, extra: mealSeg() + navRow('meal-prev', 'meal-next', weekLabel(w)) })}<div class="content">
     <div class="card"><div class="addrow"><input class="inp" id="shop-new" placeholder="Ajouter un article (ex. 2 yaourts)" autocomplete="off" enterkeyhint="done"><button class="btn btn-p" data-act="shop-add" aria-label="Ajouter">${ico('plus', 22, 2.2)}</button></div>${freqChips()}
       ${total ? `<div class="row" style="margin-top:14px"><b class="grow">${done} sur ${total} dans le panier</b><span class="mut sm">${Math.round(done / total * 100)} %</span></div><div class="prog"><i style="width:${Math.round(done / total * 100)}%"></i></div>` : ''}</div>
     ${groups.length ? `<div class="card">${groups.map(g => `<div class="aisle">${esc(g.a.l)}</div>${g.items.map(r => `<button class="shop${r.done ? ' done' : ''}" data-act="shop-toggle" data-k="${esc(r.k)}"><span class="ck">${ck}</span><span class="grow" style="min-width:0"><span class="t" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</span>${r.from ? `<span class="s sm mut" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.from)}</span>` : ''}</span><span class="q">${esc(r.q)}</span></button>`).join('')}`).join('')}</div>
@@ -2063,6 +2107,60 @@ function runShortcut() {
   else if (a === 'plan') { A.tab = 'plan'; schedule(); }
   else if (a === 'meal') { A.tab = 'meal'; A.meal.sub = 'week'; schedule(); }
 }
+
+/* --- Recherche rapide / palette de commandes (Ctrl-K ou ⌘-K, touche « / ») --- */
+const SRCH_ACT = [
+  ['exp-new', 'Nouvelle dépense', 'wallet', 'ajouter depense argent'], ['ev-new', 'Nouvel événement', 'cal', 'ajouter evenement rendez-vous'],
+  ['meal-new', 'Planifier un repas', 'meal', 'repas manger diner midi'], ['chore-new', 'Nouvelle tâche ménagère', 'check', 'tache menage poubelles'],
+  ['free-open', 'Créneaux libres à deux', 'heart', 'sortie libre ensemble'], ['ahead-open', 'Résumé de la semaine', 'sparkle', 'semaine apercu'],
+  ['tab:home', 'Aller à l’accueil', 'home', 'accueil'], ['tab:plan', 'Aller au planning', 'cal', 'planning calendrier'],
+  ['tab:meal', 'Aller aux repas', 'meal', 'repas plats courses'], ['tab:bud', 'Aller au budget', 'wallet', 'budget depenses'],
+  ['sel-start', 'Sélectionner plusieurs jours', 'check', 'selection jours semaines']
+];
+ACT['search-open'] = () => {
+  resetF({});
+  openSheet(() => `<div class="srch"><input class="inp" id="q-in" placeholder="Rechercher ou aller à…" autocomplete="off" enterkeyhint="search"></div><div id="q-res"></div>`, { focus: 'q-in' });
+  renderSearch('');
+};
+function renderSearch(q) {
+  const box = document.getElementById('q-res'); if (!box) return;
+  const n = norm(q.trim()), has = (...t) => !n || t.some(x => norm(String(x || '')).includes(n));
+  const row = (ic, t, s, data) => `<button class="srow" data-act="srch-go" ${data}><span class="ic sm">${ic}</span><span class="grow"><div class="t" style="font-weight:600">${esc(t)}</div>${s ? `<div class="s sm mut">${esc(s)}</div>` : ''}</span></button>`;
+  const grp = (t, rows) => rows.length ? `<div class="sgrp">${t}</div>${rows.join('')}` : '';
+  const acts = SRCH_ACT.filter(a => has(a[1], a[3])).slice(0, n ? 5 : 7).map(a => row(ico(a[2], 20), a[1], '', `data-k="act" data-id="${a[0]}"`));
+  let out = grp(n ? 'Actions' : 'Actions rapides', acts);
+  if (n) {
+    const ev = Object.entries(D.events).filter(([, e]) => has(e.title, e.note)).sort((a, b) => b[1].date.localeCompare(a[1].date)).slice(0, 5).map(([id, e]) => row('🗓️', e.title, dayLong(e.date) + (e.time ? ' · ' + e.time : ''), `data-k="ev" data-id="${esc(id)}"`));
+    const rc = recList().filter(r => has(r.name, (r.ingredients || []).map(i => i.n).join(' '))).slice(0, 5).map(r => row(r.fav ? '♥' : '🍽️', r.name, r.time ? r.time + ' min' : '', `data-k="rc" data-id="${esc(r.id)}"`));
+    const ml = []; Object.entries(D.meals).sort((a, b) => b[0].localeCompare(a[0])).forEach(([d, m]) => MK.forEach(k => { if (m[k] && has(m[k].name) && ml.length < 5) ml.push(row('🥘', m[k].name, mkLbl(k) + ' · ' + dayLong(d), `data-k="ml" data-id="${d}" data-s="${k}"`)); }));
+    const ex = allExp().filter(e => e.kind !== 'settle' && has(e.note, catById(e.cat).label, String(e.amount).replace('.', ','))).slice(0, 6).map(e => row(catById(e.cat).icon, (e.note || catById(e.cat).label) + ' · ' + fmt(e.amount), dayLong(e.date), `data-k="ex" data-id="${esc(e.id)}"`));
+    const ch = chList().filter(c => has(c.title)).slice(0, 4).map(c => row(c.icon || '✨', c.title, chRel(c.due), `data-k="ch" data-id="${esc(c.id)}"`));
+    out += grp('Événements', ev) + grp('Plats', rc) + grp('Repas prévus', ml) + grp('Dépenses', ex) + grp('Tâches', ch);
+    if (out.indexOf('srow') < 0) out = `<p class="mut" style="text-align:center;margin-top:28px">Rien trouvé pour « ${esc(q)} ».</p>`;
+  }
+  box.innerHTML = out;
+}
+document.addEventListener('input', e => { if (e.target && e.target.id === 'q-in') renderSearch(e.target.value); });
+ACT['srch-go'] = d => {
+  closeSheet();
+  setTimeout(() => {
+    const k = d.k, id = d.id;
+    if (k === 'act') {
+      if (id.startsWith('tab:')) { A.tab = id.slice(4); A.anim = 'a-fade'; A.resetScroll = true; schedule(); }
+      else if (id === 'chore-new') ACT['chore-edit']({ id: '' });
+      else if (id === 'sel-start') { A.tab = 'plan'; if (A.plan.level === 'day') A.plan.level = 'week'; SEL.on = true; SEL.set.clear(); schedule(); }
+      else ACT[id] && ACT[id]({});
+    } else if (k === 'ev') openEvent({ id });
+    else if (k === 'rc') openRecipe(id);
+    else if (k === 'ml') { A.tab = 'meal'; A.meal.sub = 'week'; A.meal.week = monday(id); schedule(); openMeal(id, d.s); }
+    else if (k === 'ex') openExpense(id);
+    else if (k === 'ch') ACT['chore-edit']({ id });
+  }, 80);
+};
+document.addEventListener('keydown', e => {
+  const typing = e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+  if (((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') || (e.key === '/' && !typing && !SH)) { if (!A.ready || !A.me) return; e.preventDefault(); ACT['search-open'](); }
+});
 
 /* ---------- Supabase : adaptateur qui imite l'interface « db » utilisée par l'appli ----------
    Table unique `docs` (path, col, id, data jsonb). Temps réel via postgres_changes.        */

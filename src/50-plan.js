@@ -79,7 +79,7 @@ function planMonth() {
     cells += `<button class="mc${inM ? '' : ' out'}${wdi(d) >= 5 ? ' we' : ''}${d === t ? ' today' : ''}${togetherCount(d) ? ' tg' : ''}${selCls(d)}"${sm ? '' : ' data-act="plan-week-of"'} data-d="${d}" aria-label="${esc(dayLong(d))}"><span class="n">${pd(d).getDate()}</span>${miniRows(d)}<span class="dots">${dotsFor(eventsOn(d))}</span></button>`;
   }
   const mhead = sm ? `<div class="mh"></div>` + DAYL.map((l, i) => `<button class="mh" data-act="sel-wd" data-i="${i}">${l}</button>`).join('') : DAYL.map(l => `<div class="mh">${l}</div>`).join('');
-  return `<div class="page">${hdr('Planning', '', { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', monthLabel(m)) })}<div class="content">${selCard()}
+  return `<div class="page wide">${hdr('Planning', '', { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', monthLabel(m)) })}<div class="content">${selCard()}
     <div class="card" style="padding:12px 10px"><div class="month${sm ? ' selm' : ''}">${mhead}${cells}</div></div>
     <div class="legend"><span>${av('maxym', 18)}en haut</span><span>${av('sasha', 18)}en bas</span><span>trois segments : matin, après-midi, soir</span><span><i style="--pc:var(--mint);border-radius:50%"></i>cadre vert : ensemble à la maison</span></div>
     ${legendH()}<p class="mut sm" style="margin-top:14px">${SEL.on ? '' : 'Touche un jour pour voir sa semaine. Pour en choisir plusieurs : « Sélectionner », ou appui long sur un jour.'}</p></div></div>`;
@@ -95,7 +95,7 @@ function planWeek() {
   let tog = 0; days.forEach(d => { tog += togetherCount(d); });
   const evs = []; days.forEach(d => eventsOn(d).forEach(e => evs.push(e)));
   const nRec = Object.keys(D.recurring).length;
-  return `<div class="page">${hdr('Planning', 'Semaine ' + isoWeek(w), { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', label) })}<div class="content">${selCard()}
+  return `<div class="page wide">${hdr('Planning', 'Semaine ' + isoWeek(w), { right: todayChip, extra: `<div class="lvrow">${levelSeg()}${selBtn()}</div>` + navRow('plan-prev', 'plan-next', label) })}<div class="content">${selCard()}
     <div class="card" style="padding:12px 10px">${g}
       <div class="legend" style="padding:0 6px"><span>De haut en bas : matin, après-midi, soir</span>${tog ? `<span class="pill ok">${ico('heart', 13)}${tog} moment${tog > 1 ? 's' : ''} ensemble</span>` : ''}</div></div>
     <button class="wehl" data-act="weekend" data-d="${addDays(w, 5)}">${ico('sparkle', 22)}Programme du week-end<span class="grow"></span>${ico('chevR', 20)}</button>
@@ -113,7 +113,7 @@ function planDay() {
   const gro = r2(exps.filter(e => e.cat === 'groceries').reduce((a, e) => a + e.amount, 0));
   const pres = `<div class="pres">${order.map(p => `<div class="presc"><div class="ph">${av(p, 28)}${esc(NAMES[p])}${p === A.me ? '<span class="mut sm" style="font-weight:500">(toi)</span>' : ''}</div>${SLOTS.map(s => { const pl = placeById(slotPlace(p, d, s.k)); return `<button class="pb${together(d, s.k) ? ' tg' : ''}"${pl ? ` style="--pc:${esc(pl.color)}"` : ''} data-act="slot" data-p="${p}" data-d="${d}" data-s="${s.k}"><small>${s.k === 'a' ? 'Après-m.' : s.l}</small><span class="e">${pl ? esc(pl.icon) : '＋'}</span><b>${pl ? esc(pl.label) : 'À définir'}</b></button>`; }).join('')}</div>`).join('')}</div>`;
   const mealRow = (k, l) => { const m = mealOf(d, k); return `<button class="li" data-act="meal-edit" data-d="${d}" data-k="${k}"><span class="ic sm">${ico('meal', 18)}</span><span class="grow"><div class="t">${m ? esc(m.name) : 'Pas encore prévu'}</div><div class="s">${l}${m ? ' · ' + esc(whoName(m.who)) : ''}</div></span>${ico('chevR', 18)}</button>`; };
-  return `<div class="page">${hdr(dayLong(d), rel, { back: 'plan-up', right: todayChip, extra: levelSeg() + navRow('plan-prev', 'plan-next', DAYN[wdi(d)].replace(/^./, c => c.toUpperCase()), fmtD(d, { day: 'numeric', month: 'long', year: 'numeric' })) })}<div class="content">
+  return `<div class="page wide">${hdr(dayLong(d), rel, { back: 'plan-up', right: todayChip, extra: levelSeg() + navRow('plan-prev', 'plan-next', DAYN[wdi(d)].replace(/^./, c => c.toUpperCase()), fmtD(d, { day: 'numeric', month: 'long', year: 'numeric' })) })}<div class="content">
     ${pres}
     ${tgs.length ? `<div class="note info" style="margin-top:12px"><span style="color:var(--accent-ink)">${ico('heart', 22)}</span><div class="grow"><b>Ensemble à la maison</b>${tgs.map(s => s.l.toLowerCase()).join(', ')}</div></div>` : ''}
     <div class="card"><h3>${ico('clock', 18)}Au programme<span class="sp"></span><button class="lk" data-act="ev-new-d" data-d="${d}">Ajouter</button></h3>

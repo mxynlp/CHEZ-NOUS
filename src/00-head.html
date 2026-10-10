@@ -7,13 +7,13 @@
    Palette : vert sauge #7FB89A · menthe #A8D5BA · vert profond #2F5D4A
    ===================================================================== */
 :root{
-  --bg:#F7FAF8; --card:#FFFFFF; --soft:#EAF4EE; --line:rgba(47,93,74,.11); --line-2:rgba(47,93,74,.2);
+  --bg:#CBE4D5; --bg-hi:#DDEFE4; --card:#FFFFFF; --soft:#EAF4EE; --line:rgba(47,93,74,.11); --line-2:rgba(47,93,74,.2);
   --ink:#16261E; --ink2:#5C7068; --ink3:#93A39A;
   --sage:#7FB89A; --mint:#A8D5BA; --deep:#2F5D4A; --accent-ink:#2F5D4A; --on-sage:#12301F;
   --today:#2F5D4A; --on-today:#FFFFFF;
   --maxym:#2F7D5B; --on-maxym:#FFFFFF; --sasha:#9CCB7C; --on-sasha:#1E3A22;
   --warn:#F0B27A; --bad:#E58C8C; --bad-ink:#A04545;
-  --glass:rgba(247,250,248,.78); --sheet:rgba(255,255,255,.9); --backdrop:rgba(18,32,26,.4);
+  --glass:rgba(208,230,218,.82); --sheet:rgba(255,255,255,.9); --backdrop:rgba(18,32,26,.4);
   --toast-bg:rgba(31,61,48,.95); --toast-ink:#FFFFFF;
   --shadow:0 1px 1px rgba(28,58,45,.04),0 10px 30px rgba(28,58,45,.08);
   --shadow-up:0 -12px 44px rgba(20,45,35,.2);
@@ -21,7 +21,7 @@
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter",system-ui,"Segoe UI",Roboto,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0F1A15; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
+  --bg:#0F1A15; --bg-hi:#17291F; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
   --ink:#EAF3EE; --ink2:#9DB2A7; --ink3:#6F867A; --accent-ink:#A8D5BA; --today:#A8D5BA; --on-today:#0F1A15;
   --maxym:#4FB588; --on-maxym:#07210F; --sasha:#B6DC98; --on-sasha:#18301B; --bad-ink:#F0A5A5;
   --glass:rgba(15,26,21,.78); --sheet:rgba(26,42,35,.92); --backdrop:rgba(0,0,0,.55);
@@ -29,7 +29,7 @@
   --shadow:0 1px 1px rgba(0,0,0,.2),0 10px 30px rgba(0,0,0,.28); --shadow-up:0 -12px 44px rgba(0,0,0,.5);
   color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0F1A15; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
+  --bg:#0F1A15; --bg-hi:#17291F; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
   --ink:#EAF3EE; --ink2:#9DB2A7; --ink3:#6F867A; --accent-ink:#A8D5BA; --today:#A8D5BA; --on-today:#0F1A15;
   --maxym:#4FB588; --on-maxym:#07210F; --sasha:#B6DC98; --on-sasha:#18301B; --bad-ink:#F0A5A5;
   --glass:rgba(15,26,21,.78); --sheet:rgba(26,42,35,.92); --backdrop:rgba(0,0,0,.55);
@@ -39,7 +39,7 @@
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.35;overflow:hidden;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+body{background:linear-gradient(180deg,var(--bg-hi) 0,var(--bg) 380px),var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.35;overflow:hidden;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;touch-action:manipulation;text-align:inherit}
 button:active:not(:disabled){transform:scale(.97)}
 button,.ib,.chip,.btn{transition:transform .12s var(--ease),background .2s,box-shadow .2s,opacity .2s}
@@ -402,4 +402,46 @@ body.selmode .page{padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom,
 .selcard{padding:12px 14px}
 .selcard .chip{padding:0 13px;min-height:38px;font-size:14px}
 .selcard .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+/* ---------- densité & confort (inspiré Notion / Apple) ---------- */
+.hdr{padding:10px 16px 8px;transition:box-shadow .2s}
+.title{font-size:30px;transition:font-size .2s var(--ease)}
+.title .sub{transition:opacity .15s,max-height .2s;max-height:24px;overflow:hidden}
+.hdr.compact{box-shadow:0 1px 0 var(--line)}
+.hdr.compact .title{font-size:20px}
+.hdr.compact .title .sub{opacity:0;max-height:0}
+.navrow{margin-top:6px}
+.navrow .ib{width:38px;height:38px}
+.navt b{font-size:18px}
+.hdr .seg{margin-top:8px}
+.seg button{min-height:38px}
+.hdr .ib.sm{width:40px;height:40px;box-shadow:none;background:color-mix(in srgb,var(--card) 70%,transparent)}
+.me-btn{width:40px;height:40px}
+.card{padding:16px;margin-top:12px}
+.card h3{margin-bottom:10px}
+.tc{min-height:46px;padding:5px 3px}
+.tc b{font-size:17px}
+.m2{padding:8px 12px}
+.meals2{margin-top:10px}
+.qa{gap:8px;margin-top:10px}
+.qa{grid-template-columns:repeat(3,minmax(0,1fr))}
+.qa button{min-height:66px;gap:4px;border-radius:18px;font-size:13.5px;padding:6px 4px;min-width:0}
+.qa .qi{width:30px;height:30px;border-radius:10px}
+.sd1{min-height:68px;padding:6px 2px}
+.mcell{min-height:52px;padding:6px 10px}
+.mg{gap:5px}
+.note{margin-top:10px;position:relative;padding-right:34px}
+.nx{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;font-size:20px;line-height:1;color:var(--ink2);display:grid;place-items:center}
+.hcols{display:grid;grid-template-columns:minmax(0,1fr)}
+.hcol{display:contents}
+.o1{order:1}.o2{order:2}.o3{order:3}.o4{order:4}.o5{order:5}
+@media (min-width:1000px){
+  .page.wide{max-width:1120px}
+  .hcols{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0 16px;align-items:start}
+  .hcol{display:block}
+}
+.srch .inp{min-height:52px;font-size:17px}
+.srow{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:6px 4px;border-radius:14px}
+.srow:active{background:var(--soft)}
+.srow .ic{flex:none}
+.sgrp{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin:14px 4px 4px}
 </style>

@@ -6,7 +6,7 @@ function relDays(d) { const n = diffDays(today(), d); return n === 0 ? 'aujourd�
 
 function vHome() {
   const t = today(), c = cfg(), hr = new Date().getHours();
-  const g = hr < 5 ? 'Bonne nuit' : hr < 12 ? 'Bonjour' : hr < 18 ? 'Bon après-midi' : 'Bonsoir';
+  const g = hr < 5 ? 'Bonne nuit' : hr < 18 ? 'Bonjour' : 'Bonsoir';
   const o = otherP(A.me), evs = eventsOn(t), ml = mealOf(t, 'lunch'), md = mealOf(t, 'dinner');
   const tg = SLOTS.filter(s => together(t, s.k));
   const order = [A.me, o];
@@ -33,16 +33,14 @@ function vHome() {
     <div class="bal"><div class="grow"><div class="big" style="font-size:27px">${balTxt}</div><div class="mut sm" style="margin-top:6px">Dépenses communes en ${esc(fmtD(mt + '-01', { month: 'long' }))} : <b>${fmt(commonTotal(mt))}</b></div></div>${Math.abs(bal) >= 0.5 ? `<button class="btn btn-p btn-sm" data-act="settle-open">Régler</button>` : ''}</div>
     ${nf ? `<div class="li" style="margin-top:12px;border-top:1px solid var(--line)"><span class="ic sm" style="--pc:${esc(catById(nf.cat).color)}">${esc(catById(nf.cat).icon)}</span><span class="grow"><div class="t">${esc(nf.label)}</div><div class="s">Prochain prélèvement ${relDays(nf.date)} · ${esc(fmtD(nf.date, { day: 'numeric', month: 'short' }))}</div></span><span class="amount">${fmt(nf.amount)}</span></div>` : ''}</div>`;
   const notes = [];
-  if (A.canWrite === false) notes.push(`<div class="note"><div class="grow"><b>Lecture seule</b>Demande à Maxym de t’inviter par e-mail comme éditeur (menu Partager, sans lien public) pour modifier les données.</div></div>`);
-  if (A.sync === 'local') notes.push(`<div class="note info"><div class="grow"><b>Mode local</b>Rien n’est partagé depuis cet affichage. Ouvre le lien de l’artifact pour synchroniser avec ${esc(NAMES[o])}.</div></div>`);
-  if (c.demo) notes.push(`<div class="note info"><span style="color:var(--accent-ink)">${ico('sparkle', 22)}</span><div class="grow"><b>Données d’exemple</b>Elles servent à voir le rendu. Supprime-les quand tu es prêt.<div style="margin-top:8px"><button class="btn btn-s btn-sm" data-act="reset-ask">Repartir de zéro</button></div></div></div>`);
-  return `<div class="page">${hdr(g + ' ' + NAMES[A.me], dayLong(t))}<div class="content">
+  if (A.canWrite === false) notes.push(nt('ro', `<div class="note"><div class="grow"><b>Lecture seule</b>Demande à Maxym de t’inviter par e-mail comme éditeur (menu Partager, sans lien public) pour modifier les données.</div></div>`));
+  if (A.sync === 'local') notes.push(nt('local', `<div class="note info"><div class="grow"><b>Mode local</b>Rien n’est partagé depuis cet affichage. Ouvre le lien de l’artifact pour synchroniser avec ${esc(NAMES[o])}.</div></div>`));
+  if (c.demo) notes.push(nt('demo', `<div class="note info"><span style="color:var(--accent-ink)">${ico('sparkle', 22)}</span><div class="grow"><b>Données d’exemple</b>Elles servent à voir le rendu. Supprime-les quand tu es prêt.<div style="margin-top:8px"><button class="btn btn-s btn-sm" data-act="reset-ask">Repartir de zéro</button></div></div></div>`));
+  const cc = (h, c) => h.replace(/^<(\w+) class="/, '<$1 class="' + c + ' ');
+  return `<div class="page wide">${hdr(g + ' ' + NAMES[A.me], dayLong(t))}<div class="content">
     ${notes.join('')}
     <div class="qa"><button data-act="ev-new"><span class="qi">${ico('cal', 20)}</span>Événement</button><button data-act="exp-new"><span class="qi">${ico('wallet', 20)}</span>Dépense</button><button data-act="meal-new"><span class="qi">${ico('meal', 20)}</span>Repas</button></div>
-    ${todayCard}
-    ${aheadCard()}
-    <div class="grid2">${weekCard}${budCard}</div>
-    ${choresCard()}
+    <div class="hcols"><div class="hcol">${cc(todayCard, 'o1')}${cc(choresCard(), 'o5')}</div><div class="hcol">${cc(aheadCard(), 'o2')}${cc(weekCard, 'o3')}${cc(budCard, 'o4')}</div></div>
     <p class="sync-note">${esc(syncText())}</p></div></div>`;
 }
 ACT['go-day'] = d => { A.tab = 'plan'; A.plan.level = 'day'; A.plan.date = d.d; A.plan.month = ymOf(d.d); A.anim = 'a-zin'; A.resetScroll = true; schedule(); };
@@ -51,3 +49,6 @@ ACT['go-bud'] = () => { A.tab = 'bud'; A.bud.sub = 'over'; A.anim = 'a-zin'; A.r
 ACT['ev-new'] = () => openEvent({ date: today() });
 ACT['exp-new'] = () => openExpense('');
 ACT['meal-new'] = () => openMealNext();
+
+const nt = (k, html) => lsGet('cn-dis-' + k) === '1' ? '' : html.replace(/<\/div>$/, `<button class="nx" data-act="note-x" data-k="${k}" aria-label="Masquer">×</button></div>`);
+ACT['note-x'] = d => { lsSet('cn-dis-' + d.k, '1'); schedule(); };

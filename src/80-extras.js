@@ -212,3 +212,57 @@ function runShortcut() {
   else if (a === 'plan') { A.tab = 'plan'; schedule(); }
   else if (a === 'meal') { A.tab = 'meal'; A.meal.sub = 'week'; schedule(); }
 }
+
+/* --- Recherche rapide / palette de commandes (Ctrl-K ou ⌘-K, touche « / ») --- */
+const SRCH_ACT = [
+  ['exp-new', 'Nouvelle dépense', 'wallet', 'ajouter depense argent'], ['ev-new', 'Nouvel événement', 'cal', 'ajouter evenement rendez-vous'],
+  ['meal-new', 'Planifier un repas', 'meal', 'repas manger diner midi'], ['chore-new', 'Nouvelle tâche ménagère', 'check', 'tache menage poubelles'],
+  ['free-open', 'Créneaux libres à deux', 'heart', 'sortie libre ensemble'], ['ahead-open', 'Résumé de la semaine', 'sparkle', 'semaine apercu'],
+  ['tab:home', 'Aller à l’accueil', 'home', 'accueil'], ['tab:plan', 'Aller au planning', 'cal', 'planning calendrier'],
+  ['tab:meal', 'Aller aux repas', 'meal', 'repas plats courses'], ['tab:bud', 'Aller au budget', 'wallet', 'budget depenses'],
+  ['sel-start', 'Sélectionner plusieurs jours', 'check', 'selection jours semaines']
+];
+ACT['search-open'] = () => {
+  resetF({});
+  openSheet(() => `<div class="srch"><input class="inp" id="q-in" placeholder="Rechercher ou aller à…" autocomplete="off" enterkeyhint="search"></div><div id="q-res"></div>`, { focus: 'q-in' });
+  renderSearch('');
+};
+function renderSearch(q) {
+  const box = document.getElementById('q-res'); if (!box) return;
+  const n = norm(q.trim()), has = (...t) => !n || t.some(x => norm(String(x || '')).includes(n));
+  const row = (ic, t, s, data) => `<button class="srow" data-act="srch-go" ${data}><span class="ic sm">${ic}</span><span class="grow"><div class="t" style="font-weight:600">${esc(t)}</div>${s ? `<div class="s sm mut">${esc(s)}</div>` : ''}</span></button>`;
+  const grp = (t, rows) => rows.length ? `<div class="sgrp">${t}</div>${rows.join('')}` : '';
+  const acts = SRCH_ACT.filter(a => has(a[1], a[3])).slice(0, n ? 5 : 7).map(a => row(ico(a[2], 20), a[1], '', `data-k="act" data-id="${a[0]}"`));
+  let out = grp(n ? 'Actions' : 'Actions rapides', acts);
+  if (n) {
+    const ev = Object.entries(D.events).filter(([, e]) => has(e.title, e.note)).sort((a, b) => b[1].date.localeCompare(a[1].date)).slice(0, 5).map(([id, e]) => row('🗓️', e.title, dayLong(e.date) + (e.time ? ' · ' + e.time : ''), `data-k="ev" data-id="${esc(id)}"`));
+    const rc = recList().filter(r => has(r.name, (r.ingredients || []).map(i => i.n).join(' '))).slice(0, 5).map(r => row(r.fav ? '♥' : '🍽️', r.name, r.time ? r.time + ' min' : '', `data-k="rc" data-id="${esc(r.id)}"`));
+    const ml = []; Object.entries(D.meals).sort((a, b) => b[0].localeCompare(a[0])).forEach(([d, m]) => MK.forEach(k => { if (m[k] && has(m[k].name) && ml.length < 5) ml.push(row('🥘', m[k].name, mkLbl(k) + ' · ' + dayLong(d), `data-k="ml" data-id="${d}" data-s="${k}"`)); }));
+    const ex = allExp().filter(e => e.kind !== 'settle' && has(e.note, catById(e.cat).label, String(e.amount).replace('.', ','))).slice(0, 6).map(e => row(catById(e.cat).icon, (e.note || catById(e.cat).label) + ' · ' + fmt(e.amount), dayLong(e.date), `data-k="ex" data-id="${esc(e.id)}"`));
+    const ch = chList().filter(c => has(c.title)).slice(0, 4).map(c => row(c.icon || '✨', c.title, chRel(c.due), `data-k="ch" data-id="${esc(c.id)}"`));
+    out += grp('Événements', ev) + grp('Plats', rc) + grp('Repas prévus', ml) + grp('Dépenses', ex) + grp('Tâches', ch);
+    if (out.indexOf('srow') < 0) out = `<p class="mut" style="text-align:center;margin-top:28px">Rien trouvé pour « ${esc(q)} ».</p>`;
+  }
+  box.innerHTML = out;
+}
+document.addEventListener('input', e => { if (e.target && e.target.id === 'q-in') renderSearch(e.target.value); });
+ACT['srch-go'] = d => {
+  closeSheet();
+  setTimeout(() => {
+    const k = d.k, id = d.id;
+    if (k === 'act') {
+      if (id.startsWith('tab:')) { A.tab = id.slice(4); A.anim = 'a-fade'; A.resetScroll = true; schedule(); }
+      else if (id === 'chore-new') ACT['chore-edit']({ id: '' });
+      else if (id === 'sel-start') { A.tab = 'plan'; if (A.plan.level === 'day') A.plan.level = 'week'; SEL.on = true; SEL.set.clear(); schedule(); }
+      else ACT[id] && ACT[id]({});
+    } else if (k === 'ev') openEvent({ id });
+    else if (k === 'rc') openRecipe(id);
+    else if (k === 'ml') { A.tab = 'meal'; A.meal.sub = 'week'; A.meal.week = monday(id); schedule(); openMeal(id, d.s); }
+    else if (k === 'ex') openExpense(id);
+    else if (k === 'ch') ACT['chore-edit']({ id });
+  }, 80);
+};
+document.addEventListener('keydown', e => {
+  const typing = e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+  if (((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') || (e.key === '/' && !typing && !SH)) { if (!A.ready || !A.me) return; e.preventDefault(); ACT['search-open'](); }
+});

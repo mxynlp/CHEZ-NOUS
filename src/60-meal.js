@@ -22,7 +22,7 @@ function mealWeek() {
   const grid = `<div class="mg"><span></span><div class="mgh">Midi</div><div class="mgh">Soir</div>${days.map((d, i) => `<button class="md${d === t ? ' today' : ''}${i >= 5 ? ' we' : ''}" data-act="meal-day" data-d="${d}" aria-label="Voir ${esc(dayLong(d))}">${DAYS[i]}<b>${pd(d).getDate()}</b></button>${MK.map(k => mealCell(d, k)).join('')}`).join('')}</div>`;
   const recs = recList();
   const panel = `<aside class="rpanel card" style="margin-top:0"><h3>${ico('heart', 16)}Mes plats</h3><p class="mut sm">Glisse un plat sur un repas.</p>${recs.length ? recs.map(r => `<div class="rcard" draggable="true" data-drag="${esc(JSON.stringify({ t: 'r', id: r.id }))}"><span>${REC_EMO[r.cat] || '🍽️'}</span><b>${esc(r.name)}</b></div>`).join('') : '<p class="mut sm" style="margin-top:10px">Ajoute des plats dans l’onglet Plats.</p>'}</aside>`;
-  return `<div class="page">${hdr('Repas', 'Semaine ' + isoWeek(w), { right: mealToday, extra: mealSeg() + navRow('meal-prev', 'meal-next', weekLabel(w)) })}<div class="content">
+  return `<div class="page wide">${hdr('Repas', 'Semaine ' + isoWeek(w), { right: mealToday, extra: mealSeg() + navRow('meal-prev', 'meal-next', weekLabel(w)) })}<div class="content">
     <div class="mealwrap"><div><div class="card" style="padding:12px 10px">${grid}</div>
       <div class="row" style="margin-top:14px;flex-wrap:wrap"><span class="pill ok">${n} repas sur 14 planifiés</span><span class="grow"></span><button class="btn btn-s btn-sm" data-act="meal-copy-week">${ico('copy', 18)}Copier la semaine précédente</button></div>
       ${n === 0 ? emptyH('meal', 'Semaine à planifier', 'Touche un repas pour choisir un plat, ou copie la semaine précédente.') : ''}</div>${panel}</div></div></div>`;
@@ -40,7 +40,7 @@ function mealDay() {
       <div class="btns two"><button class="btn btn-s" data-act="meal-edit" data-d="${d}" data-k="${k}">Modifier</button><button class="btn btn-s" data-act="meal-idea-day" data-d="${d}" data-k="${k}">${ico('sparkle', 18)}Autre idée</button></div>`
       : `<p class="mut">Rien de prévu pour ce repas.</p><div class="btns two"><button class="btn btn-p" data-act="meal-edit" data-d="${d}" data-k="${k}">Choisir un plat</button><button class="btn btn-s" data-act="meal-idea-day" data-d="${d}" data-k="${k}">${ico('sparkle', 18)}Idée repas</button></div>`}</div>`;
   };
-  return `<div class="page">${hdr(dayLong(d), d === today() ? 'Aujourd’hui' : '', { back: 'meal-up', right: mealToday, extra: navRow('meal-prev', 'meal-next', DAYN[wdi(d)].replace(/^./, c => c.toUpperCase()), fmtD(d, { day: 'numeric', month: 'long' })) })}<div class="content">${card('lunch')}${card('dinner')}</div></div>`;
+  return `<div class="page wide">${hdr(dayLong(d), d === today() ? 'Aujourd’hui' : '', { back: 'meal-up', right: mealToday, extra: navRow('meal-prev', 'meal-next', DAYN[wdi(d)].replace(/^./, c => c.toUpperCase()), fmtD(d, { day: 'numeric', month: 'long' })) })}<div class="content">${card('lunch')}${card('dinner')}</div></div>`;
 }
 
 /* --- navigation --- */
@@ -127,7 +127,7 @@ function dropMeal(raw, d, k) {
 function mealRecipes() {
   const cat = A.meal.cat, list = recList().filter(r => !cat || r.cat === cat), diet = cfg().diet, hasDiet = PIDS.some(p => diet[p]);
   const catChips = `<div class="chips scroll" style="margin-top:6px">${[{ id: '', l: 'Tous' }].concat(REC_CATS).map(c => `<button class="chip${cat === c.id ? ' on' : ''}" data-act="rec-cat" data-v="${c.id}">${c.l}</button>`).join('')}</div>`;
-  return `<div class="page">${hdr('Repas', '', { extra: mealSeg() })}<div class="content">${catChips}
+  return `<div class="page wide">${hdr('Repas', '', { extra: mealSeg() })}<div class="content">${catChips}
     <div class="card"><h3>${ico('heart', 18)}Mes plats<span class="sp"></span><button class="lk" data-act="rec-new">Ajouter</button></h3>
       ${list.length ? list.map(r => { const n = (r.ingredients || []).length, cl = (REC_CATS.find(c => c.id === r.cat) || {}).l || 'Autre'; return `<div class="rrow"><button class="main" data-act="rec-edit" data-id="${esc(r.id)}"><span class="ic" style="--pc:var(--sage)">${REC_EMO[r.cat] || '🍽️'}</span><span class="grow"><div class="t" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</div><div class="s sm mut">${esc(cl)}${r.time ? ' · ' + r.time + ' min' : ''}${n ? ` · ${n} ingrédient${n > 1 ? 's' : ''}` : ''}</div></span></button><button class="hb${r.fav ? ' on' : ''}" data-act="rec-fav" data-id="${esc(r.id)}" aria-label="Favori">${ico('heart', 22)}</button></div>`; }).join('')
         : emptyH('meal', cat ? 'Aucun plat dans cette catégorie' : 'Votre bibliothèque est vide', 'Ajoutez les plats que vous cuisinez souvent, avec leurs ingrédients. Les courses se génèrent toutes seules.', `<br><button class="btn btn-p" data-act="rec-new">${ico('plus', 20)}Ajouter un plat</button>`)}</div>
@@ -171,7 +171,7 @@ function mealShop() {
   const groups = AISLES.map(a => ({ a, items: rows.filter(r => r.aisle === a.id).sort((x, y) => (x.done - y.done) || x.name.localeCompare(y.name, 'fr')) })).filter(g => g.items.length);
   const ck = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const manDone = rows.filter(r => r.man && r.done).length;
-  return `<div class="page">${hdr('Repas', 'Semaine ' + isoWeek(w), { right: mealToday, extra: mealSeg() + navRow('meal-prev', 'meal-next', weekLabel(w)) })}<div class="content">
+  return `<div class="page wide">${hdr('Repas', 'Semaine ' + isoWeek(w), { right: mealToday, extra: mealSeg() + navRow('meal-prev', 'meal-next', weekLabel(w)) })}<div class="content">
     <div class="card"><div class="addrow"><input class="inp" id="shop-new" placeholder="Ajouter un article (ex. 2 yaourts)" autocomplete="off" enterkeyhint="done"><button class="btn btn-p" data-act="shop-add" aria-label="Ajouter">${ico('plus', 22, 2.2)}</button></div>${freqChips()}
       ${total ? `<div class="row" style="margin-top:14px"><b class="grow">${done} sur ${total} dans le panier</b><span class="mut sm">${Math.round(done / total * 100)} %</span></div><div class="prog"><i style="width:${Math.round(done / total * 100)}%"></i></div>` : ''}</div>
     ${groups.length ? `<div class="card">${groups.map(g => `<div class="aisle">${esc(g.a.l)}</div>${g.items.map(r => `<button class="shop${r.done ? ' done' : ''}" data-act="shop-toggle" data-k="${esc(r.k)}"><span class="ck">${ck}</span><span class="grow" style="min-width:0"><span class="t" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</span>${r.from ? `<span class="s sm mut" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.from)}</span>` : ''}</span><span class="q">${esc(r.q)}</span></button>`).join('')}`).join('')}</div>
