@@ -131,6 +131,7 @@ document.addEventListener('input', e => {
   else if (id === 'ex-amt' || id === 'fx-amount') { const p = id === 'ex-amt' ? 'ex-pct' : 'fx-pct'; if (document.getElementById(p)) updatePct(p); }
 });
 function updatePct(id) {
+  if (id === 'ex-pct' && typeof updOwe === 'function') updOwe();
   const amt = id === 'ex-pct' ? (num(val('ex-amt')) || 0) : (num(val('fx-amount')) || 0); const p = num(val(id)) || 0;
   const n = document.getElementById(id + '-t'); if (n) n.textContent = `${NAMES.maxym} ${p} % (${fmt(amt * p / 100)}) · ${NAMES.sasha} ${100 - p} % (${fmt(amt * (100 - p) / 100)})`;
 }

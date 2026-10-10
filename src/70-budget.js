@@ -77,11 +77,25 @@ function txFiltered() {
   if (f.q) { const q = norm(f.q); list = list.filter(e => norm((e.note || '') + ' ' + (e.kind === 'settle' ? 'remboursement' : catById(e.cat).label) + ' ' + String(e.amount).replace('.', ',') + ' ' + e.amount).includes(q)); }
   return list;
 }
+/* ce que l'autre doit : part de celui qui n'a pas payé */
+function oweTxt(e) {
+  if (e.kind === 'settle' || !isShared(e) || !(e.amount > 0)) return '';
+  const sh = e.shares || { maxym: e.amount / 2, sasha: e.amount / 2 }, other = otherP(e.paidBy), v = r2(sh[other] || 0);
+  if (v < 0.01) return '';
+  return e.paidBy === A.me ? NAMES[other] + ' te doit ' + fmt(v) : 'Tu dois ' + fmt(v);
+}
+function updOwe() {
+  const n = document.getElementById('ex-owe'); if (!n) return;
+  const a = num(val('ex-amt')) || 0, pct = num(val('ex-pct')), mode = F.mode;
+  if (mode === 'perso' || !(a > 0)) { n.textContent = mode === 'perso' ? 'Dépense perso : rien à partager.' : ''; return; }
+  const sh = buildShares(a, mode, F.paidBy, isFinite(pct) ? pct : 50), other = otherP(F.paidBy), v = r2(sh[other] || 0);
+  n.textContent = v < 0.01 ? '' : F.paidBy === A.me ? NAMES[other] + ' te doit ' + fmt(v) : 'Tu dois ' + fmt(v) + ' à ' + NAMES[F.paidBy];
+}
 function txRow(e) {
   if (e.kind === 'settle') return `<button class="li" data-act="exp-edit" data-id="${esc(e.id)}"><span class="ic sm">${ico('swap', 18)}</span><span class="grow"><div class="t">Remboursement</div><div class="s">${esc(NAMES[e.from])} → ${esc(NAMES[e.to])}</div></span><span class="amount">${fmt(e.amount)}</span></button>`;
   const c = catById(e.cat), pm = e.amount > 0 && e.shares ? Math.round((e.shares.maxym || 0) / e.amount * 100) : 50;
   const mode = e.mode === 'perso' ? 'Perso' : e.mode === 'custom' ? `${NAMES.maxym[0]} ${pm} · ${NAMES.sasha[0]} ${100 - pm}` : '50 / 50';
-  return `<button class="li" data-act="exp-edit" data-id="${esc(e.id)}"><span class="ic sm" style="--pc:${esc(c.color)}">${esc(c.icon)}</span><span class="grow"><div class="t">${esc(e.note || c.label)}</div><div class="s">${e.paidBy === A.me ? 'Toi' : esc(NAMES[e.paidBy])} · ${esc(c.label)} · ${esc(mode)}${e._loc === 'priv' ? ' ' + icoI('lock', 12) : ''}</div></span><span class="amount">${fmt(e.amount)}</span></button>`;
+  return `<button class="li" data-act="exp-edit" data-id="${esc(e.id)}"><span class="ic sm" style="--pc:${esc(c.color)}">${esc(c.icon)}</span><span class="grow"><div class="t">${esc(e.note || c.label)}</div><div class="s">${e.paidBy === A.me ? 'Toi' : esc(NAMES[e.paidBy])} · ${esc(c.label)} · ${esc(mode)}${e._loc === 'priv' ? ' ' + icoI('lock', 12) : ''}</div></span><span class="amtc"><span class="amount">${fmt(e.amount)}</span>${oweTxt(e) ? `<span class="owe">${esc(oweTxt(e))}</span>` : ''}</span></button>`;
 }
 function txListHtml() {
   const f = A.bud.f, list = txFiltered(), lim = f.lim || 80, shown = list.slice(0, lim);
@@ -164,6 +178,7 @@ function openExpense(id, pre) {
   F._onpick = (k, v) => {
     if (k === 'mode') { const cu = document.getElementById('ex-custom'); if (cu) cu.hidden = v !== 'custom'; const h = document.getElementById('ex-hint'); if (h) h.textContent = modeHint(v); if (v === 'perso') lockMe(); updatePct('ex-pct'); }
     if (k === 'paidBy' && F.mode === 'perso') lockMe();
+    updOwe();
   };
   openSheet(() => `<div class="st">${ex ? 'Modifier la dépense' : 'Nouvelle dépense'}</div>
     <div class="amt"><input id="ex-amt" inputmode="decimal" autocomplete="off" placeholder="0" value="${ex ? String(ex.amount).replace('.', ',') : ''}"><span>€</span></div>
@@ -171,12 +186,13 @@ function openExpense(id, pre) {
     ${lbl('Payé par')}${segH('paidBy', [A.me, otherP(A.me)].map(p => ({ id: p, l: p === A.me ? 'Moi' : NAMES[p], i: av(p, 22) })), F.paidBy)}
     ${lbl('Répartition')}${segH('mode', [{ id: '50', l: '50 / 50' }, { id: 'perso', l: 'Perso' }, { id: 'custom', l: 'Sur mesure' }], F.mode)}
     <p class="mut sm" id="ex-hint" style="margin-top:8px">${modeHint(F.mode)}</p>
+    <p id="ex-owe"></p>
     <div id="ex-custom" ${F.mode === 'custom' ? '' : 'hidden'} style="margin-top:6px"><input type="range" class="range" id="ex-pct" min="0" max="100" step="5" value="${pct}" aria-label="Part de ${NAMES.maxym}"><div class="sm mut" id="ex-pct-t"></div></div>
     <div class="row" style="align-items:flex-start"><div class="grow">${lbl('Date')}<input class="inp" type="date" id="ex-date" value="${esc(ex ? ex.date : (pre.date || today()))}"></div></div>
     ${lbl('Note')}<input class="inp" id="ex-note" maxlength="80" placeholder="Facultatif" value="${esc(ex ? ex.note || '' : '')}" autocomplete="off">
     ${rcptField(ex)}
     <div class="btns ${ex ? 'two' : ''}">${ex ? `<button class="btn btn-d" data-act="exp-del-ask" data-id="${esc(id)}">Supprimer</button>` : ''}<button class="btn btn-p" data-act="exp-save">${ex ? 'Enregistrer' : 'Ajouter'}</button></div>`, { focus: ex ? '' : 'ex-amt' });
-  setTimeout(() => updatePct('ex-pct'), 40);
+  setTimeout(() => { updatePct('ex-pct'); updOwe(); }, 40);
 }
 ACT['exp-edit'] = d => openExpense(d.id);
 ACT['exp-new-d'] = d => openExpense('', { date: d.d });
