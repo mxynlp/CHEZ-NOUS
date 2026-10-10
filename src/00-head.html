@@ -7,19 +7,24 @@
    Palette : vert sauge #7FB89A · menthe #A8D5BA · vert profond #2F5D4A
    ===================================================================== */
 :root{
-  --bg:#CBE4D5; --bg-hi:#DDEFE4; --card:#FFFFFF; --soft:#EAF4EE; --line:rgba(47,93,74,.11); --line-2:rgba(47,93,74,.2);
+  --bg:#E7F1EA; --bg-hi:#F4F9F6; --card:#FFFFFF; --soft:#EAF4EE; --line:rgba(47,93,74,.11); --line-2:rgba(47,93,74,.2);
   --ink:#16261E; --ink2:#5C7068; --ink3:#93A39A;
   --sage:#7FB89A; --mint:#A8D5BA; --deep:#2F5D4A; --accent-ink:#2F5D4A; --on-sage:#12301F;
   --today:#2F5D4A; --on-today:#FFFFFF;
   --maxym:#2F7D5B; --on-maxym:#FFFFFF; --sasha:#9CCB7C; --on-sasha:#1E3A22;
   --warn:#F0B27A; --bad:#E58C8C; --bad-ink:#A04545;
-  --glass:rgba(208,230,218,.82); --sheet:rgba(255,255,255,.9); --backdrop:rgba(18,32,26,.4);
+  --glass:rgba(231,241,234,.84); --sheet:rgba(255,255,255,.9); --backdrop:rgba(18,32,26,.4);
   --toast-bg:rgba(31,61,48,.95); --toast-ink:#FFFFFF;
   --shadow:0 1px 1px rgba(28,58,45,.04),0 10px 30px rgba(28,58,45,.08);
   --shadow-up:0 -12px 44px rgba(20,45,35,.2);
   --rc:24px; --tabh:62px; --ease:cubic-bezier(.22,.8,.24,1);
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter",system-ui,"Segoe UI",Roboto,sans-serif;
 }
+:root[data-bg="blanc"]{--bg:#F5F7F6;--bg-hi:#FFFFFF;--glass:rgba(245,247,246,.82)}
+:root[data-bg="menthe"]{--bg:#E7F1EA;--bg-hi:#F4F9F6;--glass:rgba(231,241,234,.84)}
+:root[data-bg="sauge"]{--bg:#CBE4D5;--bg-hi:#DDEFE4;--glass:rgba(208,230,218,.82)}
+:root[data-bg="creme"]{--bg:#F3EFE5;--bg-hi:#FBF8F1;--glass:rgba(243,239,229,.84)}
+:root[data-bg="ardoise"]{--bg:#E8EDF1;--bg-hi:#F5F8FA;--glass:rgba(232,237,241,.84)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0F1A15; --bg-hi:#17291F; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
   --ink:#EAF3EE; --ink2:#9DB2A7; --ink3:#6F867A; --accent-ink:#A8D5BA; --today:#A8D5BA; --on-today:#0F1A15;
@@ -444,4 +449,17 @@ body.selmode .page{padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom,
 .srow:active{background:var(--soft)}
 .srow .ic{flex:none}
 .sgrp{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin:14px 4px 4px}
+.bgp{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+.bgp button{width:44px;height:44px;border-radius:50%;background:var(--sw);box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.12);position:relative;display:grid;place-items:center}
+.bgp button.on{box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.12),0 0 0 3px var(--sage)}
+.bgp-l{font-size:12px;color:var(--ink2);text-align:center;margin-top:4px}
+.hback .title{font-size:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hback .title .sub{font-size:13px}
+.hdr .ib.sm,.me-btn{position:relative}
+.hdr .ib.sm::after,.me-btn::after{content:"";position:absolute;inset:-4px}
+.pb{min-height:56px;padding:0 10px;gap:10px}
+.pbt{display:flex;flex-direction:column;min-width:0;line-height:1.2}
+.pbt small{width:auto;font-size:11px}
+.pbt b{font-size:14px}
+.hdr .chip:not(.on){background:color-mix(in srgb,var(--card) 72%,transparent)}
 </style>

@@ -35,6 +35,7 @@ const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ
 const clean = o => JSON.parse(JSON.stringify(o));
 const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+try { document.documentElement.dataset.bg = localStorage.getItem('cn-bg') || 'menthe'; } catch (e) { document.documentElement.dataset.bg = 'menthe'; }
 const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* stockage indisponible */ } };
 function dm(a, b) { const o = Object.assign({}, a); for (const k in b) o[k] = (isObj(b[k]) && isObj(a && a[k])) ? dm(a[k], b[k]) : b[k]; return o; }

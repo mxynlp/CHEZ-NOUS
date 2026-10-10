@@ -22,6 +22,7 @@ ACT.profile = () => {
     ${A.canWrite === false ? `<div class="note"><div class="grow"><b>Lecture seule</b>Demande à Maxym de t’inviter par e-mail comme éditeur dans le menu Partager, sans lien public.</div></div>` : ''}
     ${A.sync === 'local' ? `<div class="note info"><div class="grow"><b>Pas de synchronisation</b>Ouvre la page depuis le lien partagé pour retrouver les données de ${NAMES[o]}.</div></div>` : ''}
     <div style="margin-top:10px">
+      ${bgPicker()}
       <button class="li" data-act="switch-me"><span class="ic sm">${ico('swap', 20)}</span><span class="grow t">Passer sur le profil de ${NAMES[o]}</span>${ico('chevR', 18)}</button>
       ${swH('hide', 'Masquer les montants privés', A.hide)}
       <button class="li" data-act="items-open" data-k="places"><span class="ic sm">${ico('cal', 20)}</span><span class="grow t">Lieux de présence</span>${ico('chevR', 18)}</button>
@@ -72,3 +73,11 @@ ACT['item-del'] = async () => {
   const kind = F.kind, list = clone(cfg()[kind]).filter(x => x.id !== F.id);
   closeSheet(); await act(() => patch('settings', 'main', { [kind]: list }), 'Supprimé'); setTimeout(() => openItems(kind), 340);
 };
+
+/* --- Apparence : couleur de fond (par appareil) --- */
+const BGS = [['menthe', 'Menthe', '#E7F1EA'], ['blanc', 'Blanc', '#F5F7F6'], ['creme', 'Crème', '#F3EFE5'], ['ardoise', 'Ardoise', '#E8EDF1'], ['sauge', 'Sauge', '#CBE4D5']];
+function bgPicker() {
+  const cur = document.documentElement.dataset.bg || 'menthe';
+  return `<div class="li" style="display:block"><div class="t" style="font-weight:600;margin-bottom:10px">Couleur de fond</div><div class="bgp">${BGS.map(b => `<div><button type="button" data-act="bg-set" data-v="${b[0]}" class="${cur === b[0] ? 'on' : ''}" style="--sw:${b[2]}" aria-label="${b[1]}"></button><div class="bgp-l">${b[1]}</div></div>`).join('')}</div></div>`;
+}
+ACT['bg-set'] = d => { document.documentElement.dataset.bg = d.v; lsSet('cn-bg', d.v); document.querySelectorAll('.bgp button').forEach(x => x.classList.toggle('on', x.dataset.v === d.v)); };

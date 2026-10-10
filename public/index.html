@@ -18,19 +18,24 @@
    Palette : vert sauge #7FB89A · menthe #A8D5BA · vert profond #2F5D4A
    ===================================================================== */
 :root{
-  --bg:#CBE4D5; --bg-hi:#DDEFE4; --card:#FFFFFF; --soft:#EAF4EE; --line:rgba(47,93,74,.11); --line-2:rgba(47,93,74,.2);
+  --bg:#E7F1EA; --bg-hi:#F4F9F6; --card:#FFFFFF; --soft:#EAF4EE; --line:rgba(47,93,74,.11); --line-2:rgba(47,93,74,.2);
   --ink:#16261E; --ink2:#5C7068; --ink3:#93A39A;
   --sage:#7FB89A; --mint:#A8D5BA; --deep:#2F5D4A; --accent-ink:#2F5D4A; --on-sage:#12301F;
   --today:#2F5D4A; --on-today:#FFFFFF;
   --maxym:#2F7D5B; --on-maxym:#FFFFFF; --sasha:#9CCB7C; --on-sasha:#1E3A22;
   --warn:#F0B27A; --bad:#E58C8C; --bad-ink:#A04545;
-  --glass:rgba(208,230,218,.82); --sheet:rgba(255,255,255,.9); --backdrop:rgba(18,32,26,.4);
+  --glass:rgba(231,241,234,.84); --sheet:rgba(255,255,255,.9); --backdrop:rgba(18,32,26,.4);
   --toast-bg:rgba(31,61,48,.95); --toast-ink:#FFFFFF;
   --shadow:0 1px 1px rgba(28,58,45,.04),0 10px 30px rgba(28,58,45,.08);
   --shadow-up:0 -12px 44px rgba(20,45,35,.2);
   --rc:24px; --tabh:62px; --ease:cubic-bezier(.22,.8,.24,1);
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter",system-ui,"Segoe UI",Roboto,sans-serif;
 }
+:root[data-bg="blanc"]{--bg:#F5F7F6;--bg-hi:#FFFFFF;--glass:rgba(245,247,246,.82)}
+:root[data-bg="menthe"]{--bg:#E7F1EA;--bg-hi:#F4F9F6;--glass:rgba(231,241,234,.84)}
+:root[data-bg="sauge"]{--bg:#CBE4D5;--bg-hi:#DDEFE4;--glass:rgba(208,230,218,.82)}
+:root[data-bg="creme"]{--bg:#F3EFE5;--bg-hi:#FBF8F1;--glass:rgba(243,239,229,.84)}
+:root[data-bg="ardoise"]{--bg:#E8EDF1;--bg-hi:#F5F8FA;--glass:rgba(232,237,241,.84)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0F1A15; --bg-hi:#17291F; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
   --ink:#EAF3EE; --ink2:#9DB2A7; --ink3:#6F867A; --accent-ink:#A8D5BA; --today:#A8D5BA; --on-today:#0F1A15;
@@ -455,6 +460,19 @@ body.selmode .page{padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom,
 .srow:active{background:var(--soft)}
 .srow .ic{flex:none}
 .sgrp{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin:14px 4px 4px}
+.bgp{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+.bgp button{width:44px;height:44px;border-radius:50%;background:var(--sw);box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.12);position:relative;display:grid;place-items:center}
+.bgp button.on{box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.12),0 0 0 3px var(--sage)}
+.bgp-l{font-size:12px;color:var(--ink2);text-align:center;margin-top:4px}
+.hback .title{font-size:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hback .title .sub{font-size:13px}
+.hdr .ib.sm,.me-btn{position:relative}
+.hdr .ib.sm::after,.me-btn::after{content:"";position:absolute;inset:-4px}
+.pb{min-height:56px;padding:0 10px;gap:10px}
+.pbt{display:flex;flex-direction:column;min-width:0;line-height:1.2}
+.pbt small{width:auto;font-size:11px}
+.pbt b{font-size:14px}
+.hdr .chip:not(.on){background:color-mix(in srgb,var(--card) 72%,transparent)}
 
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
@@ -521,6 +539,7 @@ const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ
 const clean = o => JSON.parse(JSON.stringify(o));
 const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+try { document.documentElement.dataset.bg = localStorage.getItem('cn-bg') || 'menthe'; } catch (e) { document.documentElement.dataset.bg = 'menthe'; }
 const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* stockage indisponible */ } };
 function dm(a, b) { const o = Object.assign({}, a); for (const k in b) o[k] = (isObj(b[k]) && isObj(a && a[k])) ? dm(a[k], b[k]) : b[k]; return o; }
@@ -835,7 +854,7 @@ const emptyH = (icon, title, text, btn) => `<div class="empty"><div class="eic">
 
 /* en-tête commun (titre large, profil, synchro) */
 function hdr(title, sub, o = {}) {
-  return `<div class="hdr"><div class="hrow">${o.back ? `<button class="ib flat" data-act="${o.back}" aria-label="Retour">${ico('chevL', 24)}</button>` : ''}<div class="title">${esc(title)}${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>${o.right || ''}${o.back ? '' : `<button class="ib sm" data-act="search-open" aria-label="Rechercher (Ctrl K)">${ico('search', 20)}</button>`}<button class="me-btn" data-act="profile" aria-label="Profil et réglages">${av(A.me, 36)}<i class="sd${A.sync === 'live' ? '' : ' off'}"></i></button></div>${o.extra || ''}</div>`;
+  return `<div class="hdr${o.back ? ' hback' : ''}"><div class="hrow">${o.back ? `<button class="ib flat" data-act="${o.back}" aria-label="Retour">${ico('chevL', 24)}</button>` : ''}<div class="title">${esc(title)}${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>${o.right || ''}${o.back ? '' : `<button class="ib sm" data-act="search-open" aria-label="Rechercher (Ctrl K)">${ico('search', 20)}</button>`}<button class="me-btn" data-act="profile" aria-label="Profil et réglages">${av(A.me, 36)}<i class="sd${A.sync === 'live' ? '' : ' off'}"></i></button></div>${o.extra || ''}</div>`;
 }
 const navRow = (prev, next, label, sub) => `<div class="navrow"><button class="ib" aria-label="Précédent" data-act="${prev}">${ico('chevL')}</button><div class="navt"><b>${esc(label)}</b>${sub ? `<span>${esc(sub)}</span>` : ''}</div><button class="ib" aria-label="Suivant" data-act="${next}">${ico('chevR')}</button></div>`;
 
@@ -965,6 +984,7 @@ ACT.profile = () => {
     ${A.canWrite === false ? `<div class="note"><div class="grow"><b>Lecture seule</b>Demande à Maxym de t’inviter par e-mail comme éditeur dans le menu Partager, sans lien public.</div></div>` : ''}
     ${A.sync === 'local' ? `<div class="note info"><div class="grow"><b>Pas de synchronisation</b>Ouvre la page depuis le lien partagé pour retrouver les données de ${NAMES[o]}.</div></div>` : ''}
     <div style="margin-top:10px">
+      ${bgPicker()}
       <button class="li" data-act="switch-me"><span class="ic sm">${ico('swap', 20)}</span><span class="grow t">Passer sur le profil de ${NAMES[o]}</span>${ico('chevR', 18)}</button>
       ${swH('hide', 'Masquer les montants privés', A.hide)}
       <button class="li" data-act="items-open" data-k="places"><span class="ic sm">${ico('cal', 20)}</span><span class="grow t">Lieux de présence</span>${ico('chevR', 18)}</button>
@@ -1016,6 +1036,14 @@ ACT['item-del'] = async () => {
   const kind = F.kind, list = clone(cfg()[kind]).filter(x => x.id !== F.id);
   closeSheet(); await act(() => patch('settings', 'main', { [kind]: list }), 'Supprimé'); setTimeout(() => openItems(kind), 340);
 };
+
+/* --- Apparence : couleur de fond (par appareil) --- */
+const BGS = [['menthe', 'Menthe', '#E7F1EA'], ['blanc', 'Blanc', '#F5F7F6'], ['creme', 'Crème', '#F3EFE5'], ['ardoise', 'Ardoise', '#E8EDF1'], ['sauge', 'Sauge', '#CBE4D5']];
+function bgPicker() {
+  const cur = document.documentElement.dataset.bg || 'menthe';
+  return `<div class="li" style="display:block"><div class="t" style="font-weight:600;margin-bottom:10px">Couleur de fond</div><div class="bgp">${BGS.map(b => `<div><button type="button" data-act="bg-set" data-v="${b[0]}" class="${cur === b[0] ? 'on' : ''}" style="--sw:${b[2]}" aria-label="${b[1]}"></button><div class="bgp-l">${b[1]}</div></div>`).join('')}</div></div>`;
+}
+ACT['bg-set'] = d => { document.documentElement.dataset.bg = d.v; lsSet('cn-bg', d.v); document.querySelectorAll('.bgp button').forEach(x => x.classList.toggle('on', x.dataset.v === d.v)); };
 
 /* ---------- 8. Accueil ---------- */
 const miniRows = d => PIDS.map(p => `<span class="mini">${SLOTS.map(s => { const pl = placeById(slotPlace(p, d, s.k)); return `<i${pl ? ` style="--pc:${esc(pl.color)}"` : ''}></i>`; }).join('')}</span>`).join('');
@@ -1183,9 +1211,9 @@ function planDay() {
   const rel = d === t ? 'Aujourd’hui' : d === addDays(t, 1) ? 'Demain' : d === addDays(t, -1) ? 'Hier' : wdi(d) >= 5 ? 'Week-end' : '';
   const tgs = SLOTS.filter(s => together(d, s.k));
   const gro = r2(exps.filter(e => e.cat === 'groceries').reduce((a, e) => a + e.amount, 0));
-  const pres = `<div class="pres">${order.map(p => `<div class="presc"><div class="ph">${av(p, 28)}${esc(NAMES[p])}${p === A.me ? '<span class="mut sm" style="font-weight:500">(toi)</span>' : ''}</div>${SLOTS.map(s => { const pl = placeById(slotPlace(p, d, s.k)); return `<button class="pb${together(d, s.k) ? ' tg' : ''}"${pl ? ` style="--pc:${esc(pl.color)}"` : ''} data-act="slot" data-p="${p}" data-d="${d}" data-s="${s.k}"><small>${s.k === 'a' ? 'Après-m.' : s.l}</small><span class="e">${pl ? esc(pl.icon) : '＋'}</span><b>${pl ? esc(pl.label) : 'À définir'}</b></button>`; }).join('')}</div>`).join('')}</div>`;
+  const pres = `<div class="pres">${order.map(p => `<div class="presc"><div class="ph">${av(p, 28)}${esc(NAMES[p])}${p === A.me ? '<span class="mut sm" style="font-weight:500">(toi)</span>' : ''}</div>${SLOTS.map(s => { const pl = placeById(slotPlace(p, d, s.k)); return `<button class="pb${together(d, s.k) ? ' tg' : ''}"${pl ? ` style="--pc:${esc(pl.color)}"` : ''} data-act="slot" data-p="${p}" data-d="${d}" data-s="${s.k}"><span class="e">${pl ? esc(pl.icon) : '＋'}</span><span class="pbt"><small>${s.l}</small><b>${pl ? esc(pl.label) : 'À définir'}</b></span></button>`; }).join('')}</div>`).join('')}</div>`;
   const mealRow = (k, l) => { const m = mealOf(d, k); return `<button class="li" data-act="meal-edit" data-d="${d}" data-k="${k}"><span class="ic sm">${ico('meal', 18)}</span><span class="grow"><div class="t">${m ? esc(m.name) : 'Pas encore prévu'}</div><div class="s">${l}${m ? ' · ' + esc(whoName(m.who)) : ''}</div></span>${ico('chevR', 18)}</button>`; };
-  return `<div class="page wide">${hdr(dayLong(d), rel, { back: 'plan-up', right: todayChip, extra: levelSeg() + navRow('plan-prev', 'plan-next', DAYN[wdi(d)].replace(/^./, c => c.toUpperCase()), fmtD(d, { day: 'numeric', month: 'long', year: 'numeric' })) })}<div class="content">
+  return `<div class="page wide">${hdr(DAYN[wdi(d)].replace(/^./, c => c.toUpperCase()), rel || fmtD(d, { year: 'numeric' }), { back: 'plan-up', right: todayChip, extra: levelSeg() + navRow('plan-prev', 'plan-next', fmtD(d, { day: 'numeric', month: 'long', year: 'numeric' })) })}<div class="content">
     ${pres}
     ${tgs.length ? `<div class="note info" style="margin-top:12px"><span style="color:var(--accent-ink)">${ico('heart', 22)}</span><div class="grow"><b>Ensemble à la maison</b>${tgs.map(s => s.l.toLowerCase()).join(', ')}</div></div>` : ''}
     <div class="card"><h3>${ico('clock', 18)}Au programme<span class="sp"></span><button class="lk" data-act="ev-new-d" data-d="${d}">Ajouter</button></h3>

@@ -53,7 +53,7 @@ const emptyH = (icon, title, text, btn) => `<div class="empty"><div class="eic">
 
 /* en-tête commun (titre large, profil, synchro) */
 function hdr(title, sub, o = {}) {
-  return `<div class="hdr"><div class="hrow">${o.back ? `<button class="ib flat" data-act="${o.back}" aria-label="Retour">${ico('chevL', 24)}</button>` : ''}<div class="title">${esc(title)}${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>${o.right || ''}${o.back ? '' : `<button class="ib sm" data-act="search-open" aria-label="Rechercher (Ctrl K)">${ico('search', 20)}</button>`}<button class="me-btn" data-act="profile" aria-label="Profil et réglages">${av(A.me, 36)}<i class="sd${A.sync === 'live' ? '' : ' off'}"></i></button></div>${o.extra || ''}</div>`;
+  return `<div class="hdr${o.back ? ' hback' : ''}"><div class="hrow">${o.back ? `<button class="ib flat" data-act="${o.back}" aria-label="Retour">${ico('chevL', 24)}</button>` : ''}<div class="title">${esc(title)}${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>${o.right || ''}${o.back ? '' : `<button class="ib sm" data-act="search-open" aria-label="Rechercher (Ctrl K)">${ico('search', 20)}</button>`}<button class="me-btn" data-act="profile" aria-label="Profil et réglages">${av(A.me, 36)}<i class="sd${A.sync === 'live' ? '' : ' off'}"></i></button></div>${o.extra || ''}</div>`;
 }
 const navRow = (prev, next, label, sub) => `<div class="navrow"><button class="ib" aria-label="Précédent" data-act="${prev}">${ico('chevL')}</button><div class="navt"><b>${esc(label)}</b>${sub ? `<span>${esc(sub)}</span>` : ''}</div><button class="ib" aria-label="Suivant" data-act="${next}">${ico('chevR')}</button></div>`;
 
