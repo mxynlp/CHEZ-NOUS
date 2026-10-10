@@ -14,7 +14,13 @@ function vBud() {
 
 /* charges fixes : générées automatiquement chaque mois (identifiants stables, aucun doublon possible) */
 const GEN = {};
+async function fixPayers() {
+  const bad = Object.entries(D.expenses).filter(([, e]) => e && e.auto && e.paidBy !== 'sasha');
+  if (!bad.length) return;
+  await act(async () => { for (const [id, e] of bad) { const mode = e.mode || '50', pct = e.amount > 0 && e.shares ? Math.round((e.shares.maxym || 0) / e.amount * 100) : 50; await patch('expenses', id, { paidBy: 'sasha', shares: buildShares(e.amount, mode, 'sasha', pct) }); } });
+}
 function ensureMonth() {
+  if (!GEN.fp && A.ready && A.me && A.canWrite !== false) { GEN.fp = 1; fixPayers(); }
   const m = ymOf(today()); if (GEN[m] || !A.ready || !A.me || A.canWrite === false) return;
   if (D.months[m] && D.months[m].generated) { GEN[m] = 1; return; }
   GEN[m] = 1; genMonth(m);
@@ -54,15 +60,14 @@ function budOver() {
     <div class="card"><h3>${ico('wallet', 18)}Dépenses communes</h3>
       <div class="row" style="flex-wrap:wrap;gap:8px"><div class="big">${fmt(total)}</div><span class="grow"></span>${cmp}</div>
       ${parts.length ? `<div class="donutw" style="margin-top:14px">${donut(parts, total)}<div class="leg">${parts.map(p => `<div class="legi"><i style="background:${esc(p.color)}"></i><span class="grow">${esc(p.icon)} ${esc(p.label)}</span><b class="amount sm">${fmt(p.v)}</b><span class="mut sm" style="width:38px;text-align:right">${Math.round(p.v / total * 100)} %</span></div>`).join('')}</div></div>` : emptyH('wallet', 'Pas encore de dépense commune', 'Ajoute une dépense avec le bouton +, elle apparaîtra ici.')}</div>
-    ${paidCard(m)}
     <div class="grid2">
     <div class="card"><h3>${ico('target', 18)}Budgets cibles<span class="sp"></span><button class="lk" data-act="tgt-edit" data-id="">Ajouter</button></h3>
       ${tg.length ? tg.map(([id, v]) => { const cat = catById(id), spent = r2(byCat[id] || 0), r = spent / v; return `<button class="tgt" data-act="tgt-edit" data-id="${esc(id)}"><div class="row"><span class="ic sm" style="--pc:${esc(cat.color)}">${esc(cat.icon)}</span><span class="grow t" style="font-weight:600">${esc(cat.label)}</span><span class="amount sm">${fmt(spent)} / ${fmt(v)}</span></div><div class="pg"><i style="width:${Math.min(100, Math.round(r * 100))}%;background:${pgColor(r)}"></i></div>${r > 1 ? `<div class="sm" style="color:var(--bad-ink);margin-top:6px">Dépassé de ${fmt(spent - v)}</div>` : ''}</button>`; }).join('') : `<p class="mut sm">Fixe un plafond mensuel par catégorie, par exemple 400 € pour les courses.</p>`}</div>
     <div class="card tap" role="button" tabindex="0" data-act="rent-edit"><h3>${ico('home', 18)}Loyer<span class="sp"></span><span style="font-size:14px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--accent-ink)">Modifier</span></h3>
       <div class="calc"><div class="r"><span>Loyer</span><b>${fmt(rn.amount)}</b></div><div class="r"><span>APL déduite</span><b>− ${fmt(rn.apl)}</b></div><div class="r t"><span>Reste à charge</span><b>${fmt(rest)}</b></div><div class="r sub"><span>Part de chacun (50 / 50)</span><b>${fmt(rest / 2)}</b></div></div>
-      <p class="mut sm" style="margin-top:10px">Prélevé le ${rn.day} · avancé par ${esc(NAMES[rn.paidBy])}</p></div></div>
+      <p class="mut sm" style="margin-top:10px">Prélevé le ${rn.day}</p></div></div>
     <div class="card"><h3>${ico('repeat', 18)}Charges fixes<span class="sp"></span><button class="lk" data-act="fx-edit" data-id="">Ajouter</button></h3>
-      ${c.fixed.map(f => { const cat = catById(f.cat); return `<button class="li" data-act="fx-edit" data-id="${esc(f.id)}"><span class="ic sm" style="--pc:${esc(cat.color)}">${esc(cat.icon)}</span><span class="grow"><div class="t">${esc(f.label)}</div><div class="s">Le ${f.day} · avancé par ${f.paidBy === A.me ? 'toi' : esc(NAMES[f.paidBy])} · ${splitTxt(f)}</div></span><span class="amount">${fmt(f.amount)}</span></button>`; }).join('') || '<p class="mut sm">Aucune charge fixe.</p>'}</div>
+      ${c.fixed.map(f => { const cat = catById(f.cat); return `<button class="li" data-act="fx-edit" data-id="${esc(f.id)}"><span class="ic sm" style="--pc:${esc(cat.color)}">${esc(cat.icon)}</span><span class="grow"><div class="t">${esc(f.label)}</div><div class="s">Le ${f.day} · ${splitTxt(f)}</div></span><span class="amtc"><span class="amount">${fmt(f.amount)}</span><span class="owe">${esc(fxPart(f))}</span></span></button>`; }).join('') || '<p class="mut sm">Aucune charge fixe.</p>'}</div>
     <div class="card"><h3>${ico('cal', 18)}Historique</h3><div class="bars">${hist.map(h => `<button class="${h.m === m ? 'on' : ''}" data-act="bud-month" data-m="${h.m}" aria-label="${esc(monthLabel(h.m) + ' : ' + fmt(h.v))}"><span>${h.v ? Math.round(h.v) : ''}</span><i style="height:${Math.round(h.v / mx * 70) + 4}px"></i><span>${esc(fmtD(h.m + '-01', { month: 'short' }).replace('.', ''))}</span></button>`).join('')}</div></div>
     <div class="btns"><button class="btn btn-s btn-b" data-act="bud-csv">${ico('download', 20)}Exporter ${esc(fmtD(m + '-01', { month: 'long' }))} en CSV</button></div>`;
 }
@@ -91,11 +96,13 @@ function updOwe() {
   const sh = buildShares(a, mode, F.paidBy, isFinite(pct) ? pct : 50), other = otherP(F.paidBy), v = r2(sh[other] || 0);
   n.textContent = v < 0.01 ? '' : F.paidBy === A.me ? NAMES[other] + ' te doit ' + fmt(v) : 'Tu dois ' + fmt(v) + ' à ' + NAMES[F.paidBy];
 }
+/* Sasha règle toutes les charges fixes : on montre simplement la part de Maxym à lui donner */
+function fxPart(f) { const v = r2(f.amount * (f.pct == null ? 50 : f.pct) / 100); return (A.me === 'maxym' ? 'Ta part ' : 'Part de ' + NAMES.maxym + ' ') + fmt(v); }
 function txRow(e) {
   if (e.kind === 'settle') return `<button class="li" data-act="exp-edit" data-id="${esc(e.id)}"><span class="ic sm">${ico('swap', 18)}</span><span class="grow"><div class="t">Remboursement</div><div class="s">${esc(NAMES[e.from])} → ${esc(NAMES[e.to])}</div></span><span class="amount">${fmt(e.amount)}</span></button>`;
   const c = catById(e.cat), pm = e.amount > 0 && e.shares ? Math.round((e.shares.maxym || 0) / e.amount * 100) : 50;
   const mode = e.mode === 'perso' ? 'Perso' : e.mode === 'custom' ? `${NAMES.maxym[0]} ${pm} · ${NAMES.sasha[0]} ${100 - pm}` : '50 / 50';
-  return `<button class="li" data-act="exp-edit" data-id="${esc(e.id)}"><span class="ic sm" style="--pc:${esc(c.color)}">${esc(c.icon)}</span><span class="grow"><div class="t">${esc(e.note || c.label)}</div><div class="s">${e.paidBy === A.me ? 'Toi' : esc(NAMES[e.paidBy])} · ${esc(c.label)} · ${esc(mode)}${e._loc === 'priv' ? ' ' + icoI('lock', 12) : ''}</div></span><span class="amtc"><span class="amount">${fmt(e.amount)}</span>${oweTxt(e) ? `<span class="owe">${esc(oweTxt(e))}</span>` : ''}</span></button>`;
+  return `<button class="li" data-act="exp-edit" data-id="${esc(e.id)}"><span class="ic sm" style="--pc:${esc(c.color)}">${esc(c.icon)}</span><span class="grow"><div class="t">${esc(e.note || c.label)}</div><div class="s">${e.auto ? '' : (e.paidBy === A.me ? 'Toi' : esc(NAMES[e.paidBy])) + ' · '}${esc(c.label)} · ${esc(mode)}${e._loc === 'priv' ? ' ' + icoI('lock', 12) : ''}</div></span><span class="amtc"><span class="amount">${fmt(e.amount)}</span>${oweTxt(e) ? `<span class="owe">${esc(oweTxt(e))}</span>` : ''}</span></button>`;
 }
 function txListHtml() {
   const f = A.bud.f, list = txFiltered(), lim = f.lim || 80, shown = list.slice(0, lim);
@@ -255,7 +262,6 @@ ACT['rent-edit'] = () => {
     <div class="row" style="align-items:flex-start"><div class="grow">${lbl('Loyer (€)')}<input class="inp" id="rn-amount" inputmode="decimal" value="${String(r.amount).replace('.', ',')}"></div><div class="grow">${lbl('APL (€)')}<input class="inp" id="rn-apl" inputmode="decimal" value="${String(r.apl).replace('.', ',')}"></div></div>
     <div class="card tint" style="margin-top:14px"><div class="calc" id="rn-calc"></div></div>
     <div class="row" style="align-items:flex-start"><div class="grow">${lbl('Jour du prélèvement')}<input class="inp" id="rn-day" inputmode="numeric" value="${r.day}"></div></div>
-    ${lbl('Qui avance le loyer')}${segH('paidBy', [A.me, otherP(A.me)].map(p => ({ id: p, l: p === A.me ? 'Moi' : NAMES[p], i: av(p, 22) })), F.paidBy)}
     <div style="margin-top:8px">${swH('apply', 'Appliquer aussi à ce mois', true)}</div>
     <div class="btns"><button class="btn btn-p btn-b" data-act="rent-save">Enregistrer</button></div>`);
   setTimeout(updateRent, 40);
@@ -263,7 +269,7 @@ ACT['rent-edit'] = () => {
 ACT['rent-save'] = async () => {
   const amount = num(val('rn-amount')), apl = num(val('rn-apl')), day = Math.round(num(val('rn-day')));
   if (!isFinite(amount) || amount < 0) return toast('Saisis le montant du loyer', 'err');
-  const o = { amount: r2(amount), apl: r2(isFinite(apl) ? apl : 0), day: Math.min(31, Math.max(1, isFinite(day) ? day : 1)), paidBy: F.paidBy }, apply = F.apply;
+  const o = { amount: r2(amount), apl: r2(isFinite(apl) ? apl : 0), day: Math.min(31, Math.max(1, isFinite(day) ? day : 1)), paidBy: 'sasha' }, apply = F.apply;
   closeSheet();
   await act(async () => {
     await patch('settings', 'main', { rent: o, amountsOk: true });
@@ -279,7 +285,6 @@ function openFixed(id) {
     ${lbl('Nom')}<input class="inp" id="fx-label" maxlength="40" value="${esc(f ? f.label : '')}" placeholder="Ex. Assurance habitation" autocomplete="off">
     <div class="row" style="align-items:flex-start"><div class="grow">${lbl('Montant par mois (€)')}<input class="inp" id="fx-amount" inputmode="decimal" value="${f ? String(f.amount).replace('.', ',') : ''}" placeholder="0"></div><div class="grow">${lbl('Jour du prélèvement')}<input class="inp" id="fx-day" inputmode="numeric" value="${f ? f.day : 5}"></div></div>
     ${lbl('Catégorie')}${chipsH('cat', cfg().cats.map(c => ({ id: c.id, l: c.label, i: c.icon })), F.cat).replace('class="chips"', 'class="chips scroll"')}
-    ${lbl('Qui avance l’argent')}${segH('paidBy', [A.me, otherP(A.me)].map(p => ({ id: p, l: p === A.me ? 'Moi' : NAMES[p], i: av(p, 22) })), F.paidBy)}
     ${lbl('Répartition')}${segH('split', [{ id: '50', l: '50 / 50' }, { id: 'custom', l: 'Sur mesure' }], F.split)}
     <div id="fx-custom" ${F.split === 'custom' ? '' : 'hidden'} style="margin-top:6px"><input type="range" class="range" id="fx-pct" min="0" max="100" step="5" value="${f ? f.pct : 50}" aria-label="Part de ${NAMES.maxym}"><div class="sm mut" id="fx-pct-t"></div></div>
     <div style="margin-top:8px">${swH('apply', 'Appliquer aussi à ce mois', true)}</div>
@@ -291,7 +296,7 @@ ACT['fx-save'] = async () => {
   const label = val('fx-label').trim(), amount = num(val('fx-amount')), day = Math.round(num(val('fx-day')));
   if (!label) return toast('Donne un nom à la charge', 'err'); if (!(amount > 0)) return toast('Saisis un montant', 'err');
   const pct = F.split === 'custom' ? Math.round(num(val('fx-pct'))) : 50, fid = F.id, id = fid || uid(), apply = F.apply;
-  const item = { id, label, cat: F.cat, amount: r2(amount), day: Math.min(31, Math.max(1, isFinite(day) ? day : 1)), paidBy: F.paidBy, pct: isFinite(pct) ? pct : 50 };
+  const item = { id, label, cat: F.cat, amount: r2(amount), day: Math.min(31, Math.max(1, isFinite(day) ? day : 1)), paidBy: 'sasha', pct: isFinite(pct) ? pct : 50 };
   const list = clone(cfg().fixed), i = list.findIndex(x => x.id === id); if (i >= 0) list[i] = item; else list.push(item);
   closeSheet();
   await act(async () => {

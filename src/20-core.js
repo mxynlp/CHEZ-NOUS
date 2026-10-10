@@ -117,12 +117,12 @@ const DEF_CATS = [
 ];
 // Montants d'exemple : à corriger dans Budget > Charges fixes. pct = part de Maxym en %
 const DEF_FIXED = [
-  { id: 'edf', label: 'EDF (électricité)', cat: 'energy', amount: 65, day: 5, paidBy: 'maxym', pct: 50 },
+  { id: 'edf', label: 'EDF (électricité)', cat: 'energy', amount: 65, day: 5, paidBy: 'sasha', pct: 50 },
   { id: 'wifi', label: 'Wi-Fi / box internet', cat: 'internet', amount: 29.99, day: 8, paidBy: 'sasha', pct: 50 },
   { id: 'netflix', label: 'Netflix', cat: 'subs', amount: 13.49, day: 12, paidBy: 'sasha', pct: 50 },
-  { id: 'disney', label: 'Disney+', cat: 'subs', amount: 9.99, day: 18, paidBy: 'maxym', pct: 50 }
+  { id: 'disney', label: 'Disney+', cat: 'subs', amount: 9.99, day: 18, paidBy: 'sasha', pct: 50 }
 ];
-const DEF_RENT = { amount: 650, apl: 286, day: 1, paidBy: 'maxym' };
+const DEF_RENT = { amount: 650, apl: 286, day: 1, paidBy: 'sasha' };
 const DEF_TARGETS = { groceries: 400 };
 const MEAL_WHERE = [{ id: 'home', l: 'Maison' }, { id: 'out', l: 'Dehors' }, { id: 'resto', l: 'Restaurant' }, { id: 'delivery', l: 'Livraison' }, { id: 'family', l: 'Chez des proches' }];
 const REC_CATS = [{ id: 'pates', l: 'Pâtes' }, { id: 'viande', l: 'Viande' }, { id: 'poisson', l: 'Poisson' }, { id: 'veggie', l: 'Végétarien' }, { id: 'rapide', l: 'Rapide' }, { id: 'soupe', l: 'Soupe & salade' }, { id: 'autre', l: 'Autre' }];
@@ -220,7 +220,7 @@ function schedule() { _ae = null; if (rq) return; rq = requestAnimationFrame(() 
 /* ---------- 5. Sélecteurs ---------- */
 function cfg() {
   const s = D.settings || {};
-  return { places: s.places || DEF_PLACES, cats: s.cats || DEF_CATS, fixed: s.fixed || DEF_FIXED, rent: Object.assign({}, DEF_RENT, s.rent || {}),
+  return { places: s.places || DEF_PLACES, cats: s.cats || DEF_CATS, fixed: (s.fixed || DEF_FIXED).map(f => Object.assign({}, f, { paidBy: 'sasha' })), rent: Object.assign({}, DEF_RENT, s.rent || {}, { paidBy: 'sasha' }),
     targets: s.targets || DEF_TARGETS, diet: s.diet || {}, demo: !!s.demo, amountsOk: !!s.amountsOk };
 }
 const placeById = id => cfg().places.find(p => p.id === id) || null;
