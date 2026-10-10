@@ -200,13 +200,27 @@ function openSettleView(e) {
 }
 ACT['settle-open'] = () => {
   const bal = myBalance(), from = bal < 0 ? A.me : otherP(A.me), to = otherP(from), amt = Math.abs(bal);
-  resetF({ dir: from + '>' + to });
-  openSheet(() => `<div class="st">Régler le solde</div><div class="ss">Enregistre un remboursement : le solde se remet à jour.</div>
+  resetF({ dir: from + '>' + to }); F.bal = bal;
+  openSheet(() => `<div class="st">Rembourser</div><div class="ss">Tout ou une partie : le solde se met à jour du montant versé, le reste continue d’être dû.</div>
+    <div class="note" style="margin:10px 0 0"><div class="grow" id="st-bal"></div></div>
     <div class="amt"><input id="st-amt" inputmode="decimal" autocomplete="off" value="${amt ? String(r2(amt)).replace('.', ',') : ''}"><span>€</span></div>
+    <div class="chips" style="margin-top:8px"><button type="button" class="chip" data-act="st-quick" data-f="1">Tout</button><button type="button" class="chip" data-act="st-quick" data-f="0.5">La moitié</button><button type="button" class="chip" data-act="st-quick" data-f="0.25">Un quart</button></div>
+    <div class="sm mut" id="st-left" style="margin-top:8px"></div>
     ${lbl('Qui rembourse qui ?')}${segH('dir', [{ id: A.me + '>' + otherP(A.me), l: 'Moi → ' + NAMES[otherP(A.me)] }, { id: otherP(A.me) + '>' + A.me, l: NAMES[otherP(A.me)] + ' → moi' }], F.dir)}
     ${lbl('Date')}<input class="inp" type="date" id="st-date" value="${today()}">
     <div class="btns"><button class="btn btn-p btn-b" data-act="settle-save">Enregistrer le remboursement</button></div>`, { focus: 'st-amt' });
+  F._onpick = () => updSettle(); setTimeout(updSettle, 40);
 };
+/* solde « du point de vue de Maxym » : > 0 = Sasha doit à Maxym ; on calcule le reste dû après ce versement */
+function updSettle() {
+  const bal = F.bal || 0, owing = Math.abs(bal), a = num(val('st-amt')) || 0, dir = F.dir || '', from = dir.split('>')[0];
+  const meOwes = bal < 0, payerIsDebtor = (from === A.me) === meOwes;
+  const nb = document.getElementById('st-bal'), nl = document.getElementById('st-left');
+  const debtor = meOwes ? 'Tu dois' : NAMES[otherP(A.me)] + ' te doit';
+  if (nb) nb.innerHTML = owing >= 0.01 ? `<b>Solde actuel</b>${esc(debtor)} ${fmt(owing)}.` : '<b>Solde actuel</b>Vous êtes à égalité.';
+  if (nl) nl.textContent = owing < 0.01 ? '' : !payerIsDebtor ? 'Ce sens inverse la dette : le solde augmente.' : a >= owing - 0.005 ? (a > owing + 0.005 ? 'Tu rembourses plus que le solde : ça inverse la dette.' : 'Le solde sera à zéro.') : a > 0 ? 'Il restera ' + fmt(owing - a) + ' à rembourser.' : '';
+}
+ACT['st-quick'] = d => { const owing = Math.abs(F.bal || 0), n = document.getElementById('st-amt'); if (n) { n.value = String(r2(owing * parseFloat(d.f))).replace('.', ','); updSettle(); } };
 ACT['settle-save'] = async () => {
   const amount = num(val('st-amt')); if (!(amount > 0)) return toast('Saisis un montant', 'err');
   const [from, to] = F.dir.split('>'), date = val('st-date') || today();

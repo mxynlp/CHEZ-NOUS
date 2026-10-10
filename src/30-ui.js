@@ -126,7 +126,8 @@ document.addEventListener('keydown', e => {
 document.addEventListener('input', e => {
   const id = e.target && e.target.id;
   if (id === 'tx-q') { A.bud.f.q = e.target.value; const l = document.getElementById('tx-list'); if (l && typeof txListHtml === 'function') l.innerHTML = txListHtml(); else schedule(); }
-  else if (id === 'ex-pct' || id === 'fx-pct') updatePct(id);
+  else if (id === 'st-amt') { if (typeof updSettle === 'function') updSettle(); }
+    else if (id === 'ex-pct' || id === 'fx-pct') updatePct(id);
   else if (id === 'ex-amt' || id === 'fx-amount') { const p = id === 'ex-amt' ? 'ex-pct' : 'fx-pct'; if (document.getElementById(p)) updatePct(p); }
 });
 function updatePct(id) {
