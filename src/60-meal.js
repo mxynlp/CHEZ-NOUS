@@ -33,7 +33,8 @@ function mealDay() {
   const d = A.meal.date;
   const card = (k) => {
     const m = mealOf(d, k), has = m && m.name, rec = has && ((m.recipeId && D.recipes[m.recipeId]) || null), wh = has && MEAL_WHERE.find(x => x.id === m.where);
-    return `<div class="card"><h3>${ico('meal', 18)}${mkLbl(k)}</h3>${has ? `<div class="big" style="font-size:25px">${esc(m.name)}</div>
+    const pho = has && typeof phImg === 'function' && (m.photo || (rec && rec.photo)) ? phImg(phThumbOf(m.photo || rec.photo), 'mealpic') : '';
+    return `<div class="card"><h3>${ico('meal', 18)}${mkLbl(k)}</h3>${pho}${has ? `<div class="big" style="font-size:25px">${esc(m.name)}</div>
       <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:8px"><span class="pill">${avs(whoList(m.who || 'both'))}${esc(whoName(m.who || 'both'))}</span>${wh ? `<span class="pill">${esc(wh.l)}</span>` : ''}${rec && rec.time ? `<span class="pill">${ico('clock', 13)}${rec.time} min</span>` : ''}</div>
       ${m.note ? `<p class="mut" style="margin-top:10px">${esc(m.note)}</p>` : ''}
       ${rec && rec.ingredients && rec.ingredients.length ? `<p class="mut sm" style="margin-top:10px">${rec.ingredients.slice(0, 8).map(i => esc(ingText(i))).join(' · ')}${rec.ingredients.length > 8 ? '…' : ''}</p>` : ''}
@@ -71,6 +72,7 @@ function openMeal(d, k, pre) {
   pre = pre || {}; const ex = mealOf(d, k);
   resetF({ d, k, who: ex ? ex.who || 'both' : 'both', where: ex ? ex.where || 'home' : 'home', recipeId: ex ? ex.recipeId || '' : '', copyK: k });
   let name = ex ? ex.name : '';
+  if (typeof phInit === 'function') phInit(ex ? ex.photo : '');
   if (pre.suggest) { const r = suggestRecipe(); if (r) { name = r.name; F.recipeId = r.id; F._idea = r.id; } else toast('Ajoute d’abord quelques plats dans l’onglet Plats', 'err'); }
   const recs = recList().slice(0, 14);
   openSheet(() => `<div class="st">${mkLbl(k)} · ${esc(dayLong(d))}</div>
@@ -80,6 +82,7 @@ function openMeal(d, k, pre) {
     ${lbl('Qui mange')}${segH('who', [{ id: 'both', l: 'Nous deux' }, { id: A.me, l: 'Moi' }, { id: otherP(A.me), l: NAMES[otherP(A.me)] }], F.who)}
     ${lbl('Où')}${chipsH('where', MEAL_WHERE, F.where).replace('class="chips"', 'class="chips scroll"')}
     ${lbl('Note')}<input class="inp" id="ml-note" maxlength="100" placeholder="Facultatif" value="${esc(ex ? ex.note || '' : '')}">
+    ${typeof phField === 'function' ? phField() : ''}
     ${ex ? `${lbl('Dupliquer ce repas')}<div class="row" style="align-items:center"><input class="inp" type="date" id="ml-copy-d" value="${addDays(d, 1)}"><div style="flex:none">${segH('copyK', [{ id: 'lunch', l: 'Midi' }, { id: 'dinner', l: 'Soir' }], F.copyK)}</div></div><button type="button" class="btn btn-s btn-b" style="margin-top:8px" data-act="ml-copy">${ico('copy', 18)}Copier</button>` : ''}
     <div class="btns ${ex ? 'two' : ''}">${ex ? `<button class="btn btn-d" data-act="ml-del">Retirer</button>` : ''}<button class="btn btn-p" data-act="ml-save">Enregistrer</button></div>`);
 }
@@ -100,6 +103,9 @@ ACT['ml-save'] = async () => {
   const name = val('ml-name').trim(); if (!name) return toast('Choisis ou écris un plat', 'err');
   let rid = F.recipeId; if (!(rid && D.recipes[rid] && norm(D.recipes[rid].name) === norm(name))) { const f = Object.entries(D.recipes).find(([, r]) => norm(r.name) === norm(name)); rid = f ? f[0] : ''; }
   const { d, k } = F, obj = { name, recipeId: rid, who: F.who, where: F.where, note: val('ml-note').trim() };
+  if (typeof phCommit === 'function' && PH.ok) {
+    try { toast(F.phBlob ? 'Envoi de la photo…' : 'Enregistrement…'); obj.photo = await phCommit('meals/' + d + '_' + k, 'meals/' + d + '/' + k); } catch (e) { console.error(e); return toast(phErr(e), 'err', 4500); }
+  }
   closeSheet(); await saveMeal(d, k, obj);
 };
 ACT['ml-del'] = async () => { const { d, k } = F, prev = mealOf(d, k) ? clean(mealOf(d, k)) : null; closeSheet(); const ok = await act(() => patch('meals', d, { [k]: null }), 'Repas retiré'); if (ok && prev) offerUndo(() => patch('meals', d, { date: d, [k]: prev }), 'Repas retiré'); };
@@ -129,13 +135,14 @@ function mealRecipes() {
   const catChips = `<div class="chips scroll" style="margin-top:6px">${[{ id: '', l: 'Tous' }].concat(REC_CATS).map(c => `<button class="chip${cat === c.id ? ' on' : ''}" data-act="rec-cat" data-v="${c.id}">${c.l}</button>`).join('')}</div>`;
   return `<div class="page wide">${hdr('Repas', '', { extra: mealSeg() })}<div class="content">${catChips}
     <div class="card"><h3>${ico('heart', 18)}Mes plats<span class="sp"></span><button class="lk" data-act="rec-new">Ajouter</button></h3>
-      ${list.length ? list.map(r => { const n = (r.ingredients || []).length, cl = (REC_CATS.find(c => c.id === r.cat) || {}).l || 'Autre'; return `<div class="rrow"><button class="main" data-act="rec-edit" data-id="${esc(r.id)}"><span class="ic" style="--pc:var(--sage)">${REC_EMO[r.cat] || '🍽️'}</span><span class="grow"><div class="t" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</div><div class="s sm mut">${esc(cl)}${r.time ? ' · ' + r.time + ' min' : ''}${n ? ` · ${n} ingrédient${n > 1 ? 's' : ''}` : ''}</div></span></button><button class="hb${r.fav ? ' on' : ''}" data-act="rec-fav" data-id="${esc(r.id)}" aria-label="Favori">${ico('heart', 22)}</button></div>`; }).join('')
+      ${list.length ? list.map(r => { const n = (r.ingredients || []).length, cl = (REC_CATS.find(c => c.id === r.cat) || {}).l || 'Autre'; return `<div class="rrow"><button class="main" data-act="rec-edit" data-id="${esc(r.id)}"><span class="ic" style="--pc:var(--sage)">${r.photo && typeof phImg === 'function' ? phImg(phThumbOf(r.photo), 'cover') : (REC_EMO[r.cat] || '🍽️')}</span><span class="grow"><div class="t" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</div><div class="s sm mut">${esc(cl)}${r.time ? ' · ' + r.time + ' min' : ''}${n ? ` · ${n} ingrédient${n > 1 ? 's' : ''}` : ''}</div></span></button><button class="hb${r.fav ? ' on' : ''}" data-act="rec-fav" data-id="${esc(r.id)}" aria-label="Favori">${ico('heart', 22)}</button></div>`; }).join('')
         : emptyH('meal', cat ? 'Aucun plat dans cette catégorie' : 'Votre bibliothèque est vide', 'Ajoutez les plats que vous cuisinez souvent, avec leurs ingrédients. Les courses se génèrent toutes seules.', `<br><button class="btn btn-p" data-act="rec-new">${ico('plus', 20)}Ajouter un plat</button>`)}</div>
     <div class="card tint"><h3>Régimes et allergies<span class="sp"></span><button class="lk" data-act="diet-edit">${hasDiet ? 'Modifier' : 'Ajouter'}</button></h3>${hasDiet ? PIDS.filter(p => diet[p]).map(p => `<div class="row" style="margin-top:6px">${av(p, 24)}<span>${esc(diet[p])}</span></div>`).join('') : '<p class="mut sm">Facultatif. Note ce que vous évitez pour y penser en choisissant un plat.</p>'}</div></div></div>`;
 }
 function openRecipe(id) {
   const r = id ? D.recipes[id] : null;
   resetF({ id: id || '', cat: r ? r.cat || 'autre' : 'pates', fav: r ? !!r.fav : false });
+  if (typeof phInit === 'function') phInit(r ? r.photo : '');
   openSheet(() => `<div class="st">${r ? 'Modifier le plat' : 'Nouveau plat'}</div>
     ${lbl('Nom')}<input class="inp" id="rc-name" maxlength="60" value="${esc(r ? r.name : '')}" placeholder="Ex. Gratin dauphinois" autocomplete="off">
     ${lbl('Catégorie')}${chipsH('cat', REC_CATS, F.cat)}
@@ -143,6 +150,7 @@ function openRecipe(id) {
     ${lbl('Ingrédients')}<textarea class="inp" id="rc-ing" style="min-height:130px" placeholder="Un par ligne&#10;200 g pâtes&#10;2 oignons&#10;1 pot crème">${esc(r && r.ingredients ? r.ingredients.map(ingText).join('\n') : '')}</textarea>
     <p class="mut sm" style="margin-top:6px">Quantité, unité puis nom. Les courses se rangent par rayon automatiquement.</p>
     ${lbl('Note')}<input class="inp" id="rc-note" maxlength="120" placeholder="Facultatif" value="${esc(r ? r.note || '' : '')}">
+    ${typeof phField === 'function' ? phField() : ''}
     <div style="margin-top:8px">${swH('fav', 'Plat favori', F.fav)}</div>
     <div class="btns ${r ? 'two' : ''}">${r ? `<button class="btn btn-d" data-act="rec-del">Supprimer</button>` : ''}<button class="btn btn-p" data-act="rec-save">Enregistrer</button></div>`, { focus: r ? '' : 'rc-name' });
 }
@@ -153,6 +161,9 @@ ACT['rec-save'] = async () => {
   const name = val('rc-name').trim(); if (!name) return toast('Donne un nom au plat', 'err');
   const ings = val('rc-ing').split('\n').map(parseIng).filter(Boolean), t = num(val('rc-time')), fid = F.id, id = fid || uid();
   const o = { name, cat: F.cat, time: isFinite(t) ? Math.round(t) : 0, ingredients: ings, note: val('rc-note').trim(), fav: !!F.fav, ts: Date.now() };
+  if (typeof phCommit === 'function' && PH.ok) {
+    try { toast(F.phBlob ? 'Envoi de la photo…' : 'Enregistrement…'); o.photo = await phCommit('recipes/' + id, 'recipes/' + id); } catch (e) { console.error(e); return toast(phErr(e), 'err', 4500); }
+  }
   closeSheet(); await act(() => put('recipes', id, o), fid ? 'Plat modifié' : 'Plat ajouté');
 };
 ACT['rec-del'] = async () => { const id = F.id; closeSheet(); await act(() => del('recipes', id), 'Plat supprimé'); };

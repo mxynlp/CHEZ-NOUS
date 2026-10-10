@@ -24,7 +24,7 @@ head=head.replace('</style>',extra_css+'</style>',1)
 title=re.search(r'<title>.*?</title>',head).group(0)
 head=head.replace(title,'',1)
 body=body.replace('<div id="gate"></div>','<div id="gate"></div>\n<div id="auth"></div>')
-js=''.join(rd(f) for f in ['src/20-core.js','src/30-ui.js'])+prof+''.join(rd(f) for f in ['src/40-home.js','src/50-plan.js','src/60-meal.js','src/70-budget.js','src/80-extras.js'])
+js=''.join(rd(f) for f in ['src/20-core.js','src/30-ui.js'])+prof+''.join(rd(f) for f in ['src/40-home.js','src/50-plan.js','src/60-meal.js','src/70-budget.js','src/80-extras.js','src/85-photos.js'])
 js+=open(R+'src/15-supabase.js').read()+open(R+'src/91-boot-pwa.js').read()
 html=f"""<!doctype html>
 <html lang="fr"><head><meta charset="utf-8">

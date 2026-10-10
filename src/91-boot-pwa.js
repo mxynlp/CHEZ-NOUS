@@ -44,6 +44,7 @@ async function startApp(session) {
   caps.downloads = { async save({ filename, data }) { const u = URL.createObjectURL(new Blob([data], { type: 'text/csv;charset=utf-8' })); const a = document.createElement('a'); a.href = u; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); } };
   RC.upload = async (id, blob) => { const { error } = await SB.storage.from('receipts').upload(id + '.jpg', blob, { upsert: true, contentType: 'image/jpeg' }); if (error) throw error; };
   RC.url = async id => { const { data, error } = await SB.storage.from('receipts').createSignedUrl(id + '.jpg', 600); return error ? null : data.signedUrl; };
+  PH.sb = SB; PH.ok = true;
   loadLocal();
   try { await Promise.race([subscribeAll(), sleep(8000)]); } catch (e) { console.error(e); }
   if (!A.me) { const p = D.priv.profile; if (p && (p.me === 'maxym' || p.me === 'sasha')) { A.me = p.me; lsSet('cn-me', A.me); } }
@@ -87,7 +88,7 @@ ACT['push-pref'] = async d => { PUSH.prefs[d.k] = !PUSH.prefs[d.k]; schedule(); 
 
 (async function bootPwa() {
   A.hide = lsGet('cn-hide') === '1';
-  const tb = lsGet('cn-tab'); if (['home', 'plan', 'meal', 'bud'].includes(tb)) A.tab = tb;
+  const tb = lsGet('cn-tab'); if (['home', 'plan', 'meal', 'album', 'bud'].includes(tb)) A.tab = tb;
   const me = lsGet('cn-me'); A.me = me === 'maxym' || me === 'sasha' ? me : null;
   renderSkel();
   if (!window.supabase || !CFG.url || /VOTRE|xxxx/i.test(CFG.url)) { authView('login', 'Configuration manquante : renseigne config.js (voir le guide).'); return; }

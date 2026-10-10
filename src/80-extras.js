@@ -45,6 +45,7 @@ const tplChips = () => { const l = tplList(); return l.length ? `${lbl('Ou appli
 
 /* --- Tâches du foyer --- */
 const CH_EVERY = [{ id: '1', l: 'Chaque jour' }, { id: '3', l: 'Tous les 3 jours' }, { id: '7', l: 'Chaque semaine' }, { id: '14', l: '2 semaines' }, { id: '30', l: 'Chaque mois' }];
+const CH_ICONS = ['✨', '🗑️', '🧹', '🧺', '🚿', '🍽️', '🪴', '🛒', '🐾', '🪟', '🛏️', '🔧', '🧽', '🚗'];
 const CH_SUGG = [['🗑️', 'Sortir les poubelles', 3], ['🧹', 'Passer l’aspirateur', 7], ['🧺', 'Faire la lessive', 7], ['🚿', 'Nettoyer la salle de bain', 14], ['🍽️', 'Vider le lave-vaisselle', 2], ['🛏️', 'Changer les draps', 14]];
 const chWho = c => c.who === 'rotate' ? (c.turn || PIDS[0]) : (c.who || PIDS[0]);
 const chDue = c => (c.last && c.last.date) ? addDays(c.last.date, c.every || 7) : (c.start || today());
@@ -74,14 +75,16 @@ ACT['chores-open'] = () => {
 ACT['chore-edit'] = d => {
   const c = d.id ? D.chores[d.id] : null;
   resetF({ id: d.id || '', every: String(c ? c.every : 7), who: c ? c.who : 'rotate', icon: c ? c.icon || '✨' : '✨' });
+  F._onpick = (k, v) => { if (k === 'icon') { const n = document.getElementById('emp-cur'); if (n) n.textContent = v; } };
   openSheet(() => `<div class="st">${c ? 'Modifier la tâche' : 'Nouvelle tâche'}</div>
     ${!c ? `<div class="chips scroll" style="margin-top:10px">${CH_SUGG.map(s => `<button type="button" class="chip" data-act="chore-sugg" data-t="${esc(s[1])}" data-i="${esc(s[0])}" data-e="${s[2]}">${s[0]} ${esc(s[1])}</button>`).join('')}</div>` : ''}
     ${lbl('Tâche')}<input class="inp" id="ch-title" maxlength="50" placeholder="Ex. Sortir les poubelles" value="${esc(c ? c.title : '')}" autocomplete="off">
+    ${lbl('Icône')}${emojiPicker(F.icon, CH_ICONS)}
     ${lbl('Fréquence')}${chipsH('every', CH_EVERY, F.every).replace('class="chips"', 'class="chips scroll"')}
     ${lbl('Qui ?')}${segH('who', [{ id: 'rotate', l: 'Tour à tour' }, { id: A.me, l: 'Moi' }, { id: otherP(A.me), l: NAMES[otherP(A.me)] }], F.who)}
     <div class="btns ${c ? 'two' : ''}">${c ? `<button class="btn btn-d" data-act="chore-del" data-id="${esc(d.id)}">Supprimer</button>` : ''}<button class="btn btn-p" data-act="chore-save">Enregistrer</button></div>`, { focus: c ? '' : 'ch-title' });
 };
-ACT['chore-sugg'] = d => { const n = document.getElementById('ch-title'); if (n) n.value = d.t; F.icon = d.i; F.every = d.e; $$('[data-pick="every"]').forEach(x => x.classList.toggle('on', x.dataset.val === String(d.e))); };
+ACT['chore-sugg'] = d => { const n = document.getElementById('ch-title'); if (n) n.value = d.t; F.icon = d.i; { const n = document.getElementById('emp-cur'); if (n) n.textContent = d.i; } F.every = d.e; $$('[data-pick="every"]').forEach(x => x.classList.toggle('on', x.dataset.val === String(d.e))); };
 ACT['chore-save'] = async () => {
   const title = val('ch-title').trim(); if (!title) return toast('Donne un nom à la tâche', 'err');
   const old = F.id ? D.chores[F.id] : null, id = F.id || uid();

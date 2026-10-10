@@ -79,7 +79,10 @@ const IC = {
   swap: 'M4 8h14m0 0-3.5-3.5M18 8l-3.5 3.5M20 16H6m0 0 3.5-3.5M6 16l3.5 3.5',
   info: 'M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17ZM12 11v5.5M12 7.8h.01',
   filter: 'M4 6.5h16M7 12h10M10 17.5h4',
-  arrowR: 'M5 12h14m-5-5 5 5-5 5'
+  arrowR: 'M5 12h14m-5-5 5 5-5 5',
+  photo: 'M4 6h16v12.5H4zM4 16l4.5-4.5 4 4 3-3 4.5 4.5M9 10.2a1.2 1.2 0 1 0 0-.01',
+  play: 'M8.5 5.5v13l10.5-6.5z',
+  film: 'M4 5.5h16v13H4zM8 5.5v13M16 5.5v13M4 9.5h4M16 9.5h4M4 14.5h4M16 14.5h4'
 };
 const ico = (n, s = 22, w = 1.8) => `<svg class="i" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${IC[n]}"/></svg>`;
 
@@ -157,8 +160,8 @@ const A = { me: null, tab: 'home', ready: false, sync: 'boot', hide: false, anim
   meal: { sub: 'week', week: monday(today()), level: 'week', date: today(), cat: '' },
   bud: { sub: 'over', month: ymOf(today()), f: { q: '', cat: '', who: '', per: 'month' } } };
 let DB = null, UID = null;
-const D = { templates: {}, chores: {}, settings: null, presence: {}, events: {}, meals: {}, recipes: {}, expenses: {}, shopitems: {}, shopchecks: {}, recurring: {}, goals: {}, contribs: {}, months: {}, priv: {} };
-const SHARED = ['templates', 'chores', 'presence', 'events', 'meals', 'recipes', 'expenses', 'shopitems', 'shopchecks', 'recurring', 'goals', 'contribs', 'months'];
+const D = { templates: {}, chores: {}, settings: null, presence: {}, events: {}, meals: {}, recipes: {}, expenses: {}, shopitems: {}, shopchecks: {}, recurring: {}, goals: {}, contribs: {}, months: {}, album: {}, priv: {} };
+const SHARED = ['templates', 'chores', 'presence', 'events', 'meals', 'recipes', 'expenses', 'shopitems', 'shopchecks', 'recurring', 'goals', 'contribs', 'months', 'album'];
 const LSK = 'chez-nous-local-v1';
 const UNS = [];
 const useDb = col => !!DB && (col !== 'priv' || !!UID);

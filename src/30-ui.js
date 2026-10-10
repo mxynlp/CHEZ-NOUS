@@ -59,9 +59,10 @@ const navRow = (prev, next, label, sub) => `<div class="navrow"><button class="i
 
 /* barre d'onglets */
 const TABS = [{ id: 'home', l: 'Accueil', i: 'home' }, { id: 'plan', l: 'Planning', i: 'cal' }, { id: 'meal', l: 'Repas', i: 'meal' }, { id: 'bud', l: 'Budget', i: 'wallet' }];
+const tabsNow = () => (typeof PH !== 'undefined' && PH.ok) ? TABS.slice(0, 3).concat([{ id: 'album', l: 'Album', i: 'photo' }], TABS.slice(3)) : TABS;
 let tabHtml = '';
 function renderTabs() {
-  const h = `<div class="brand">${ico('home', 26)}Chez nous</div>` + TABS.map(x => `<button class="tab${A.tab === x.id ? ' on' : ''}" role="tab" aria-selected="${A.tab === x.id}" data-act="tab" data-t="${x.id}"><span class="tic">${ico(x.i, 24)}</span><span>${x.l}</span></button>`).join('');
+  const h = `<div class="brand">${ico('home', 26)}Chez nous</div>` + tabsNow().map(x => `<button class="tab${A.tab === x.id ? ' on' : ''}" role="tab" aria-selected="${A.tab === x.id}" data-act="tab" data-t="${x.id}"><span class="tic">${ico(x.i, 24)}</span><span>${x.l}</span></button>`).join('');
   if (h !== tabHtml) { tabHtml = h; $('#tabbar').innerHTML = h; }
 }
 ACT.tab = d => { if (A.tab === d.t) { $('#view').scrollTo({ top: 0, behavior: 'smooth' }); return; } A.tab = d.t; A.anim = 'a-fade'; A.resetScroll = true; lsSet('cn-tab', d.t); schedule(); };
@@ -70,6 +71,7 @@ ACT.tab = d => { if (A.tab === d.t) { $('#view').scrollTo({ top: 0, behavior: 's
 function fabInfo() {
   if (A.tab === 'plan') return 'Nouvel événement';
   if (A.tab === 'meal') return A.meal.sub === 'week' ? 'Planifier un repas' : A.meal.sub === 'recipes' ? 'Nouveau plat' : '';
+  if (A.tab === 'album') return 'Ajouter des photos';
   if (A.tab === 'bud') return { over: 'Nouvelle dépense', tx: 'Nouvelle dépense', inc: 'Nouveau revenu', goals: 'Nouvel objectif' }[A.bud.sub] || '';
   return '';
 }
@@ -78,6 +80,7 @@ function updateFab() {
   if (!f.firstChild) f.innerHTML = ico('plus', 28, 2.2);
 }
 ACT.fab = () => {
+  if (A.tab === 'album') return albPick();
   if (A.tab === 'plan') return openEvent({ date: A.plan.level === 'day' ? A.plan.date : today() });
   if (A.tab === 'meal') { if (A.meal.sub === 'week') return openMealNext(); if (A.meal.sub === 'recipes') return openRecipe(''); }
   if (A.tab === 'bud') { const s = A.bud.sub; if (s === 'inc') return openIncome(''); if (s === 'goals') return openGoal(''); return openExpense(''); }
@@ -102,9 +105,9 @@ function render() {
   $('#gate').classList.remove('on');
   renderTabs();
   try { if (typeof ensureMonth === 'function') ensureMonth(); } catch (e) { console.error(e); }
-  const V ={ home: vHome, plan: vPlan, meal: vMeal, bud: vBud };
+  const V = { home: vHome, plan: vPlan, meal: vMeal, bud: vBud, album: typeof vAlbum === 'function' ? vAlbum : vHome };
   let html;
-  try { html = V[A.tab](); } catch (e) { console.error(e); html = `<div class="page">${hdr('Oups', '')}<div class="content"><div class="note"><div class="grow"><b>Un affichage a échoué</b>Recharge la page. (${esc(e.message)})</div></div></div></div>`; }
+  try { html = (V[A.tab] || vHome)(); } catch (e) { console.error(e); html = `<div class="page">${hdr('Oups', '')}<div class="content"><div class="note"><div class="grow"><b>Un affichage a échoué</b>Recharge la page. (${esc(e.message)})</div></div></div></div>`; }
   setView(html); updateFab(); refreshSheet(); if (typeof renderSelBar === 'function') renderSelBar();
 }
 
@@ -127,6 +130,7 @@ document.addEventListener('input', e => {
   const id = e.target && e.target.id;
   if (id === 'tx-q') { A.bud.f.q = e.target.value; const l = document.getElementById('tx-list'); if (l && typeof txListHtml === 'function') l.innerHTML = txListHtml(); else schedule(); }
   else if (id === 'st-amt') { if (typeof updSettle === 'function') updSettle(); }
+    else if (id === 'emp-q') { if (typeof empSearch === 'function') empSearch(e.target.value); }
     else if (id === 'ex-pct' || id === 'fx-pct') updatePct(id);
   else if (id === 'ex-amt' || id === 'fx-amount') { const p = id === 'ex-amt' ? 'ex-pct' : 'fx-pct'; if (document.getElementById(p)) updatePct(p); }
 });

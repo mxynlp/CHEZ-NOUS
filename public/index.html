@@ -36,6 +36,13 @@
 :root[data-bg="sauge"]{--bg:#CBE4D5;--bg-hi:#DDEFE4;--glass:rgba(208,230,218,.82)}
 :root[data-bg="creme"]{--bg:#F3EFE5;--bg-hi:#FBF8F1;--glass:rgba(243,239,229,.84)}
 :root[data-bg="ardoise"]{--bg:#E8EDF1;--bg-hi:#F5F8FA;--glass:rgba(232,237,241,.84)}
+:root[data-bg="ciel"]{--bg:#E3EEF9;--bg-hi:#F5F9FC;--glass:rgba(227,238,249,.84)}
+:root[data-bg="ocean"]{--bg:#D8ECEF;--bg-hi:#F5FBFC;--glass:rgba(216,236,239,.84)}
+:root[data-bg="lavande"]{--bg:#ECE8F7;--bg-hi:#F7F5FC;--glass:rgba(236,232,247,.84)}
+:root[data-bg="rose"]{--bg:#F8E8EE;--bg-hi:#FCF5F8;--glass:rgba(248,232,238,.84)}
+:root[data-bg="peche"]{--bg:#FBEBDD;--bg-hi:#FCF8F5;--glass:rgba(251,235,221,.84)}
+:root[data-bg="sable"]{--bg:#EFE6D4;--bg-hi:#FCFAF5;--glass:rgba(239,230,212,.84)}
+:root[data-bg="citron"]{--bg:#F3F1CF;--bg-hi:#FCFCF5;--glass:rgba(243,241,207,.84)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0F1A15; --bg-hi:#17291F; --card:#1A2A23; --soft:#22372D; --line:rgba(168,213,186,.1); --line-2:rgba(168,213,186,.2);
   --ink:#EAF3EE; --ink2:#9DB2A7; --ink3:#6F867A; --accent-ink:#A8D5BA; --today:#A8D5BA; --on-today:#0F1A15;
@@ -52,6 +59,22 @@
   --toast-bg:rgba(234,243,238,.96); --toast-ink:#0F1A15;
   --shadow:0 1px 1px rgba(0,0,0,.2),0 10px 30px rgba(0,0,0,.28); --shadow-up:0 -12px 44px rgba(0,0,0,.5);
   color-scheme:dark}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"])[data-bg="ciel"]{--bg:#0F1317;--bg-hi:#171E24;--card:#1C2329;--soft:#263039;--glass:rgba(15,19,23,.78);--sheet:rgba(28,35,41,.92)}}
+:root[data-theme="dark"][data-bg="ciel"]{--bg:#0F1317;--bg-hi:#171E24;--card:#1C2329;--soft:#263039;--glass:rgba(15,19,23,.78);--sheet:rgba(28,35,41,.92)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"])[data-bg="ocean"]{--bg:#0F1617;--bg-hi:#172224;--card:#1C2829;--soft:#263639;--glass:rgba(15,22,23,.78);--sheet:rgba(28,40,41,.92)}}
+:root[data-theme="dark"][data-bg="ocean"]{--bg:#0F1617;--bg-hi:#172224;--card:#1C2829;--soft:#263639;--glass:rgba(15,22,23,.78);--sheet:rgba(28,40,41,.92)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"])[data-bg="lavande"]{--bg:#120F17;--bg-hi:#1B1724;--card:#201C29;--soft:#2C2639;--glass:rgba(18,15,23,.78);--sheet:rgba(32,28,41,.92)}}
+:root[data-theme="dark"][data-bg="lavande"]{--bg:#120F17;--bg-hi:#1B1724;--card:#201C29;--soft:#2C2639;--glass:rgba(18,15,23,.78);--sheet:rgba(32,28,41,.92)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"])[data-bg="rose"]{--bg:#170F12;--bg-hi:#24171C;--card:#291C20;--soft:#39262D;--glass:rgba(23,15,18,.78);--sheet:rgba(41,28,32,.92)}}
+:root[data-theme="dark"][data-bg="rose"]{--bg:#170F12;--bg-hi:#24171C;--card:#291C20;--soft:#39262D;--glass:rgba(23,15,18,.78);--sheet:rgba(41,28,32,.92)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"])[data-bg="peche"]{--bg:#17120F;--bg-hi:#241C17;--card:#29211C;--soft:#392E26;--glass:rgba(23,18,15,.78);--sheet:rgba(41,33,28,.92)}}
+:root[data-theme="dark"][data-bg="peche"]{--bg:#17120F;--bg-hi:#241C17;--card:#29211C;--soft:#392E26;--glass:rgba(23,18,15,.78);--sheet:rgba(41,33,28,.92)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"])[data-bg="sable"]{--bg:#17140F;--bg-hi:#241F17;--card:#29251C;--soft:#393226;--glass:rgba(23,20,15,.78);--sheet:rgba(41,37,28,.92)}}
+:root[data-theme="dark"][data-bg="sable"]{--bg:#17140F;--bg-hi:#241F17;--card:#29251C;--soft:#393226;--glass:rgba(23,20,15,.78);--sheet:rgba(41,37,28,.92)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"])[data-bg="citron"]{--bg:#17170F;--bg-hi:#242317;--card:#29291C;--soft:#393826;--glass:rgba(23,23,15,.78);--sheet:rgba(41,41,28,.92)}}
+:root[data-theme="dark"][data-bg="citron"]{--bg:#17170F;--bg-hi:#242317;--card:#29291C;--soft:#393826;--glass:rgba(23,23,15,.78);--sheet:rgba(41,41,28,.92)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"])[data-bg="sauge"]{--bg:#0F1712;--bg-hi:#17241C;--card:#1C2921;--soft:#26392D;--glass:rgba(15,23,18,.78);--sheet:rgba(28,41,33,.92)}}
+:root[data-theme="dark"][data-bg="sauge"]{--bg:#0F1712;--bg-hi:#17241C;--card:#1C2921;--soft:#26392D;--glass:rgba(15,23,18,.78);--sheet:rgba(28,41,33,.92)}
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
@@ -85,7 +108,7 @@ h1,h2,h3,p{margin:0}
 .navt span{font-size:13px;color:var(--ink2)}
 .hdr .seg{margin-top:10px}
 
-#tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(1.6);backdrop-filter:blur(24px) saturate(1.6);border-top:1px solid var(--line)}
+#tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(1.6);backdrop-filter:blur(24px) saturate(1.6);border-top:1px solid var(--line)}
 .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:52px;border-radius:16px;color:var(--ink3);font-size:11px;font-weight:600}
 .tab.on{color:var(--accent-ink)}
 .tab.on .tic{background:color-mix(in srgb,var(--sage) 30%,transparent)}
@@ -297,6 +320,10 @@ textarea.inp{padding:12px 14px;min-height:84px;resize:vertical}
 .emojis{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
 .emojis button{aspect-ratio:1;border-radius:12px;font-size:22px;display:grid;place-items:center;min-height:40px}
 .emojis button.on{background:var(--sage)}
+.emp-top{display:flex;align-items:center;gap:10px}.emp-cur{width:52px;height:52px;border-radius:16px;background:var(--soft);display:grid;place-items:center;font-size:30px;flex:none}
+.emp-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin:10px 0 6px}.emp-tabs::-webkit-scrollbar{display:none}
+.emp-tabs button{flex:none;width:40px;height:38px;border-radius:11px;font-size:19px;display:grid;place-items:center;opacity:.6}.emp-tabs button.on{background:var(--sage);opacity:1}
+.emp-grid{max-height:216px;overflow-y:auto;overscroll-behavior:contain;grid-template-columns:repeat(7,1fr)}
 .sw-col{display:flex;flex-wrap:wrap;gap:10px}
 .sw-col button{width:40px;height:40px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 2px rgba(0,0,0,.06)}
 .sw-col button.on{box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--accent-ink)}
@@ -476,6 +503,30 @@ body.selmode .page{padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom,
 .pbt b{font-size:14px}
 .hdr .chip:not(.on){background:color-mix(in srgb,var(--card) 72%,transparent)}
 
+/* photos & album */
+.phi{display:block;max-width:100%}.phi.cover{width:100%;height:100%;object-fit:cover}
+.ic:has(.phi){overflow:hidden;padding:0}.ic .phi{width:100%;height:100%;object-fit:cover}
+.mealpic{width:100%;height:190px;object-fit:cover;border-radius:16px;margin-bottom:12px;background:var(--soft)}
+.phadd{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:76px;border-radius:16px;border:1.5px dashed var(--line-2);background:var(--soft);color:var(--accent-ink);font-weight:600;font-size:15px}
+.phprev{border-radius:16px;overflow:hidden;background:var(--soft);max-height:220px;display:grid;place-items:center}.phprev .phi{width:100%;max-height:220px;object-fit:cover}
+.albm{margin-top:18px}.albh{display:flex;align-items:baseline;justify-content:space-between;font-size:17px;margin:0 2px 8px}
+.albg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+@media (min-width:600px){.albg{grid-template-columns:repeat(5,1fr);gap:4px}}@media (min-width:920px){.albg{grid-template-columns:repeat(6,1fr)}}
+.alt{position:relative;aspect-ratio:1;overflow:hidden;border-radius:6px;background:var(--soft);padding:0;display:block}
+.alt .phi{width:100%;height:100%;object-fit:cover}.alph{display:grid;place-items:center;width:100%;height:100%;color:var(--ink3)}
+.albdg{position:absolute;right:5px;bottom:5px;width:24px;height:24px;border-radius:12px;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center}
+.albq{margin-top:22px}
+#albv{position:fixed;inset:0;z-index:45;background:#05100b;color:#fff;display:none;flex-direction:column}
+#albv.on{display:flex}body.albopen{overflow:hidden}
+.albtop{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top,0px)) 10px 8px;position:relative;z-index:2}
+.albtop .ib{color:#fff}.albtop .sp{flex:1}.albcnt{font-size:14px;opacity:.8;margin-left:4px;font-variant-numeric:tabular-nums}
+.albmed{flex:1;min-height:0;display:grid;place-items:center;overflow:hidden}
+.albmed img,.albmed video{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.albmsg{opacity:.7}.albspin{width:30px;height:30px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;animation:albsp .8s linear infinite}@keyframes albsp{to{transform:rotate(360deg)}}
+.albnav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:64px;color:#fff;display:none;place-items:center;background:rgba(0,0,0,.25);border-radius:14px;z-index:2}.albnav.l{left:8px}.albnav.r{right:8px}
+@media (hover:hover) and (min-width:700px){.albnav{display:grid}}
+.albcap{padding:10px 16px calc(14px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:6px;opacity:.95}.albcap .inp{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.18)}.albcap .sm{opacity:.7}
+
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
 img{max-width:100%}[hidden]{display:none!important}
@@ -585,7 +636,10 @@ const IC = {
   swap: 'M4 8h14m0 0-3.5-3.5M18 8l-3.5 3.5M20 16H6m0 0 3.5-3.5M6 16l3.5 3.5',
   info: 'M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17ZM12 11v5.5M12 7.8h.01',
   filter: 'M4 6.5h16M7 12h10M10 17.5h4',
-  arrowR: 'M5 12h14m-5-5 5 5-5 5'
+  arrowR: 'M5 12h14m-5-5 5 5-5 5',
+  photo: 'M4 6h16v12.5H4zM4 16l4.5-4.5 4 4 3-3 4.5 4.5M9 10.2a1.2 1.2 0 1 0 0-.01',
+  play: 'M8.5 5.5v13l10.5-6.5z',
+  film: 'M4 5.5h16v13H4zM8 5.5v13M16 5.5v13M4 9.5h4M16 9.5h4M4 14.5h4M16 14.5h4'
 };
 const ico = (n, s = 22, w = 1.8) => `<svg class="i" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${IC[n]}"/></svg>`;
 
@@ -663,8 +717,8 @@ const A = { me: null, tab: 'home', ready: false, sync: 'boot', hide: false, anim
   meal: { sub: 'week', week: monday(today()), level: 'week', date: today(), cat: '' },
   bud: { sub: 'over', month: ymOf(today()), f: { q: '', cat: '', who: '', per: 'month' } } };
 let DB = null, UID = null;
-const D = { templates: {}, chores: {}, settings: null, presence: {}, events: {}, meals: {}, recipes: {}, expenses: {}, shopitems: {}, shopchecks: {}, recurring: {}, goals: {}, contribs: {}, months: {}, priv: {} };
-const SHARED = ['templates', 'chores', 'presence', 'events', 'meals', 'recipes', 'expenses', 'shopitems', 'shopchecks', 'recurring', 'goals', 'contribs', 'months'];
+const D = { templates: {}, chores: {}, settings: null, presence: {}, events: {}, meals: {}, recipes: {}, expenses: {}, shopitems: {}, shopchecks: {}, recurring: {}, goals: {}, contribs: {}, months: {}, album: {}, priv: {} };
+const SHARED = ['templates', 'chores', 'presence', 'events', 'meals', 'recipes', 'expenses', 'shopitems', 'shopchecks', 'recurring', 'goals', 'contribs', 'months', 'album'];
 const LSK = 'chez-nous-local-v1';
 const UNS = [];
 const useDb = col => !!DB && (col !== 'priv' || !!UID);
@@ -870,9 +924,10 @@ const navRow = (prev, next, label, sub) => `<div class="navrow"><button class="i
 
 /* barre d'onglets */
 const TABS = [{ id: 'home', l: 'Accueil', i: 'home' }, { id: 'plan', l: 'Planning', i: 'cal' }, { id: 'meal', l: 'Repas', i: 'meal' }, { id: 'bud', l: 'Budget', i: 'wallet' }];
+const tabsNow = () => (typeof PH !== 'undefined' && PH.ok) ? TABS.slice(0, 3).concat([{ id: 'album', l: 'Album', i: 'photo' }], TABS.slice(3)) : TABS;
 let tabHtml = '';
 function renderTabs() {
-  const h = `<div class="brand">${ico('home', 26)}Chez nous</div>` + TABS.map(x => `<button class="tab${A.tab === x.id ? ' on' : ''}" role="tab" aria-selected="${A.tab === x.id}" data-act="tab" data-t="${x.id}"><span class="tic">${ico(x.i, 24)}</span><span>${x.l}</span></button>`).join('');
+  const h = `<div class="brand">${ico('home', 26)}Chez nous</div>` + tabsNow().map(x => `<button class="tab${A.tab === x.id ? ' on' : ''}" role="tab" aria-selected="${A.tab === x.id}" data-act="tab" data-t="${x.id}"><span class="tic">${ico(x.i, 24)}</span><span>${x.l}</span></button>`).join('');
   if (h !== tabHtml) { tabHtml = h; $('#tabbar').innerHTML = h; }
 }
 ACT.tab = d => { if (A.tab === d.t) { $('#view').scrollTo({ top: 0, behavior: 'smooth' }); return; } A.tab = d.t; A.anim = 'a-fade'; A.resetScroll = true; lsSet('cn-tab', d.t); schedule(); };
@@ -881,6 +936,7 @@ ACT.tab = d => { if (A.tab === d.t) { $('#view').scrollTo({ top: 0, behavior: 's
 function fabInfo() {
   if (A.tab === 'plan') return 'Nouvel événement';
   if (A.tab === 'meal') return A.meal.sub === 'week' ? 'Planifier un repas' : A.meal.sub === 'recipes' ? 'Nouveau plat' : '';
+  if (A.tab === 'album') return 'Ajouter des photos';
   if (A.tab === 'bud') return { over: 'Nouvelle dépense', tx: 'Nouvelle dépense', inc: 'Nouveau revenu', goals: 'Nouvel objectif' }[A.bud.sub] || '';
   return '';
 }
@@ -889,6 +945,7 @@ function updateFab() {
   if (!f.firstChild) f.innerHTML = ico('plus', 28, 2.2);
 }
 ACT.fab = () => {
+  if (A.tab === 'album') return albPick();
   if (A.tab === 'plan') return openEvent({ date: A.plan.level === 'day' ? A.plan.date : today() });
   if (A.tab === 'meal') { if (A.meal.sub === 'week') return openMealNext(); if (A.meal.sub === 'recipes') return openRecipe(''); }
   if (A.tab === 'bud') { const s = A.bud.sub; if (s === 'inc') return openIncome(''); if (s === 'goals') return openGoal(''); return openExpense(''); }
@@ -913,9 +970,9 @@ function render() {
   $('#gate').classList.remove('on');
   renderTabs();
   try { if (typeof ensureMonth === 'function') ensureMonth(); } catch (e) { console.error(e); }
-  const V ={ home: vHome, plan: vPlan, meal: vMeal, bud: vBud };
+  const V = { home: vHome, plan: vPlan, meal: vMeal, bud: vBud, album: typeof vAlbum === 'function' ? vAlbum : vHome };
   let html;
-  try { html = V[A.tab](); } catch (e) { console.error(e); html = `<div class="page">${hdr('Oups', '')}<div class="content"><div class="note"><div class="grow"><b>Un affichage a échoué</b>Recharge la page. (${esc(e.message)})</div></div></div></div>`; }
+  try { html = (V[A.tab] || vHome)(); } catch (e) { console.error(e); html = `<div class="page">${hdr('Oups', '')}<div class="content"><div class="note"><div class="grow"><b>Un affichage a échoué</b>Recharge la page. (${esc(e.message)})</div></div></div></div>`; }
   setView(html); updateFab(); refreshSheet(); if (typeof renderSelBar === 'function') renderSelBar();
 }
 
@@ -938,6 +995,7 @@ document.addEventListener('input', e => {
   const id = e.target && e.target.id;
   if (id === 'tx-q') { A.bud.f.q = e.target.value; const l = document.getElementById('tx-list'); if (l && typeof txListHtml === 'function') l.innerHTML = txListHtml(); else schedule(); }
   else if (id === 'st-amt') { if (typeof updSettle === 'function') updSettle(); }
+    else if (id === 'emp-q') { if (typeof empSearch === 'function') empSearch(e.target.value); }
     else if (id === 'ex-pct' || id === 'fx-pct') updatePct(id);
   else if (id === 'ex-amt' || id === 'fx-amount') { const p = id === 'ex-amt' ? 'ex-pct' : 'fx-pct'; if (document.getElementById(p)) updatePct(p); }
 });
@@ -1031,10 +1089,11 @@ ACT['items-open'] = d => openItems(d.k);
 ACT['item-edit'] = d => {
   const kind = d.k, list = clone(cfg()[kind]), cur = list.find(x => x.id === d.id) || { id: '', label: '', icon: kind === 'places' ? '📍' : '🧾', color: '#7FB89A' };
   resetF({ kind, id: d.id, icon: cur.icon, color: cur.color });
+  F._onpick = (k, v) => { if (k === 'icon') { const c = document.getElementById('emp-cur'); if (c) c.textContent = v; } };
   const emo = kind === 'places' ? PLACE_EMO : CAT_EMO;
   openSheet(() => `<div class="st">${d.id ? 'Modifier' : 'Nouveau'} ${kind === 'places' ? 'lieu' : 'catégorie'}</div>
     ${lbl('Nom')}<input class="inp" id="it-name" maxlength="40" value="${esc(cur.label)}" placeholder="${kind === 'places' ? 'Ex. Salle de sport' : 'Ex. Animaux'}">
-    ${lbl('Icône')}<div class="emojis">${emo.map(x => `<button type="button" data-pick="icon" data-val="${esc(x)}" class="${x === cur.icon ? 'on' : ''}">${x}</button>`).join('')}</div>
+    ${lbl('Icône')}${emojiPicker(F.icon || cur.icon, emo)}
     ${lbl('Couleur')}<div class="sw-col">${COLORS.map(c => `<button type="button" data-pick="color" data-val="${c}" style="--c:${c}" class="${c === cur.color ? 'on' : ''}" aria-label="Couleur ${c}"></button>`).join('')}</div>
     <div class="btns ${d.id && list.length > 1 ? 'two' : ''}">${d.id && list.length > 1 ? `<button class="btn btn-d" data-act="item-del">Supprimer</button>` : ''}<button class="btn btn-p" data-act="item-save">Enregistrer</button></div>`, { focus: d.id ? '' : 'it-name' });
 };
@@ -1050,12 +1109,55 @@ ACT['item-del'] = async () => {
 };
 
 /* --- Apparence : couleur de fond (par appareil) --- */
-const BGS = [['menthe', 'Menthe', '#E7F1EA'], ['blanc', 'Blanc', '#F5F7F6'], ['creme', 'Crème', '#F3EFE5'], ['ardoise', 'Ardoise', '#E8EDF1'], ['sauge', 'Sauge', '#CBE4D5']];
+const BGS = [['menthe', 'Menthe', '#E7F1EA'], ['blanc', 'Blanc', '#F5F7F6'], ['creme', 'Crème', '#F3EFE5'], ['ardoise', 'Ardoise', '#E8EDF1'], ['sauge', 'Sauge', '#CBE4D5'], ['ciel', 'Ciel', '#E3EEF9'], ['ocean', 'Océan', '#D8ECEF'], ['lavande', 'Lavande', '#ECE8F7'], ['rose', 'Rose', '#F8E8EE'], ['peche', 'Pêche', '#FBEBDD'], ['sable', 'Sable', '#EFE6D4'], ['citron', 'Citron', '#F3F1CF']];
 function bgPicker() {
   const cur = document.documentElement.dataset.bg || 'menthe';
   return `<div class="li" style="display:block"><div class="t" style="font-weight:600;margin-bottom:10px">Couleur de fond</div><div class="bgp">${BGS.map(b => `<div><button type="button" data-act="bg-set" data-v="${b[0]}" class="${cur === b[0] ? 'on' : ''}" style="--sw:${b[2]}" aria-label="${b[1]}"></button><div class="bgp-l">${b[1]}</div></div>`).join('')}</div></div>`;
 }
 ACT['bg-set'] = d => { document.documentElement.dataset.bg = d.v; lsSet('cn-bg', d.v); document.querySelectorAll('.bgp button').forEach(x => x.classList.toggle('on', x.dataset.v === d.v)); };
+
+/* --- Sélecteur d'émojis complet (émojis Apple natifs, recherche en français) --- */
+const EMO_RAW = `Visages	😀 visage rieur content dents grand sourire	😃 visage souriant grands yeux content dents	😄 visage tres souriant yeux rieurs content	😁 visage souriant yeux rieurs content dents	😆 visage souriant yeux plisses ahah bouche	😅 visage souriant goutte sueur excite froid	🤣 rouler terre rire content drole hilare	😂 visage riant larmes content heureux joie	🙂 visage leger sourire content heureux	🙃 tete lenvers incroyable renversee	🫠 visage qui fond disparaitre fondre gene	😉 visage faisant clin dil blague flirter	😊 visage souriant yeux rieurs content heureux	😇 visage souriant aureole ange angelique	🥰 visage souriant curs adorer aimer amour	😍 visage souriant yeux forme cur amour	🤩 visage etoiles place yeux grand sourire	😘 visage envoyant bisou amour baiser bise	😗 visage faisant bisou amour baiser bise	☺️ visage souriant content decontracte detendu	😚 visage faisant bisou yeux fermes baiser	😙 visage yeux rieurs faisant bisou amour	🥲 visage souriant larme fier heureux	😋 miam bon content delicieux	😛 visage qui tire langue cool genial	😜 visage qui tire langue fait clin	🤪 tete fou grand large oeil	😝 visage qui tire langue yeux plisses	🤑 argent yeux bouche dollars	🤗 visage qui fait calin gentil mains	🤭 visage main bouche malin oops oups	🫢 visage yeux ouverts main bouche choque	🫣 visage qui regarde entre ses doigts	🤫 visage doigt bouche chut pas bruit	🤔 visage pleine reflexion hum mediter penser	🫡 visage qui fait salut militaire armee	🤐 visage bouche fermeture eclair cousue	🤨 visage sourcils releves euh hein incredule	😐️ visage neutre gene chaud froid	😑 visage sans expression inexpressif mecontent neutre	😶 visage sans bouche muet rien dire	🫥 visage pointilles disparaitre deprime introverti	😶‍🌫️ visage nuages brouillard distrait	😏 visage sourire malin arrogant charmeur	😒 visage blase bizarre fache	🙄 visage roulant yeux agace excede incredulite	😬 visage grimacant dents grimace gene	😮‍💨 visage expirant chuchoter decourage decu	🤥 visage menteur mensonge pinocchio	😌 visage soulage calme soulagement serenite	😔 visage pensif abattu decu horrible	😪 visage endormi fatigue larme pleurer	🤤 visage qui bave baver delicieux mmh	😴 visage somnolent bonne nuit coucher dormir	😷 visage masque bacteries dentiste docteur	🤒 visage thermometre indispose malade	🤕 visage bandage autour tete aie blessure	🤢 visage nauseeux degoutant malade nausee	🤮 visage qui vomit gerbe gerber malade	🤧 visage qui eternue atchoum fievre grippe	🥵 visage rouge chaud chaleur coup	🥶 visage bleu froid gel	🥴 visage emeche bouche ondulee bourre bourree	😵 visage etourdi fatigue malade mort	😵‍💫 visage yeux spirales confusion hagard malade	🤯 tete qui explose choc choque surpris	🤠 visage chapeau cowboy	🥳 visage festif anniversaire chapeau pointu celebration	🥸 visage deguise deguisement espion faux nez	😎 visage lunettes soleil cool pose	🤓 visage geek doue fute	🧐 visage monocle classe collet monte fortune	😕 visage confus desole ennuye	🫤 visage bouche diagonale bof confus decu	😟 visage inquiet anxieux preoccupe	🙁 visage legerement mecontent triste	☹️ visage mecontent malheureux triste	😮 visage bouche ouverte bee choque	😯 visage ebahi incroyable omd sans voix	😲 visage stupefait choc choque impossible	😳 visage qui rougit chaud comment gene	🥺 visage implorant embarrasse excuse gros yeux	🥹 visage retenant ses larmes admiration fierte	😦 visage mecontent bouche ouverte decu effraye	😧 visage angoisse comment hein	😨 visage effraye anxieux apeure bleme	😰 visage anxieux goutte sueur aah bleu	😥 visage triste mais soulage decu ouf	😢 visage qui pleure horrible larme larmes	😭 visage qui pleure chaudes larmes larme	😱 visage qui hurle peur choque cri	😖 visage deconcerte confus frustre	😣 visage perseverant concentre mal tete migraine	😞 visage decu abattu affreux decourage	😓 visage demoralise goutte sueur froide mal	😩 visage epuise faim fatigue mecontent	😫 visage fatigue contrarie mecontent	🥱 visage baillant baille bailler dormir	😤 visage fumee sortant narines colere fache	😡 visage boudeur colere exaspere furieux	😠 visage colere exaspere frustre	🤬 visage symboles bouche censure colere gros	😈 visage souriant cornes fantastique fache	👿 visage colere cornes diable diablotin demon	💀 crane corps dead fantastique	☠️ tete mort crane	💩 tas crotte bande dessinee caca	🤡 visage clown maquillage	👹 ogre creature effrayant fantastique	👺 monstre japonais colere creature fantastique	👻 fantome blague bouh creature	👽️ alien creature espace extraterrestre	👾 monstre lespace alien creature envahisseur	🤖 robot androide automate machine	😺 chat qui sourit animal bouche ouverte	😸 chat qui sourit yeux rieurs animal	😹 chat qui pleure joie animal rit	😻 chat souriant yeux curs amour amoureux	😼 chat sourire coin animal ironique	😽 chat qui fait bisou animal baiser	🙀 chat fatigue animal	😿 chat qui pleure animal larme	😾 chat qui boude animal bouder	🙈 singe rien voir animal cache effraye	🙉 singe rien entendre animal geste interdit	🙊 singe rien dire animal bouche cousue	💌 lettre damour amour cur	💘 cur fleche amour coeur transperce cupidon	💝 cur ruban amour anniversaire	💖 cur etincelant amour sentiment	💗 cur grandissant amour battant	💓 cur battant amour cardio	💞 curs qui tournent amour anniversaire	💕 deux curs amour anniversaire	💟 decoration cur amour blanc	❣️ cur point dexclamation amour exclamation	💔 cur brise amour malheureux	❤️‍🔥 cur enflamme amour desir feu	❤️‍🩹 cur bandages reconforter reparer soigner	❤️ cur rouge amour sentiment	🧡 cur orange coeur	💛 cur jaune amour sentiment	💚 cur vert amour sentiment	💙 cur bleu amour sentiment	💜 cur violet amour sentiment	🤎 cur marron brun	🖤 cur noir	🤍 cur blanc	💋 trace rouge levres baiser bise bisou	💯 cent points 100 score	💢 symbole colere bande dessinee	💥 explosion bande dessinee bombe	💫 etourdissement bande dessinee tournis	💦 gouttes sueur bande dessinee eau	💨 decamper bande dessinee deguerpir	🕳️ trou	💬 bulle parole bande dessinee	👁️‍🗨️ bulle bande dessinee	🗨️ bulle parole gauche dialogue	🗯️ bulle colere droite bande dessinee	💭 bulle pensee bande dessinee	💤 endormi bande dessinee bonne nuit
+Gens	👋 signe main revoir bonjour bye	🤚 dos main levee	🖐️ main levee doigts ecartes paume	✋️ main levee feuille paume	🖖 salut vulcain doigts main spock	🫱 main vers droite serrer tenir	🫲 main vers gauche serrer tenir	🫳 main paume vers bas chasser choisir	🫴 main paume vers haut appeler attirer	👌 compris daccord geste	🤌 bout doigts joints agacement argumentation	🤏 pouce index rapproches petit petite quantite	✌️ victoire ciseaux doigts main	🤞 doigts croises bonne chance	🫰 main index pouce croises amour argent	🤟 signe taime amour geste ily	🤘 cornes doigts diable	🤙 signe appel telephonique doigts main	👈️ main index pointant gauche doigt	👉️ main index pointant droite doigt	👆️ main index pointant vers haut doigt	🖕 doigt dhonneur main majeur	👇️ main index pointant vers bas doigt	☝️ index pointant vers haut doigt	🫵 index pointant vers lutilisateur pointer toi	👍️ pouce vers haut bien compris daccord	👎️ pouce vers bas main mauvais	✊️ poing leve main pierre	👊 poing face absolument battre boum	🤛 poing gauche fistbump main	🤜 poing droite main	👏 applaudissements bien joue bon travail bravo	🙌 mains levees air geste hourra	🫶 mains qui forment cur amour	👐 mains ouvertes main ecartees ouvert	🤲 paume contre doigts vers haut esperer	🤝 poignee main daccord mains	🙏 mains priere demander felicitations	✍️ main qui ecrit ecrire	💅 vernis ongles cosmetiques manucure maquillage	🤳 selfie appareil photo telephone	💪 biceps contracte bande dessinee	🦾 bras mecanique accessibilite robot	🦿 jambe mecanique accessibilite handicap artificielle	🦵 jambe coup pied cuisse genou	🦶 pied cheville coup pas lourd	👂️ oreille corps entendre ouie	🦻 oreille appareillee accessibilite handicap malentendant	👃 nez corps narines odeur	🧠 cerveau intelligent intelligente	🫀 cur anatomie battement coeur battements	🫁 poumons anatomie expiration inspiration	🦷 dent carie dentiste email diamant	🦴 chien halloween squelette	👀 yeux chercher corps coup dil	👁️ corps	👅 langue corps lecher	👄 bouche baiser beaute bise	🫦 levres qui mordent anxieux flirt inquiet	👶 bebe enceinte enfant nouveau	🧒 enfant genre neutre jeune non	👦 garcon enfant jeune personne	👧 fille couettes enfant grands yeux	🧑 adulte genre neutre non	👱 personne blonde blond cheveux garcon	👨 homme ami garcon personne	🧔 personne barbue barbe barbu	🧔‍♂️ homme barbu barbe	🧔‍♀️ femme barbue barbe	👨‍🦰 homme cheveux roux ami garcon	👨‍🦱 homme cheveux boucles ami garcon	👨‍🦳 homme cheveux blancs ami garcon	👨‍🦲 homme chauve ami garcon	👩 femme blonde coupe cheveux personne	👩‍🦰 femme cheveux roux blonde coupe	🧑‍🦰 adulte cheveux roux genre neutre	👩‍🦱 femme cheveux boucles blonde coupe	🧑‍🦱 adulte cheveux boucles genre neutre	👩‍🦳 femme cheveux blancs blonde coupe	🧑‍🦳 adulte cheveux blancs genre neutre	👩‍🦲 femme chauve blonde coupe cheveux	🧑‍🦲 adulte chauve genre neutre	👱‍♀️ femme blonde cheveux	👱‍♂️ homme blond cheveux	🧓 personne agee adulte genre neutre non	👴 homme age chauve grand pere	👵 femme agee blonde dame	🙍 personne froncant sourcils contrariee decue embetee	🙍‍♂️ homme froncant sourcils froncement geste	🙍‍♀️ femme froncant sourcils froncement geste	🙎 personne qui boude bouder decue expression	🙎‍♂️ homme qui boude bouder faire moue	🙎‍♀️ femme qui boude geste	🙅 personne faisant geste dinterdiction aucune chance	🙅‍♂️ homme faisant geste dinterdiction interdit	🙅‍♀️ femme faisant geste dinterdiction interdit	🙆 personne faisant geste dacceptation danser daccord	🙆‍♂️ homme faisant geste dacceptation daccord	🙆‍♀️ femme faisant geste dacceptation daccord main	💁 personne paume vers haut aide diva	💁‍♂️ homme paume vers haut aide apporter	💁‍♀️ femme paume vers haut	🙋 personne qui leve main compte moi	🙋‍♂️ homme qui leve main geste sais	🙋‍♀️ femme qui leve main geste levee	🧏 personne sourde accessibilite entendre malentendant	🧏‍♂️ homme sourd accessibilite entendre malentendant	🧏‍♀️ femme sourde accessibilite entendre malentendant	🙇 personne qui sincline confus desole excuses	🙇‍♂️ homme qui sincline desole geste	🙇‍♀️ femme qui sincline desolee excuses	🤦 personne paume visage drame exasperation femme	🤦‍♂️ homme paume visage encore exasperation	🤦‍♀️ femme paume visage encore exasperation	🤷 personne qui hausse epaules aucune idee	🤷‍♂️ homme qui hausse epaules aucune idee	🤷‍♀️ femme qui hausse epaules aucune idee	🧑‍⚕️ professionnel sante tous genres docteur infirmier	👨‍⚕️ professionnel sante docteur homme profession medicale	👩‍⚕️ professionnelle sante docteur docteure femme	🧑‍🎓 etudiant tous genres diplome etudiante	👨‍🎓 etudiant diplome homme	👩‍🎓 etudiante diplomee femme	🧑‍🏫 personnel enseignant enseignante formateur	👨‍🏫 enseignant homme instituteur instructeur	👩‍🏫 enseignante femme institutrice instructrice	🧑‍⚖️ juge balance	👨‍⚖️ juge homme balance	👩‍⚖️ juge femme balance	🧑‍🌾 fermier tous genres fermiere jardinier	👨‍🌾 fermier agriculteur homme jardinier	👩‍🌾 fermiere agricultrice femme jardiniere	🧑‍🍳 cuisinier tous genres chef cuisiniere	👨‍🍳 cuisinier chef homme metier	👩‍🍳 cuisiniere chef femme metier	🧑‍🔧 mecanicien tous genres artisan mecanicienne	👨‍🔧 mecanicien homme mecanique metier	👩‍🔧 mecanicienne femme mecanique metier	🧑‍🏭 ouvrier tous genres assemblage industrie	👨‍🏭 ouvrier assemblage homme industrie	👩‍🏭 ouvriere assemblage femme industrie	🧑‍💼 employe bureau tous genres affaires architecte	👨‍💼 employe bureau affaires architecte	👩‍💼 employee bureau affaires architecte	🧑‍🔬 scientifique chimiste	👨‍🔬 scientifique homme biologiste chimiste	👩‍🔬 scientifique femme biologiste chimiste	🧑‍💻 informaticien tous genres developpeur developpeuse	👨‍💻 informaticien codeur developpeur homme	👩‍💻 informaticienne codeuse developpeuse femme	🧑‍🎤 chanteur tous genres artiste chanteuse	👨‍🎤 chanteur acteur artiste homme	👩‍🎤 chanteuse actrice artiste femme	🧑‍🎨 artiste palette	👨‍🎨 artiste homme metier	👩‍🎨 artiste femme metier	🧑‍✈️ pilote avion	👨‍✈️ pilote homme avion metier	👩‍✈️ pilote femme avion metier	🧑‍🚀 astronaute fusee	👨‍🚀 astronaute homme casque cosmonaute	👩‍🚀 astronaute femme casque cosmonaute	🧑‍🚒 pompier camion pompiers	👨‍🚒 pompier homme camion pompiers casque	👩‍🚒 pompier femme camion pompiers casque	👮 officier police autorite flic homme	👮‍♂️ policier flic homme officier	👮‍♀️ policiere autorite femme flic	🕵️ detective enqueteur espion homme	🕵️‍♂️ detective homme enqueteur espion	🕵️‍♀️ detective femme enqueteuse enquetrice	💂 garde buckingham palace casque homme	💂‍♂️ garde homme	💂‍♀️ garde femme buckingham palace casque	🥷 ninja assassin combat furtif	👷 personnel batiment btp casque	👷‍♂️ ouvrier batiment homme	👷‍♀️ ouvriere batiment casque chantier	🫅 personne couronne monarque noble royal	🤴 prince couronne royal royaute	👸 princesse conte fees couronne fantastique	👳 personne turban homme oriental	👳‍♂️ homme turban	👳‍♀️ femme turban	👲 homme casquette chinoise mao chapeau	🧕 femme foulard bandana voile	🤵 personne smoking homme marie mariee	🤵‍♂️ homme smoking	🤵‍♀️ femme smoking	👰 personne mariee voile mariage	👰‍♂️ homme voile	👰‍♀️ femme voile	🤰 femme enceinte	🫃 homme enceint enceinte grossesse	🫄 personne enceinte grossesse trop mange	🤱 allaitement bebe maman nourrice	👩‍🍼 femme allaitant bebe allaitement biberon	👨‍🍼 homme allaitant bebe allaitement biberon	🧑‍🍼 personne allaitant bebe allaitement biberon	👼 bebe ange ailes aureole	🎅 pere noel bonnet fetes magie	🤶 mere noel bonnet fetes	🧑‍🎄 santa joyeux noel papa	🦸 super heros bien cape force	🦸‍♂️ super heros homme bien	🦸‍♀️ super heroine bien femme heros	🦹 super vilain cape criminel diabolique	🦹‍♂️ super vilain homme criminel mal	🦹‍♀️ super vilain femme criminelle mal	🧙 mage chapeau enchantement ensorceleur	🧙‍♂️ mage homme magicien sorcier	🧙‍♀️ mage femme ensorceleuse sorciere	🧚 personnage feerique ailes deguisement fee	🧚‍♂️ feetaud oberon puck	🧚‍♀️ fee titania	🧛 vampire canines cape conte	🧛‍♂️ vampire homme dracula mort vivant	🧛‍♀️ vampire femme morte vivante	🧜 creature aquatique ariel folklore mer	🧜‍♂️ triton	🧜‍♀️ sirene	🧝 elfe conte elf seigneur anneaux	🧝‍♂️ elfe homme magique	🧝‍♀️ elfe femme magique	🧞 genie aladin djinn homme	🧞‍♂️ genie homme djinn	🧞‍♀️ genie femme djinn	🧟 zombie effrayant flippant halloween	🧟‍♂️ zombie homme mort vivant	🧟‍♀️ zombie femme morte vivante	🧌 troll conte fees legende monstre	💆 personne qui fait masser detente femme	💆‍♂️ homme qui fait masser apaiser visage	💆‍♀️ femme qui fait masser massage visage	💇 personne qui fait couper cheveux barbier	💇‍♂️ homme qui fait couper cheveux coiffeur	💇‍♀️ femme qui fait couper cheveux coiffure	🚶 personne qui marche balade route flaner	🚶‍♂️ homme qui marche pieton	🚶‍♀️ femme qui marche marcher	🧍 personne debout	🧍‍♂️ homme debout	🧍‍♀️ femme debout	🧎 personne genoux priere religion	🧎‍♂️ homme genoux	🧎‍♀️ femme genoux	🧑‍🦯 personne canne blanche accessibilite aveugle	👨‍🦯 homme canne blanche accessibilite aveugle deficient	👩‍🦯 femme canne blanche accessibilite aveugle deficiente	🧑‍🦼 personne fauteuil motorise accessibilite roulant	👨‍🦼 homme fauteuil motorise accessibilite roulant handicap	👩‍🦼 femme fauteuil motorise accessibilite roulant	🧑‍🦽 personne fauteuil roulant manuel accessibilite	👨‍🦽 homme fauteuil roulant manuel accessibilite handicap	👩‍🦽 femme fauteuil roulant manuel accessibilite	🏃 personne qui court arriver coureur courir	🏃‍♂️ homme qui court course pied jogging	🏃‍♀️ femme qui court course pied joggeuse	💃 danseuse danse femme qui	🕺 danseur danse femme flamenco	🕴️ homme daffaires levitation affaires costume	👯 personnes oreilles lapin amies bunny danseuse	👯‍♂️ hommes oreilles lapin amis danseur faire	👯‍♀️ femmes oreilles lapin danseuse femme fete	🧖 personne hammam bien etre chaud detente	🧖‍♂️ homme hammam sauna	🧖‍♀️ femme hammam sauna	🧗 personne qui grimpe alpiniste escalader grimper	🧗‍♂️ homme qui grimpe alpiniste grimpeur	🧗‍♀️ femme qui grimpe alpiniste grimpeuse	🤺 escrimeur escrime escrimeuse personne	🏇 course hippique cheval chevaux jockey	⛷️ skieur neige ski sport	🏂️ snowboardeur homme neige ski	🏌️ joueur golf balle golfeur	🏌️‍♂️ golfeur golf homme	🏌️‍♀️ golfeuse femme golf practice	🏄️ personne faisant surf glisse homme mer	🏄‍♂️ surfeur homme surf	🏄‍♀️ surfeuse femme mer ocean	🚣 personne ramant barque bateau lac	🚣‍♂️ rameur barque bateau homme	🚣‍♀️ rameuse barque bateau femme	🏊️ personne nageant crawl eau exercice	🏊‍♂️ nageur homme nage	🏊‍♀️ nageuse femme nage natation	⛹️ personne ballon athletique basket ball	⛹️‍♂️ homme ballon	⛹️‍♀️ femme ballon basket ball basketteuse	🏋️ halterophile bodybuilding entrainement force	🏋️‍♂️ homme halterophile	🏋️‍♀️ femme halterophile entrainement exercice	🚴 cycliste course guidon homme	🚴‍♂️ cycliste homme cyclisme	🚴‍♀️ cycliste femme cyclisme	🚵 personne vtt coureur cyclisme grimper	🚵‍♂️ homme vtt cycliste	🚵‍♀️ femme vtt cycliste	🤸 personne faisant roue agilite athlete faire	🤸‍♂️ homme faisant roue acrobatie content faire	🤸‍♀️ femme faisant roue acrobatie exercice faire	🤼 personnes faisant lutte bataille lutteur	🤼‍♂️ lutteurs athletes bataille force	🤼‍♀️ lutteuses bataille combat duel	🤽 personne jouant water polo ballon homme	🤽‍♂️ joueur water polo ballon eau homme	🤽‍♀️ joueuse water polo ballon femme nager	🤾 personne jouant handball athlete ballon	🤾‍♂️ handballeur handball homme sport	🤾‍♀️ handballeuse athlete attaquante ballon	🤹 personne qui jongle artiste cirque gerer	🤹‍♂️ jongleur acrobatie artiste balles	🤹‍♀️ jongleuse femme jonglage multitache	🧘 personne posture lotus detendu femme	🧘‍♂️ homme posture lotus meditation position yoga	🧘‍♀️ femme posture lotus meditation position yoga	🛀 personne prenant bain baignoire qui prend	🛌 personne lit auberge bonne nuit coucher	🧑‍🤝‍🧑 deux personnes tenant main couple homosexuel	👭 deux femmes tenant main amies amitie	👫 femme homme tenant main amis amoureux	👬 deux hommes tenant main amis amitie	💏 bisou amour anniversaire baiser	👩‍❤️‍💋‍👨 bisou femme homme amour anniversaire baiser	👨‍❤️‍💋‍👨 bisou homme amour anniversaire baiser	👩‍❤️‍💋‍👩 bisou femme amour anniversaire baiser	💑 couple cur amour anniversaire	👩‍❤️‍👨 couple cur femme homme amour anniversaire	👨‍❤️‍👨 couple cur homme amour anniversaire	👩‍❤️‍👩 couple cur femme amour anniversaire	👨‍👩‍👦 famille homme femme garcon enfant pere	👨‍👩‍👧 famille homme femme fille enfant pere	👨‍👩‍👧‍👦 famille homme femme fille garcon enfant	👨‍👩‍👦‍👦 famille homme femme garcon enfant pere	👨‍👩‍👧‍👧 famille homme femme fille enfant pere	👨‍👨‍👦 famille homme garcon enfant pere mere	👨‍👨‍👧 famille homme fille enfant pere mere	👨‍👨‍👧‍👦 famille homme fille garcon enfant pere	👨‍👨‍👦‍👦 famille homme garcon enfant pere mere	👨‍👨‍👧‍👧 famille homme fille enfant pere mere	👩‍👩‍👦 famille femme garcon enfant pere mere	👩‍👩‍👧 famille femme fille enfant pere mere	👩‍👩‍👧‍👦 famille femme fille garcon enfant pere	👩‍👩‍👦‍👦 famille femme garcon enfant pere mere	👩‍👩‍👧‍👧 famille femme fille enfant pere mere	👨‍👦 famille homme garcon enfant pere mere	👨‍👦‍👦 famille homme garcon enfant pere mere	👨‍👧 famille homme fille enfant pere mere	👨‍👧‍👦 famille homme fille garcon enfant pere	👨‍👧‍👧 famille homme fille enfant pere mere	👩‍👦 famille femme garcon enfant pere mere	👩‍👦‍👦 famille femme garcon enfant pere mere	👩‍👧 famille femme fille enfant pere mere	👩‍👧‍👦 famille femme fille garcon enfant pere	👩‍👧‍👧 famille femme fille enfant pere mere	🗣️ tete qui parle parler silhouette	👤 silhouette buste mystere ombre	👥 silhouettes bustes amis bff	🫂 etreinte accolade amitie revoir	👪️ famille enfant pere mere fils femme	👣 traces pas empreintes pied pieds
+Nature	🐵 tete singe animal georges petit curieux	🐒 singe animal primate	🦍 gorille animal primate	🦧 orang outan animal primate singe	🐶 tete chien animal domestique	🐕️ chien aboyer animal domestique	🦮 chien guide accessibilite animal aveugle	🐕‍🦺 chien dassistance accessibilite aide animal	🐩 caniche animal chien	🐺 loup animal louve tete	🦊 renard animal nature tete	🦝 raton laveur animal curieux sournois	🐱 tete chat animal chaton	🐈️ chat animal domestique chaton	🐈‍⬛ chat noir animal chaton	🦁 tete lion animal astrologie criniere	🐯 tete tigre animal felin predateur	🐅 tigre animal felin predateur	🐆 leopard animal felin predateur	🐴 tete cheval animal dressage	🐎 cheval animal course hippique hippodrome	🦄 licorne animal licrone tete	🦓 zebre animal noir blanc rayure	🦌 cerf animal bois	🦬 bison animal buffle cornes	🐮 tete vache animal lait meuh	🐂 buf animal astrologie ferme	🐃 buffle animal corne zoo	🐄 vache animal ferme lait	🐷 tete cochon animal ferme	🐖 cochon animal ferme gros	🐗 sanglier animal game thrones	🐽 groin animal cochon ferme	🐏 belier animal astrologie corne	🐑 mouton animal brebis beler	🐐 chevre animal astrologie capricorne	🐪 dromadaire animal bosse desert	🐫 chameau animal bosse deux bosses	🦙 lama alpaca alpaga animal	🦒 girafe animal cou taches	🐘 elephant animal pachyderme trompe	🦣 mammouth animal defenses extinction	🦏 rhinoceros animal corne	🦛 hippopotame animal hippo	🐭 tete souris animal visage	🐁 souris animal	🐀 rat animal	🐹 hamster animal domestique tete	🐰 tete lapin animal domestique dents	🐇 lapin animal domestique	🐿️ ecureuil animal noisettes	🦫 castor animal barrage dents	🦔 herisson animal piquant porc epic	🦇 chauve souris animal vampire	🐻 ours animal miel nounours	🐻‍❄️ ours polaire arctique blanc	🐨 koala animal australie	🐼 panda animal tete	🦥 paresseux animal endormi	🦦 loutre animal joueur mignon	🦨 mouffette animal odeur puer	🦘 kangourou austalie joey kangoo	🦡 blaireau animal ratel	🐾 empreintes danimaux pattes	🦃 dindon action graces animal dinde	🐔 poule animal coq ferme	🐓 coq animal oiseau volaille	🐣 poussin qui eclot animal bebe naissance	🐤 poussin animal oiseau tete	🐥 poussin face animal bebe nouveau	🐦️ oiseau animal ornithologie	🐧 pingouin animal antarctique banquise	🕊️ colombe animal oiseau paix	🦅 aigle animal oiseau rapace	🦆 canard animal coin oiseau	🦢 cygne animal jeune oiseau	🦉 chouette animal hibou oiseau	🦤 dodo animal dronte espece eteinte	🪶 plume leger oiseau plumage	🦩 flamant animal oiseau rose	🦚 paon animal bel oiseau colore	🦜 perroquet animal oiseau parle	🐸 grenouille animal crapaud tete	🐊 crocodile alligator animal caiman	🐢 tortue animal carapace lentement	🦎 lezard animal reptile	🐍 serpent animal reptile sonnette	🐲 tete dragon animal mythe	🐉 dragon animal chine chinois	🦕 sauropode animal brachiosaure brontosaure	🦖 rex animal dinosaure	🐳 baleine soufflant son event animal	🐋 baleine animal mer ocean	🐬 dauphin animal flipper mer	🦭 phoque animal lion mer ocean	🐟️ poisson alimentation animal astrologie	🐠 poisson tropical animal	🐡 poisson lune animal	🦈 requin animal dents mer poisson	🐙 pieuvre animal creature mer	🐚 coquille spirale animal conque coquillage	🪸 corail ocean rechauffement climatique recif	🦀 crabe animal astrologie cancer	🦞 homard animal bisque fruit mer	🦐 crevette aliment crustace fruits mer	🦑 calamar aliment animal encornet	🦪 huitre coquillage coquille mollusque	🐌 escargot animal jardin lentement	🦋 papillon animal insecte mignon	🐛 chenille animal insecte jardin	🐜 fourmi animal insecte jardin	🐝 abeille animal bourdon guepe	🪲 scarabee animal insecte	🐞 coccinelle animal bete insecte	🦗 criquet animal insecte sauterelle	🪳 cafard animal blatte coquerelle	🕷️ araignee animal insecte	🕸️ toile daraignee araignee	🦂 scorpion animal astrologie desert	🦟 moustique fievre infection insecte	🪰 mouche animal asticot insecte	🪱 lombric animal annelide insecte	🦠 microbe amibe bacterie biologie	💐 bouquet amoureux anniversaire fleur	🌸 fleur cerisier bourgeon plante	💮 fleur blanche	🪷 lotus beaute bouddhisme calme	🏵️ rosette plante	🌹 rose amour beaute fleur	🥀 fleur fanee mort	🌺 hibiscus fleur plante	🌻 tournesol champs fleur plante	🌼 bourgeon bouton dor dent lion fleur	🌷 tulipe bourgeon fleur plante	🌱 jeune pousse germe plant plante	🪴 plante pot decoration ennuyeux faire pousser	🌲 conifere arbre feuilles persistantes foret	🌳 arbre feuilles caduques feuillu	🌴 palmier arbre cocotier plage	🌵 cactus desert nature piquant	🌾 plant riz grain plante	🌿 feuille arbre feuilles plante	☘️ trefle irlande plante	🍀 trefle quatre feuilles chance	🍁 feuille derable automne morte	🍂 feuille morte automne feuilles mortes	🍃 feuille virevoltante bourrasque souffle	🪹 nid vide branches faire son maison	🪺 nid ufs branches faire son	🍄 champignon veneneux mario plante
+Nourriture	🍇 raisin fruit nourriture	🍈 melon fruit	🍉 pasteque fruit	🍊 mandarine agrume clementine fruit	🍋 citron acide agrume fruit	🍌 banane fruit nourriture potassium	🍍 ananas fruit nourriture tropical	🥭 mangue fruit nourriture tropical	🍎 pomme rouge fruit nourriture	🍏 pomme verte fruit nourriture	🍐 poire fruit nourriture	🍑 peche fruit nourriture	🍒 cerises cerise fruit nourriture	🍓 fraise fruit nourriture	🫐 myrtilles airelles baies bleu	🥝 kiwi fruit nourriture	🍅 tomate fruit legume nourriture	🫒 olive aliment aperitif apero	🥥 noix coco fruit nourriture	🥑 avocat fruit nourriture	🍆 aubergine legume nourriture	🥔 pomme terre legume nourriture patate	🥕 carotte legume nourriture	🌽 epi mais ferme nourriture	🌶️ piment rouge nourriture piquant	🫑 poivron legume piment rouge	🥒 concombre cornichon legume nourriture	🥬 legume feuilles vertes bok choy chou	🥦 brocoli broccoli chou sauvage	🧄 ail aromate assaisonnement condiment	🧅 oignon assaisonnement condiment legume	🥜 cacahuetes arachide cacahuete noisette	🫘 haricots haricot rouge legume legumineuse	🌰 chataigne marron nourriture plante	🍞 pain miche nourriture mie	🥐 croissant nourriture pain petit dejeuner	🥖 baguette nourriture pain	🫓 galette arepa gordita lavash	🥨 bretzel nourriture torsade	🥯 bagel boulangerie petit dejeuner sandwich	🥞 pancakes crepe gouter nourriture	🧇 gaufre brunch gourmandise gouter	🧀 part fromage nourriture	🍖 viande nourriture	🍗 cuisse poulet dinde nourriture	🥩 morceau viande cotelette porc dagneau	🥓 lard bacon nourriture porc	🍔 hamburger burger cheeseburger fast food	🍟 frites fast food potatoes potats	🍕 pizza fromage nourriture part	🌭 hot dog nourriture saucisse francfort	🥪 sandwich nourriture pain mie	🌮 taco mexicain nourriture	🌯 burrito kebab mexicain wrap	🫔 tamal mexicain nourriture pamonha	🥙 kebab falafel nourriture pain pita	🧆 falafels boulette boulettes falafel	🥚 nourriture	🍳 plat cuisine friture nourriture	🥘 plat mitonne casserole espagne paella	🍲 marmite nourriture ragout	🫕 fondue bourguignonne chocolat fromage	🥣 bol cuillere congee cereales	🥗 salade verte nourriture	🍿 pop corn cinema nourriture	🧈 beurre gras produit laitier	🧂 sel condiment saliere sale	🥫 aliments conserve boite nourriture	🍱 boite dejeuner bento	🍘 galette riz cracker nourriture	🍙 boulette riz japonais nourriture onigiri	🍚 bol riz nourriture	🍛 riz curry nourriture	🍜 bol fumant nouilles nourriture	🍝 spaghetti italien nourriture pates	🍠 patate douce nourriture four	🍢 brochette poisson fruits mer nourriture	🍣 sushi japonais nourriture poisson	🍤 beignet crevette	🍥 croquette poisson gateau narutomaki nourriture	🥮 gateau lune automne festival moon cake	🍡 brochette bonbons dango dessert	🥟 boulette pate dumpling empanada gyoza	🥠 biscuit chinois nourriture prophetie	🥡 boite emporter baguettes carton chinois	🍦 glace italienne cornet dessert	🍧 granite coupe glace creme glacee dessert	🍨 glace coupe creme glacee	🍩 doughnut dessert donut gouter	🍪 cookie biscuit dessert gouter	🎂 gateau danniversaire anniversaire bougies dessert	🍰 gateau sable dessert gouter	🧁 cupcake dessert muffin patisserie	🥧 tarte decoration garniture gateau	🍫 barre chocolatee chocolat dessert	🍬 bonbon dessert gouter nourriture	🍭 sucette dessert gouter nourriture	🍮 creme renversee dessert flan nourriture	🍯 pot miel nourriture ours	🍼 biberon boisson bebe lait	🥛 verre lait boisson	☕️ boisson chaude cafe cafeine	🫖 theiere boisson chaude infusion	🍵 tasse boisson the sans anse	🍶 sake boisson bouteille verre	🍾 bouteille champagne alcool boisson bouchon	🍷 verre vin alcool bar boisson	🍸️ cocktail alcool bar boisson	🍹 cocktail tropical alcool bar boite	🍺 chope alcool bar biere	🍻 chopes biere alcool boisson	🥂 trinquer alcool champagne celebrer	🥃 verre tumbler alcool liqueur	🫗 verser liquide accident boisson eau	🥤 gobelet paille boisson eau jus fruit	🧋 the perles boba boisson bubble tea	🧃 briquette jus boisson carton	🧉 mate boisson	🧊 glacon cube froid glace	🥢 baguettes hashi	🍽️ fourchette couteau assiette couverts	🍴 fourchette couteau couverts faim	🥄 cuillere couvert manger	🔪 couteau cuisine arme chef	🫙 bocal condiments conserver pot	🏺 amphore astrologie cuisine grec
+Voyages	🌍️ globe tourne lafrique leurope afrique espace	🌎️ globe tourne ameriques amerique espace	🌏️ globe tourne lasie laustralie asie australie	🌐 globe meridiens terrestre internet monde	🗺️ carte monde planisphere	🗾 carte japon	🧭 boussole compas direction magnetique	🏔️ montagne enneigee froid neige	⛰️ montagne nature sommet voyage	🌋 volcan lave nature eruption	🗻 mont fuji montagne nature	🏕️ camping nature tente sapin voyage	🏖️ plage parasol voyage	🏜️ desert voyage	🏝️ ile deserte cocotier palmier voyage	🏞️ parc national nature voyage	🏟️ stade	🏛️ monument classique colonnes voyage	🏗️ construction dun batiment chantier grue	🧱 brique argile briques mortier	🪨 rocher caillou dur lourd	🪵 bois arbre buche bucheron	🛖 hutte abri case maison	🏘️ maisons batiment batiments maison	🏚️ maison abandonnee	🏠️ maison batiment foyer simple	🏡 maison jardin foyer	🏢 immeuble bureaux ville	🏣 bureau poste japonais batiment japon	🏤 bureau poste batiment europeen	🏥 hopital batiment docteur medecin	🏦 banque batiment	🏨 hotel batiment voyage	🏩 love hotel amour batiment cur	🏪 superette 24h batiment magasin	🏫 ecole batiment	🏬 grand magasin batiment centre commercial	🏭️ usine batiment	🏯 chateau japonais batiment	🏰 chateau batiment europeen voyage	💒 mariage amour chapelle cur	🗼 tour tokyo japon	🗽 statue liberte new york	⛪️ eglise batiment chapelle chretien	🕌 mosquee islam musulman musulmane	🛕 temple hindou bouddhisme pagode	🕍 synagogue judaisme juif juive	⛩️ sanctuaire shinto religion voyage	🕋 kaaba islam musulman musulmane	⛲️ fontaine eau	⛺️ tente camping nature voyage	🌁 brume brouillard voyage	🌃 nuit etoilee ville voyage	🏙️ ville batiment voyage	🌄 soleil levant derriere montagnes lever matin	🌅 soleil levant lever matin nature	🌆 ville crepuscule coucher soleil immeubles	🌇 coucher soleil ville crepuscule soir	🌉 pont nuit	♨️ sources chaudes chaud source vapeur	🎠 cheval manege	🛝 toboggan aire jeu glissade jouer	🎡 grande roue attractions parc dattractions	🎢 montagnes russes attractions parc dattractions	💈 enseigne barbier coiffeur coiffure	🎪 chapiteau cirque	🚂 locomotive chemin fer machine vapeur moyen	🚃 wagon chemin fer moyen transport rail	🚄 tgv chemin fer moyen transport rail	🚅 train grande vitesse chemin fer moyen	🚆 train arrivee chemin fer moyen transport	🚇️ metro moyen transport	🚈 metro leger monorail moyen transport	🚉 gare chemin fer moyen transport rail	🚊 tramway moyen transport rer tram	🚝 monorail moyen transport vehicule	🚞 train montagne chemin fer moyen transport	🚋 wagon tramway moyen transport tram trolleybus	🚌 bus moyen transport vehicule ecole	🚍️ bus face qui arrive car	🚎 trolleybus bus moyen transport tram	🚐 minibus bus moyen transport navette	🚑️ ambulance urgences vehicule	🚒 camion pompier pin pon	🚓 voiture police flic patrouille	🚔️ voiture police face qui arrive vehicule	🚕 taxi moyen transport jaune uber	🚖 taxi face joe new york	🚗 voiture automobile conduire moyen transport	🚘️ voiture face automobile conduire moyen transport	🚙 vehicule utilitaire sport automobile conduire loisirs	🛻 pick auto camion benne camionnette	🚚 camion livraison camionnette moyen transport	🚛 semi remorque camion moyen transport poids	🚜 tracteur moyen transport vehicule	🏎️ voiture course automobile formule	🏍️ moto course	🛵 scooter	🦽 fauteuil roulant manuel accessibilite handicap	🦼 fauteuil motorise accessibilite roulant	🛺 tuk rickshaw taxi thai	🚲️ velo bicyclette cyclisme moyen transport	🛴 trottinette	🛹 planche roulettes glisse longboard	🛼 patin roulettes derby roller roulette	🚏 arret bus	🛣️ autoroute route voyage	🛤️ voie ferree chemin fer rail train	🛢️ baril petrole	⛽️ pompe essence diesel gazole	🛞 roue cercle pneu tourner	🚨 gyrophare alarme alerte lumiere	🚥 feu tricolore horizontal carrefour croisement	🚦 feu tricolore vertical carrefour croisement	🛑 stop octogonal panneau signe	🚧 travaux barriere	⚓️ ancre bateau outil voyage	🛟 bouee sauvetage flotter sauver sauveteur	⛵️ voilier bateau mer moyen transport	🛶 canoe bateau rame ramer	🚤 hors bord bateau luxe moyen transport	🛳️ paquebot bateau croisiere voyage	⛴️ ferry bateau moyen transport voyage	🛥️ bateau moteur	🚢 navire bateau croisiere moyen transport	✈️ avion vol jet moyen transport	🛩️ petit avion moyen transport voyage	🛫 avion decollage depart	🛬 avion latterrissage arrivee atterrissage	🪂 parachute chute libre ascensionnel parapente	💺 siege chaise fauteuil place	🚁 helicoptere helico moyen transport vehicule	🚟 train suspendu moyen transport voyage	🚠 telepherique montagne moyen transport ski	🚡 tramway aerien moyen transport telecabine	🛰️ satellite espace	🚀 fusee decollage espace moyen transport	🛸 soucoupe volante alien extraterrestre ovni	🛎️ cloche comptoir clochette hotel	🧳 bagage valise voyage	⌛️ sablier chronometre minuteur sable	⏳️ sablier sable qui coule attendre chronometre	⌚️ montre heure	⏰️ reveil alarme attendre dring	⏱️ chronometre heure temps	⏲️ horloge heure minuteur temps	🕰️ pendule horloge posee	🕛️ midi minuit heure	🕧️ midi minuit demie heure	🕐️ heure	🕜️ heure demie	🕑️ deux heures heure	🕝️ deux heures demie heure	🕒️ trois heures heure	🕞️ trois heures demie heure	🕓️ quatre heures seize	🕟️ quatre heures demie heure	🕔️ cinq heures dix sept	🕠️ cinq heures demie dix sept trente	🕕️ six heures dix huit	🕡️ six heures demie dix huit trente	🕖️ sept heures dix neuf	🕢️ sept heures demie dix neuf trente	🕗️ huit heures heure	🕣️ huit heures demie heure	🕘️ neuf heures	🕤️ neuf heures demie heure	🕙️ dix heures heure	🕥️ dix heures demie heure	🕚️ onze heures heure	🕦️ onze heures demie heure	🌑 nouvelle lune espace sombre	🌒 lune croissante espace nuit	🌓 premier quartier lune espace nuit	🌔 lune gibbeuse croissante croissant espace gibbeux	🌕️ pleine lune espace nuit	🌖 lune gibbeuse decroissante decroissant espace gibbeux	🌗 dernier quartier lune espace	🌘 lune decroissante croissant espace	🌙 croissant lune espace	🌚 nouvelle lune visage espace	🌛 premier quartier lune visage croissant espace	🌜️ dernier quartier lune visage croissant	🌡️ thermometre meteo	☀️ soleil beau temps brillant espace	🌝 pleine lune visage nuit	🌞 soleil visage chaleur chaud ensoleille	🪐 planete anneaux saturne saturnien	⭐️ etoile astronomie nuit	🌟 etoile brillante nuit etoilee succes	🌠 etoile filante espace nuit	🌌 voie lactee espace	☁️ nuage gris meteo	⛅️ soleil derriere nuages cache meteo nuage	⛈️ nuage eclair pluie meteo orage	🌤️ soleil derriere petit nuage cache meteo	🌥️ soleil derriere gros nuage cache meteo	🌦️ soleil derriere nuage pluie cache gouttes	🌧️ nuage pluie averse gouttes mauvais temps	🌨️ nuage neige flocons froid hiver	🌩️ nuage eclair orage	🌪️ tornade cyclone meteo nuage	🌫️ brouillard brume fog meteo	🌬️ vent visage meteo nuage souffle	🌀 cyclone spirale tourbillon typhon	🌈 arc ciel bisexuelle gay pride homosexuelle	🌂 parapluie ferme meteo pluie	☂️ parapluie ouvert pluie	☔️ parapluie gouttes pluie meteo	⛱️ parasol sol meteo parapluie	⚡️ haute tension courant danger nature	❄️ flocon neige froid meteo	☃️ bonhomme neige flocons	⛄️ bonhomme neige sans flocons froid	☄️ comete espace meteore	🔥 feu allumer bruler chaud	💧 goutte deau eau froid	🌊 vague eau kanagawa lame
+Activités	🎃 citrouille halloween lanterne	🎄 sapin noel arbre fete fetes	🎆 feu dartifice juillet artifice fete	🎇 cierge magique juillet artifice feu dartifice	🧨 petard dynamite explosif explosive	✨️ etincelles magie nuit	🎈 ballon gonflable anniversaire baudruche	🎉 cotillons anniversaire fete super	🎊 confettis anniversaire fete	🎋 arbre vux fete japon	🎍 bambou decoratif fete japonais	🎎 poupees japonaises festival japon	🎏 koinobori carpe fete	🎐 carillon eolien clochette fete	🎑 ceremonie lune	🧧 enveloppe rouge argent bonne chance cadeau	🎀 ruban fete nud rose	🎁 cadeau anniversaire emballe fete	🎗️ ruban memoire souvenir	🎟️ billet dentree place spectacle	🎫 billet place spectacle	🎖️ medaille militaire	🏆️ trophee champion championne coupe	🏅 medaille sportive champion championne	🥇 medaille dor 1er	🥈 medaille dargent argent deuxieme	🥉 medaille bronze	⚽️ ballon football balle	⚾️ baseball balle sport	🥎 softball balle gant sports	🏀 basket ballon ball panier	🏐 volley ball ballon jeu match	🏈 football americain ballon sport super bowl	🏉 rugby ballon sport	🎾 tennis balle sport	🥏 disque volant discoplane	🎳 bowling boule jeu partie	🏏 cricket balle batte	🏑 hockey gazon balle crosse	🏒 hockey glace crosse palet	🥍 crosse balle but lacrosse	🏓 ping pong balle jeu partie	🏸 badminton jeu match raquette	🥊 gant boxe sport	🥋 tenue darts martiaux arts judo karate	🥅 cage but filet sport	⛳️ drapeau golf sport trou	⛸️ patin glace patiner	🎣 peche ligne canne sport	🤿 masque plongee apnee tuba	🎽 maillot course athletisme pied jogging	🎿 ski neige sport	🛷 luge glisser neige traineau	🥌 pierre curling granit jeu	🎯 mille cible flechettes jeu	🪀 yoyo descendre jouet monter	🪁 cerf volant planer voler	🔫 pistolet eau arme feu flingue	🎱 boule billard magique	🔮 boule cristal avenir magie	🪄 baguette magique abracadabra magicien magie	🎮️ jeu video joystick manette playstation	🕹️ manette jeu video joystick	🎰 machine sous casino jeu	🎲 hasard jeu	🧩 piece puzzle assemblage indice interloque	🧸 ours peluche jeu jouet nounours	🪅 pinata mai bonbons cinco mayo	🪩 boule facettes briller danse disco	🪆 poupees russes emboite empiler jouet	♠️ pique carte couleur jeu	♥️ cur cartes jouer couleur	♦️ carreau carreaux carte couleur	♣️ trefle cartes jouer couleur jeu	♟️ pion dechec duper sacrifiable echec	🃏 carte joker cartes jouer jeu	🀄️ dragon rouge mahjong jeu mah jong	🎴 jeu fleurs carte jouer fleur	🎭️ spectacle vivant acteur actrice art	🖼️ cadre image art musee	🎨 palette peinture art artiste couleurs	🧵 bobine fil aiguille coudre	🪡 aiguille coudre broderie couture	🧶 fil boule crochet laine	🪢 nud attacher corde entrelacer
+Objets	👓️ lunettes vue accessoire vetements	🕶️ lunettes soleil noires	🥽 lunettes chimiste labo piscine	🥼 blouse blanche docteur experience	🦺 gilet securite chantier fluo jaune	👔 cravate chemise travail vetements	👕 shirt bleu chemise courses	👖 jean bleu courses denim	🧣 foulard cou froid glagla	🧤 gants gant main vetements	🧥 manteau froid glagla veste	🧦 chaussettes pieds vetements	👗 robe courses jolie shopping	👘 kimono vetements	🥻 sari inde mode robe	🩱 maillot bain piece	🩲 slip maillot bain sous vetement	🩳 short baignade calecon maillot bain	👙 bikini maillot bain nager piscine	👚 vetements femme chemise chemisier courses	👛 porte monnaie accessoire courses	👜 sac main accessoire courses	👝 pochette accessoire sac main	🛍️ sacs shopping achats courses sac	🎒 cartable sac dos ecole	🩴 tong claquettes mer plage	👞 chaussure dhomme accessoire coup pied	👟 chaussure sport accessoire athletisme basket	🥾 chaussure randonnee camping marche chaussures chantier	🥿 chaussure plate ballerine sans lacets chaussures	👠 chaussure talon haut accessoire femme	👡 sandale femme chaussure talon	🩰 chaussons danse ballerines ballet chaussures	👢 botte femme accessoire chaussure	👑 couronne accessoire famille royale monarchie	👒 chapeau femme vetements	🎩 haut forme accessoire chapeau	🎓️ toque universitaire accessoire chapeau diplome	🧢 casquette americaine baseball cap	🪖 casque militaire armee guerre	⛑️ casque secouriste assistance croix blanche	📿 chapelet accessoire collier perles	💄 rouge levres cosmetiques maquillage rendez vous	💍 bague alliance amour brillant	💎 pierre precieuse argent bijou diamant	🔇 muet chut enceinte haut parleur barre	🔈️ volume enceintes faible enceinte haut parleur	🔉 volume enceintes moyen enceinte haut parleur	🔊 volume enceintes eleve enceinte fort haut	📢 haut parleur communication fort message	📣 porte voix encourager hourra manifestation	📯 cor postal facteur poste	🔔 cloche clochette sonner	🔕 alarme desactivee barree cloche silence	🎼 partition musique note	🎵 note musique	🎶 notes musique note	🎙️ micro studio chant enregistrement	🎚️ curseur niveau musique	🎛️ boutons reglage commande controle	🎤 micro chanter karaoke	🎧️ casque musique son ecouteur	📻️ radio actualites communication loisirs	🎷 saxophone instrument musique	🎺 trompette instrument musique	🪗 accordeon bandoneon concert concertina	🎸 guitare electrique instrument musique	🎹 piano clavier instrument musique	🎻 violon instrument musique	🪕 banjo cordes instrument	🥁 batterie baguette baguettes musique	🪘 djembe battement conga instrument	📱 telephone portable communication smartphone	📲 appel entrant communication recevoir	☎️ telephone rouge	📞 combine telephonique communication telephone	📟️ bipeur bip communication pager	📠 fax communication telecopieur	🔋 pile	🪫 pile faible batterie decharge	🔌 cable fiche electrique branche prise	💻️ ordinateur portable bureau travail	🖥️ ordinateur bureau moniteur	🖨️ imprimante imprimer ordinateur	⌨️ clavier informatique ordinateur	🖱️ souris dordinateur informatique	🖲️ boule commande informatique ordinateur souris	💽 disque dordinateur minidisc	💾 disquette disque informatique ordinateur	💿️ blu ray disque	📀 dvd blu ray disque	🧮 abaque boulier calcul calculation	🎥 camera cinema film filmer	🎞️ pellicule bande cinema film	📽️ projecteur cinematographique cinema film	🎬️ clap action film tourne	📺️ televiseur petit ecran tele	📷️ appareil photo selfie video	📸 appareil photo flash	📹️ camescope camera filmer video	📼 cassette video magnetoscope vhs videocassette	🔍️ loupe orientee gauche agrandir chercher detective	🔎 loupe orientee droite agrandir chercher detective	🕯️ bougie chandelle lumiere	💡 ampoule allumer bande dessinee	🔦 torche lampe electrique lumiere	🏮 lampion rouge japonais lanterne lumiere	🪔 diya diwali fete inde huile	📔 carnet couverture cahier livre	📕 livre ferme apprendre enseignement lire	📖 livre ouvert apprendre bibliotheque enseignement	📗 livre vert apprendre bibliotheque enseignement	📘 livre bleu apprendre lecture lire	📙 livre orange apprendre lecture lire	📚️ livres apprendre bibliotheque enseignement	📓 carnet cahier ecrire	📒 carnet compte cahier classeur grand livre	📃 page enroulee document	📜 parchemin papier	📄 page document	📰 journal actualites communication gros titres	🗞️ journal roule actualites presse	📑 signets marque marqueur onglets	🔖 marque page marqueur signet	🏷️ etiquette	🪙 piece argent euro fortune	💰️ sac plein dargent argent avare banque	💴 billet yens argent banque	💵 billet dollars argent banque	💶 billet euros argent banque	💷 billet livres argent banque	💸 billet ailes argent	💳️ carte bancaire argent banque	🧾 recu compta comptabilite comptable	💹 courbe yen hausse banque croissance devise	✉️ enveloppe courrier electronique mail lettre	📧 mail courriel courrier electronique lettre	📨 message recu courriel courrier electronique	📩 enveloppe fleche communication courriel courrier electronique	📤️ boite denvoi courriel courrier electronique mail	📥️ boite reception courriel courrier electronique mail	📦️ colis boite livraison paquet	📫️ boite lettres fermee drapeau leve courrier	📪️ boite lettres fermee drapeau baisse courrier	📬️ boite lettres ouverte drapeau leve courrier	📭️ boite lettres ouverte drapeau baisse courrier	📮 boite lettres courrier poste	🗳️ urne electorale vote bulletin	✏️ crayon papier gomme mine	✒️ stylo plume noir ecrire	🖋️ stylo plume ecrire	🖊️ stylo bille ecrire	🖌️ pinceau peinture	🖍️ crayon pastel rouge	📝 memo bloc notes crayon ecrire	💼 porte documents accessoire bureau cartable	📁 dossier fichier repertoire	📂 dossier ouvert ouvrir	🗂️ intercalaires classement classeur index	📅 calendrier date	📆 ephemeride agenda calendrier date	🗒️ bloc notes spirale spirales cahier	🗓️ calendrier spirale bloc notes spirales	📇 carnet dadresses carte fiche index	📈 graphique hausse croissance donnees	📉 graphique baisse bas chute	📊 graphiques barres donnees graphique	📋️ porte bloc fournitures liste presse papiers	📌 punaise fournitures	📍 epingle carte emplacement fournitures	📎 trombone fournitures	🖇️ trombones fournitures	📏 regle fournitures mathematiques plate	📐 equerre fournitures mathematiques	✂️ ciseaux couper decouper fournitures	🗃️ boite dossiers classeur dossier	🗄️ meuble dossiers classement classer classeur	🗑️ corbeille papiers poubelle	🔒️ cadenas ferme prive verrouiller	🔓️ cadenas ouvert deverrouiller	🔏 cadenas ferme stylo plume confidentiel prive	🔐 cadenas ferme cle	🔑 cle mot passe ouvrir serrure	🗝️ cle ancienne fermer indice	🔨 marteau outil reparer travaux	🪓 hache bois bucheron fendre	⛏️ pioche mine outil	⚒️ marteau pioche burin	🛠️ marteau cle molette	🗡️ dague arme couteau poignard	⚔️ epees croisees arme armes	💣️ bombe bande dessinee boum	🪃 boomerang aborigene australie jeu	🏹 arc fleche archer astrologie	🛡️ bouclier arme	🪚 scie bois outil	🔧 cle molette outil travaux	🪛 tournevis outil outillage vis	🔩 vis ecrou boulon outil travaux	⚙️ roue dentee engrenage outil	🗜️ serre joint compresser comprimer outil	⚖️ balance poids astrologie horoscope	🦯 canne blanche accessibilite aveugle deficient visuel	🔗 chainons chaine maillons mousqueton	⛓️ chaines chaine	🪝 crochet accrocher appater attraper	🧰 boite outils caisse coffre mecanique	🧲 aimant aimanter attirer attraction	🪜 echelle ascension barreau escabeau	⚗️ alambic chimie outil	🧪 tube essai chimie chimiste experience	🧫 boite petri bacterie bacteriologie biologie	🧬 adn biologie biologiste gene	🔬 microscope experience laboratoire outil	🔭 telescope astronomie espace outil	📡 antenne satellite parabolique parabole	💉 seringue aiguille docteur malade	🩸 goutte sang don menstruation menstruations	💊 pilule docteur gelule malade	🩹 sparadrap bandage bobo medecine	🩼 bequille accident aide blesse	🩺 stethoscope cur diagnostic docteur	🩻 radiographie cage thoracique docteur medical	🚪 porte placard dentree	🛗 ascenseur accessibilite descente monte charge	🪞 miroir beaute glace image	🪟 fenetre air frais cadre carreaux	🛏️ lit dormir hotel	🛋️ canape lampe	🪑 chaise assis siege	🚽 toilettes cabinets	🪠 ventouse bouche deboucheur degorgement	🚿 douche eau pommeau	🛁 baignoire bain mousse	🪤 tapette souris appat apat fromage	🪒 rasoir coupant lame raser	🧴 bouteille lotion apres shampoing creme hydratante	🧷 epingle surete couche imperdable lange	🧹 balai balais balayage menage	🧺 panier agriculture cueillette lessive	🧻 rouleau papier essuie tout hygienique toilette	🪣 seau conteneur plage	🧼 savon bain bulles lavage	🫧 bulles bulle propre savon	🪥 brosse dents brosser dentaire	🧽 eponge absorbante absorbe laver	🧯 extincteur chaud feu fire	🛒 chariot caddie courses panier	🚬 cigarette allumee fumer fumeur	⚰️ cercueil enterrement mort obseques	🪦 pierre tombale cimetiere enterrement funerailles	⚱️ urne funeraire cendres mort obseques	🧿 mauvais amulette loeil bleu oeil	🪬 main fatma amulette chance	🗿 moai monolithe statue	🪧 pancarte affiche greve manifestation	🪪 carte didentite justificatif papiers permis conduire
+Symboles	🏧 distributeur billets argent banque dab	🚮 icone poubelle corbeille dechets	🚰 eau potable robinet	♿️ symbole acces handicapes fauteuil roulant	🚹️ symbole toilettes hommes homme	🚺️ symbole toilettes femmes femme	🚻 panneau toilettes	🚼️ symbole bebe espace change	🚾 toilettes	🛂 controle passeports passeport	🛃 douane douanes	🛄 retrait bagages arrivee avion aeroport	🛅 consigne bagages casier cle	⚠️ symbole davertissement attention avertissement	🚸 traversee denfants circulation enfants pietons	⛔️ sens interdit circulation entree interdite interdiction	🚫 symbole dinterdiction entree interdite interdiction interdit	🚳 velos interdits bicyclette interdiction interdit	🚭️ interdiction fumer cigarette barree	🚯 depot dordures interdit dechets interdiction	🚱 eau non potable imbuvable interdiction	🚷 interdit pietons interdiction	📵 telephones portables interdits interdiction interdit portable	🔞 ans plus dix huit interdiction interdit	☢️ radioactif radioactivite symbole	☣️ danger biologique symbole	⬆️ fleche haut direction nord	↗️ fleche haut droite direction nord est	➡️ fleche droite direction est	↘️ fleche bas droite direction sens	⬇️ fleche bas direction sens	↙️ fleche bas gauche direction sens	⬅️ fleche gauche direction ouest	↖️ fleche haut gauche direction nord ouest	↕️ fleche haut bas deux sens	↔️ fleche gauche droite	↩️ fleche courbe gauche	↪️ fleche courbe droite	⤴️ fleche courbe haut vers droite	⤵️ fleche courbe bas	🔃 fleches sens horaire actualiser fleche aiguilles	🔄 fleches sens antihoraire actualiser fleche	🔙 fleche retour vers gauche	🔚 fleche fin vers gauche	🔛 fleche active droite gauche	🔜 fleche bientot	🔝 fleche haut vers	🛐 lieu culte prier religion	⚛️ symbole latome athee atome	🕉️ hindou religion	✡️ etoile david judaisme juif	☸️ roue dharma bouddhisme bouddhiste	☯️ yin yang complementaire religion tao	✝️ croix latine chretien chretienne	☦️ croix orthodoxe chretien chretienne	☪️ lune etoile islam musulman	☮️ symbole paix amour peace and love	🕎 chandelier sept branches candelabre hanoucca	🔯 etoile branches chance judaisme juif	♈️ belier zodiaque astrologie horoscope	♉️ taureau astrologie horoscope zodiaque	♊️ gemeaux astrologie horoscope zodiaque	♋️ cancer astrologie crabe horoscope	♌️ lion astrologie horoscope zodiaque	♍️ vierge astrologie horoscope zodiaque	♎️ balance astrologie horoscope justice	♏️ scorpion zodiaque astrologie horoscope	♐️ sagittaire astrologie horoscope zodiaque	♑️ capricorne astrologie chevre horoscope	♒️ verseau astrologie eau horoscope	♓️ poissons astrologie horoscope zodiaque	⛎️ serpentaire ophiuchus serpent zodiaque	🔀 bouton lecture aleatoire fleche fleches croisees	🔁 bouton repetition repeter fleche fleches cercle	🔂 bouton repetition piste fleche fleches cercle	▶️ bouton lecture droite fleche	⏩️ bouton avance rapide	⏭️ bouton piste suivante suivant double fleche	⏯️ bouton lecture pause fleche	◀️ bouton retour fleche gauche	⏪️ bouton retour rapide double fleche	⏮️ bouton piste precedente precedent fleche	🔼 petit triangle haut bouton fleche	⏫️ double fleche vers haut	🔽 petit triangle bas bouton fleche	⏬️ double fleche vers bas	⏸️ bouton pause	⏹️ bouton stop carre	⏺️ bouton enregistrer cercle enregistrement	⏏️ bouton ejecter	🎦 cinema camera film	🔅 luminosite faible brillance lumiere	🔆 luminosite elevee brillance lumiere	📶 barres reseau communication couverture portable	📳 mode vibreur communication portable telephone	📴 telephone eteint portable eteindre	♀️ symbole femme	♂️ symbole lhomme homme	⚧️ symbole communaute transgenre	✖️ signe multiplier annuler croix noire	➕️ plus addition ajouter	➖️ moins arithmetique mathematiques	➗️ signe diviser algebre division	🟰 signe egal gras mathematiques reponse	♾️ infini illimite universel eternite	‼️ double point dexclamation exclamation	⁉️ points dexclamation dinterrogation	❓️ point dinterrogation rouge interrogation	❔️ point dinterrogation blanc interrogation ponctuation	❕️ point dexclamation blanc exclamation ponctuation	❗️ point dexclamation rouge exclamation	〰️ ligne ondulee ponctuation tiret trait dunion	💱 conversion devise argent banque change	💲 symbole dollar argent devise	⚕️ caducee docteur esculape medecine	♻️ symbole recyclage	⚜️ fleur lys blason lis reine	🔱 trident ancre bateau fourche	📛 badge nominatif nom	🔰 symbole japonais debutant chevron jaune vert	⭕️ cercle rouge anneau	✅️ bouton coche carre blanche	☑️ case cochee bouton carre coche	✔️ coche noire oui	❌️ croix annuler rouge multiplication	❎️ bouton croix multiplier vert	➰️ boucle bouclette	➿️ double boucle	〽️ alternance symbole	✳️ asterisque huit branches asterique	✴️ etoile huit branches asterisque	❇️ eclat briller scintiller	©️ symbole copyright droits dauteur	®️ marque deposee commerciale	™️ marque commerciale deposee	#️⃣ touches	*️⃣ touches	0️⃣ touches zero	1️⃣ touches	2️⃣ touches deux	3️⃣ touches trois	4️⃣ touches quatre	5️⃣ touches cinq	6️⃣ touches six	7️⃣ touches sept	8️⃣ touches huit	9️⃣ touches neuf	🔟 touches	🔠 majuscules abcd alphabet latin lettres	🔡 minuscules abcd alphabet latin lettre	🔢 saisie chiffres 1234	🔣 saisie symboles	🔤 alphabet latin abc lettres	🅰️ groupe sanguin	🆎 groupe sanguin	🅱️ groupe sanguin	🆑 bouton effacer	🆒 bouton cool icone	🆓 bouton gratuit icone	ℹ️ source dinformations guichet informations	🆔 bouton identifiant icone	Ⓜ️ encercle cercle	🆕 bouton nouveau icone	🆖 bouton pas bien interdit	🅾️ groupe sanguin	🆗 bouton icone	🅿️ bouton panneau parking	🆘 bouton sos secours icone	🆙 bouton vers haut icone nouveaute nouveau	🆚 bouton contre icone	🈁 bouton ici japonais ideogramme katakana	🈂️ bouton frais service japonais ideogramme katakana	🈷️ bouton montant mensuel japonais ideogramme	🈶 bouton pas gratuit japonais ideogramme	🈯️ bouton reserve japonais ideogramme	🉐 bouton bonne affaire japonais ideogramme avantage	🈹 bouton reduction japonais ideogramme rabais	🈚️ bouton gratuit japonais ideogramme	🈲 bouton interdit japonais ideogramme	🉑 bouton accepter japonais acceptable ideogramme	🈸 bouton application japonais ideogramme appliquer	🈴 bouton note reussir japonais ideogramme passage	🈳 bouton chambres disponibles japonais ideogramme vide	㊗️ bouton felicitations japonais ideogramme	㊙️ bouton secret japonais ideogramme	🈺 bouton ouvert affaires japonais ideogramme	🈵 bouton complet japonais ideogramme plenitude	🔴 disque rouge cercle forme geometrique geometrie	🟠 disque orange cercle forme geometrique geometrie	🟡 disque jaune cercle forme geometrique geometrie	🟢 disque vert cercle forme geometrique geometrie	🔵 disque bleu cercle forme geometrique	🟣 disque violet cercle forme geometrique geometrie	🟤 disque marron brun cercle	⚫️ disque noir cercle forme geometrique geometrie	⚪️ disque blanc cercle forme geometrique	🟥 carre rouge forme geometrique geometrie	🟧 carre orange forme geometrique geometrie	🟨 carre jaune forme geometrique geometrie	🟩 carre vert forme geometrique geometrie	🟦 carre bleu forme geometrique	🟪 carre violet forme geometrique geometrie	🟫 carre marron brun forme geometrique	⬛️ grand carre noir forme geometrique	⬜️ grand carre blanc forme geometrie	◼️ carre moyen noir forme geometrique	◻️ carre moyen blanc forme geometrique	◾️ carre petit moyen noir forme geometrie	◽️ carre petit moyen blanc forme geometrie	▪️ petit carre noir forme geometrique	▫️ petit carre blanc forme geometrique	🔶 grand losange orange forme geometrique geometrie	🔷 grand losange bleu forme geometrique orange	🔸 petit losange orange forme geometrique geometrie	🔹 petit losange bleu forme geometrique geometrie	🔺 triangle rouge pointant vers haut fleche	🔻 triangle rouge pointant vers bas fleche	💠 diamant point bande dessinee dessin	🔘 bouton radio forme geometrie	🔳 carre blanc bouton forme	🔲 carre noir bouton forme
+Drapeaux	🏁 drapeau damier	🚩 drapeau triangulaire	🎌 drapeaux croises	🏴 drapeau noir	🏳️ drapeau blanc	🏳️‍🌈 drapeau arc ciel	🏳️‍⚧️ drapeau transgenre	🏴‍☠️ drapeau pirate	🇦🇨 drapeau ile lascension	🇦🇩 drapeau andorre	🇦🇪 drapeau emirats arabes	🇦🇫 drapeau afghanistan	🇦🇬 drapeau antigua barbuda	🇦🇮 drapeau anguilla	🇦🇱 drapeau albanie	🇦🇲 drapeau armenie	🇦🇴 drapeau angola	🇦🇶 drapeau antarctique	🇦🇷 drapeau argentine	🇦🇸 drapeau samoa americaines	🇦🇹 drapeau autriche	🇦🇺 drapeau australie	🇦🇼 drapeau aruba	🇦🇽 drapeau iles aland	🇦🇿 drapeau azerbaidjan	🇧🇦 drapeau bosnie herzegovine	🇧🇧 drapeau barbade	🇧🇩 drapeau bangladesh	🇧🇪 drapeau belgique	🇧🇫 drapeau burkina faso	🇧🇬 drapeau bulgarie	🇧🇭 drapeau bahrein	🇧🇮 drapeau burundi	🇧🇯 drapeau benin	🇧🇱 drapeau saint barthelemy	🇧🇲 drapeau bermudes	🇧🇳 drapeau brunei	🇧🇴 drapeau bolivie	🇧🇶 drapeau pays bas	🇧🇷 drapeau bresil	🇧🇸 drapeau bahamas	🇧🇹 drapeau bhoutan	🇧🇻 drapeau ile bouvet	🇧🇼 drapeau botswana	🇧🇾 drapeau bielorussie	🇧🇿 drapeau belize	🇨🇦 drapeau canada	🇨🇨 drapeau iles cocos	🇨🇩 drapeau congo kinshasa	🇨🇫 drapeau republique centrafricaine	🇨🇬 drapeau congo brazzaville	🇨🇭 drapeau suisse	🇨🇮 drapeau cote divoire	🇨🇰 drapeau iles cook	🇨🇱 drapeau chili	🇨🇲 drapeau cameroun	🇨🇳 drapeau chine	🇨🇴 drapeau colombie	🇨🇵 drapeau ile clipperton	🇨🇷 drapeau costa rica	🇨🇺 drapeau cuba	🇨🇻 drapeau cap vert	🇨🇼 drapeau curacao	🇨🇽 drapeau ile christmas	🇨🇾 drapeau chypre	🇨🇿 drapeau tchequie	🇩🇪 drapeau allemagne	🇩🇬 drapeau diego garcia	🇩🇯 drapeau djibouti	🇩🇰 drapeau danemark	🇩🇲 drapeau dominique	🇩🇴 drapeau republique dominicaine	🇩🇿 drapeau algerie	🇪🇦 drapeau ceuta melilla	🇪🇨 drapeau equateur	🇪🇪 drapeau estonie	🇪🇬 drapeau egypte	🇪🇭 drapeau sahara occidental	🇪🇷 drapeau erythree	🇪🇸 drapeau espagne	🇪🇹 drapeau ethiopie	🇪🇺 drapeau union europeenne	🇫🇮 drapeau finlande	🇫🇯 drapeau fidji	🇫🇰 drapeau iles malouines	🇫🇲 drapeau micronesie	🇫🇴 drapeau iles feroe	🇫🇷 drapeau france	🇬🇦 drapeau gabon	🇬🇧 drapeau royaume uni	🇬🇩 drapeau grenade	🇬🇪 drapeau georgie	🇬🇫 drapeau guyane francaise	🇬🇬 drapeau guernesey	🇬🇭 drapeau ghana	🇬🇮 drapeau gibraltar	🇬🇱 drapeau groenland	🇬🇲 drapeau gambie	🇬🇳 drapeau guinee	🇬🇵 drapeau guadeloupe	🇬🇶 drapeau guinee equatoriale	🇬🇷 drapeau grece	🇬🇸 drapeau georgie sud	🇬🇹 drapeau guatemala	🇬🇺 drapeau guam	🇬🇼 drapeau guinee bissau	🇬🇾 drapeau guyana	🇭🇰 drapeau chinoise hong	🇭🇲 drapeau iles heard	🇭🇳 drapeau honduras	🇭🇷 drapeau croatie	🇭🇹 drapeau haiti	🇭🇺 drapeau hongrie	🇮🇨 drapeau iles canaries	🇮🇩 drapeau indonesie	🇮🇪 drapeau irlande	🇮🇱 drapeau israel	🇮🇲 drapeau ile man	🇮🇳 drapeau inde	🇮🇴 drapeau territoire britannique	🇮🇶 drapeau irak	🇮🇷 drapeau iran	🇮🇸 drapeau islande	🇮🇹 drapeau italie	🇯🇪 drapeau jersey	🇯🇲 drapeau jamaique	🇯🇴 drapeau jordanie	🇯🇵 drapeau japon	🇰🇪 drapeau kenya	🇰🇬 drapeau kirghizstan	🇰🇭 drapeau cambodge	🇰🇮 drapeau kiribati	🇰🇲 drapeau comores	🇰🇳 drapeau saint christophe	🇰🇵 drapeau coree nord	🇰🇷 drapeau coree sud	🇰🇼 drapeau koweit	🇰🇾 drapeau iles caimans	🇰🇿 drapeau kazakhstan	🇱🇦 drapeau laos	🇱🇧 drapeau liban	🇱🇨 drapeau sainte lucie	🇱🇮 drapeau liechtenstein	🇱🇰 drapeau sri lanka	🇱🇷 drapeau liberia	🇱🇸 drapeau lesotho	🇱🇹 drapeau lituanie	🇱🇺 drapeau luxembourg	🇱🇻 drapeau lettonie	🇱🇾 drapeau libye	🇲🇦 drapeau maroc	🇲🇨 drapeau monaco	🇲🇩 drapeau moldavie	🇲🇪 drapeau montenegro	🇲🇫 drapeau saint martin	🇲🇬 drapeau madagascar	🇲🇭 drapeau iles marshall	🇲🇰 drapeau macedoine nord	🇲🇱 drapeau mali	🇲🇲 drapeau myanmar birmanie	🇲🇳 drapeau mongolie	🇲🇴 drapeau chinoise macao	🇲🇵 drapeau iles mariannes	🇲🇶 drapeau martinique	🇲🇷 drapeau mauritanie	🇲🇸 drapeau montserrat	🇲🇹 drapeau malte	🇲🇺 drapeau maurice	🇲🇻 drapeau maldives	🇲🇼 drapeau malawi	🇲🇽 drapeau mexique	🇲🇾 drapeau malaisie	🇲🇿 drapeau mozambique	🇳🇦 drapeau namibie	🇳🇨 drapeau nouvelle caledonie	🇳🇪 drapeau niger	🇳🇫 drapeau ile norfolk	🇳🇬 drapeau nigeria	🇳🇮 drapeau nicaragua	🇳🇱 drapeau pays bas	🇳🇴 drapeau norvege	🇳🇵 drapeau nepal	🇳🇷 drapeau nauru	🇳🇺 drapeau niue	🇳🇿 drapeau nouvelle zelande	🇴🇲 drapeau oman	🇵🇦 drapeau panama	🇵🇪 drapeau perou	🇵🇫 drapeau polynesie francaise	🇵🇬 drapeau papouasie nouvelle	🇵🇭 drapeau philippines	🇵🇰 drapeau pakistan	🇵🇱 drapeau pologne	🇵🇲 drapeau saint pierre	🇵🇳 drapeau iles pitcairn	🇵🇷 drapeau porto rico	🇵🇸 drapeau territoires palestiniens	🇵🇹 drapeau portugal	🇵🇼 drapeau palaos	🇵🇾 drapeau paraguay	🇶🇦 drapeau qatar	🇷🇪 drapeau reunion	🇷🇴 drapeau roumanie	🇷🇸 drapeau serbie	🇷🇺 drapeau russie	🇷🇼 drapeau rwanda	🇸🇦 drapeau arabie saoudite	🇸🇧 drapeau iles salomon	🇸🇨 drapeau seychelles	🇸🇩 drapeau soudan	🇸🇪 drapeau suede	🇸🇬 drapeau singapour	🇸🇭 drapeau sainte helene	🇸🇮 drapeau slovenie	🇸🇯 drapeau svalbard jan	🇸🇰 drapeau slovaquie	🇸🇱 drapeau sierra leone	🇸🇲 drapeau saint marin	🇸🇳 drapeau senegal	🇸🇴 drapeau somalie	🇸🇷 drapeau suriname	🇸🇸 drapeau soudan sud	🇸🇹 drapeau sao tome	🇸🇻 drapeau salvador	🇸🇽 drapeau saint martin	🇸🇾 drapeau syrie	🇸🇿 drapeau eswatini	🇹🇦 drapeau tristan cunha	🇹🇨 drapeau iles turques	🇹🇩 drapeau tchad	🇹🇫 drapeau terres australes	🇹🇬 drapeau togo	🇹🇭 drapeau thailande	🇹🇯 drapeau tadjikistan	🇹🇰 drapeau tokelau	🇹🇱 drapeau timor oriental	🇹🇲 drapeau turkmenistan	🇹🇳 drapeau tunisie	🇹🇴 drapeau tonga	🇹🇷 drapeau turquie	🇹🇹 drapeau trinite tobago	🇹🇻 drapeau tuvalu	🇹🇼 drapeau taiwan	🇹🇿 drapeau tanzanie	🇺🇦 drapeau ukraine	🇺🇬 drapeau ouganda	🇺🇲 drapeau iles mineures	🇺🇳 drapeau nations unies	🇺🇸 drapeau etats unis	🇺🇾 drapeau uruguay	🇺🇿 drapeau ouzbekistan	🇻🇦 drapeau etat cite	🇻🇨 drapeau saint vincent	🇻🇪 drapeau venezuela	🇻🇬 drapeau iles vierges	🇻🇮 drapeau iles vierges	🇻🇳 drapeau viet nam	🇻🇺 drapeau vanuatu	🇼🇫 drapeau wallis futuna	🇼🇸 drapeau samoa	🇽🇰 drapeau kosovo	🇾🇪 drapeau yemen	🇾🇹 drapeau mayotte	🇿🇦 drapeau afrique sud	🇿🇲 drapeau zambie	🇿🇼 drapeau zimbabwe	🏴󠁧󠁢󠁥󠁮󠁧󠁿 drapeau angleterre	🏴󠁧󠁢󠁳󠁣󠁴󠁿 drapeau ecosse	🏴󠁧󠁢󠁷󠁬󠁳󠁿 drapeau pays galles`;
+let _EMO = null;
+function emoData() {
+  if (_EMO) return _EMO;
+  _EMO = EMO_RAW.split('\n').map(l => { const p = l.split('\t'); return { n: p[0], items: p.slice(1).map(x => { const i = x.indexOf(' '); return { e: x.slice(0, i), k: x.slice(i + 1) }; }) }; });
+  return _EMO;
+}
+const EMO_TAB = ['😀', '👋', '🐶', '🍕', '✈️', '⚽', '💡', '❤️', '🏁'];
+const firstEmoji = s => { s = String(s || '').trim(); if (!s) return ''; try { const seg = new Intl.Segmenter('fr', { granularity: 'grapheme' }); for (const g of seg.segment(s)) { if (/\p{Extended_Pictographic}|\p{Regional_Indicator}/u.test(g.segment)) return g.segment; } } catch (e) { const m = s.match(/\p{Extended_Pictographic}\uFE0F?/u); if (m) return m[0]; } return ''; };
+const empGrid = (list, cur) => list.map(x => `<button type="button" data-pick="icon" data-val="${esc(x)}" class="${x === cur ? 'on' : ''}">${x}</button>`).join('');
+function emojiPicker(cur, sugg) {
+  const d = emoData();
+  F._sugg = sugg;
+  return `<div class="emp"><div class="emp-top"><span class="emp-cur" id="emp-cur">${esc(cur)}</span><input class="inp" id="emp-q" placeholder="Chercher (pizza, plage, vélo…) ou colle un émoji" autocomplete="off" enterkeyhint="search"></div>
+    <div class="emp-tabs"><button type="button" class="on" data-act="emp-cat" data-i="-1" aria-label="Suggestions">⭐</button>${d.map((g, i) => `<button type="button" data-act="emp-cat" data-i="${i}" aria-label="${esc(g.n)}">${EMO_TAB[i] || '•'}</button>`).join('')}</div>
+    <div class="emojis emp-grid" id="emp-grid">${empGrid(sugg, cur)}</div></div>`;
+}
+ACT['emp-cat'] = d => {
+  const i = parseInt(d.i, 10), g = document.getElementById('emp-grid'); if (!g) return;
+  $$('.emp-tabs button').forEach(b => b.classList.toggle('on', b.dataset.i === String(i)));
+  const q = document.getElementById('emp-q'); if (q) q.value = '';
+  g.innerHTML = empGrid(i < 0 ? (F._sugg || []) : emoData()[i].items.map(x => x.e), F.icon); g.scrollTop = 0;
+};
+function empSearch(v) {
+  const g = document.getElementById('emp-grid'); if (!g) return;
+  const em = firstEmoji(v);
+  if (em && !/[a-zA-Z]/.test(v)) { F.icon = em; const c = document.getElementById('emp-cur'); if (c) c.textContent = em; g.innerHTML = empGrid([em], em); return; }
+  const toks = norm(v).split(/\s+/).filter(Boolean);
+  if (!toks.length) { ACT['emp-cat']({ i: -1 }); return; }
+  $$('.emp-tabs button').forEach(b => b.classList.remove('on'));
+  const res = []; emoData().forEach(gr => gr.items.forEach(x => { if (res.length < 160 && toks.every(t => x.k.includes(t))) res.push(x.e); }));
+  g.innerHTML = res.length ? empGrid(res, F.icon) : '<p class="mut sm" style="grid-column:1/-1;padding:10px 4px">Aucun émoji trouvé. Tu peux aussi en coller un dans la case.</p>';
+}
 
 /* ---------- 8. Accueil ---------- */
 const miniRows = d => PIDS.map(p => `<span class="mini">${SLOTS.map(s => { const pl = placeById(slotPlace(p, d, s.k)); return `<i${pl ? ` style="--pc:${esc(pl.color)}"` : ''}></i>`; }).join('')}</span>`).join('');
@@ -1398,7 +1500,8 @@ function mealDay() {
   const d = A.meal.date;
   const card = (k) => {
     const m = mealOf(d, k), has = m && m.name, rec = has && ((m.recipeId && D.recipes[m.recipeId]) || null), wh = has && MEAL_WHERE.find(x => x.id === m.where);
-    return `<div class="card"><h3>${ico('meal', 18)}${mkLbl(k)}</h3>${has ? `<div class="big" style="font-size:25px">${esc(m.name)}</div>
+    const pho = has && typeof phImg === 'function' && (m.photo || (rec && rec.photo)) ? phImg(phThumbOf(m.photo || rec.photo), 'mealpic') : '';
+    return `<div class="card"><h3>${ico('meal', 18)}${mkLbl(k)}</h3>${pho}${has ? `<div class="big" style="font-size:25px">${esc(m.name)}</div>
       <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:8px"><span class="pill">${avs(whoList(m.who || 'both'))}${esc(whoName(m.who || 'both'))}</span>${wh ? `<span class="pill">${esc(wh.l)}</span>` : ''}${rec && rec.time ? `<span class="pill">${ico('clock', 13)}${rec.time} min</span>` : ''}</div>
       ${m.note ? `<p class="mut" style="margin-top:10px">${esc(m.note)}</p>` : ''}
       ${rec && rec.ingredients && rec.ingredients.length ? `<p class="mut sm" style="margin-top:10px">${rec.ingredients.slice(0, 8).map(i => esc(ingText(i))).join(' · ')}${rec.ingredients.length > 8 ? '…' : ''}</p>` : ''}
@@ -1436,6 +1539,7 @@ function openMeal(d, k, pre) {
   pre = pre || {}; const ex = mealOf(d, k);
   resetF({ d, k, who: ex ? ex.who || 'both' : 'both', where: ex ? ex.where || 'home' : 'home', recipeId: ex ? ex.recipeId || '' : '', copyK: k });
   let name = ex ? ex.name : '';
+  if (typeof phInit === 'function') phInit(ex ? ex.photo : '');
   if (pre.suggest) { const r = suggestRecipe(); if (r) { name = r.name; F.recipeId = r.id; F._idea = r.id; } else toast('Ajoute d’abord quelques plats dans l’onglet Plats', 'err'); }
   const recs = recList().slice(0, 14);
   openSheet(() => `<div class="st">${mkLbl(k)} · ${esc(dayLong(d))}</div>
@@ -1445,6 +1549,7 @@ function openMeal(d, k, pre) {
     ${lbl('Qui mange')}${segH('who', [{ id: 'both', l: 'Nous deux' }, { id: A.me, l: 'Moi' }, { id: otherP(A.me), l: NAMES[otherP(A.me)] }], F.who)}
     ${lbl('Où')}${chipsH('where', MEAL_WHERE, F.where).replace('class="chips"', 'class="chips scroll"')}
     ${lbl('Note')}<input class="inp" id="ml-note" maxlength="100" placeholder="Facultatif" value="${esc(ex ? ex.note || '' : '')}">
+    ${typeof phField === 'function' ? phField() : ''}
     ${ex ? `${lbl('Dupliquer ce repas')}<div class="row" style="align-items:center"><input class="inp" type="date" id="ml-copy-d" value="${addDays(d, 1)}"><div style="flex:none">${segH('copyK', [{ id: 'lunch', l: 'Midi' }, { id: 'dinner', l: 'Soir' }], F.copyK)}</div></div><button type="button" class="btn btn-s btn-b" style="margin-top:8px" data-act="ml-copy">${ico('copy', 18)}Copier</button>` : ''}
     <div class="btns ${ex ? 'two' : ''}">${ex ? `<button class="btn btn-d" data-act="ml-del">Retirer</button>` : ''}<button class="btn btn-p" data-act="ml-save">Enregistrer</button></div>`);
 }
@@ -1465,6 +1570,9 @@ ACT['ml-save'] = async () => {
   const name = val('ml-name').trim(); if (!name) return toast('Choisis ou écris un plat', 'err');
   let rid = F.recipeId; if (!(rid && D.recipes[rid] && norm(D.recipes[rid].name) === norm(name))) { const f = Object.entries(D.recipes).find(([, r]) => norm(r.name) === norm(name)); rid = f ? f[0] : ''; }
   const { d, k } = F, obj = { name, recipeId: rid, who: F.who, where: F.where, note: val('ml-note').trim() };
+  if (typeof phCommit === 'function' && PH.ok) {
+    try { toast(F.phBlob ? 'Envoi de la photo…' : 'Enregistrement…'); obj.photo = await phCommit('meals/' + d + '_' + k, 'meals/' + d + '/' + k); } catch (e) { console.error(e); return toast(phErr(e), 'err', 4500); }
+  }
   closeSheet(); await saveMeal(d, k, obj);
 };
 ACT['ml-del'] = async () => { const { d, k } = F, prev = mealOf(d, k) ? clean(mealOf(d, k)) : null; closeSheet(); const ok = await act(() => patch('meals', d, { [k]: null }), 'Repas retiré'); if (ok && prev) offerUndo(() => patch('meals', d, { date: d, [k]: prev }), 'Repas retiré'); };
@@ -1494,13 +1602,14 @@ function mealRecipes() {
   const catChips = `<div class="chips scroll" style="margin-top:6px">${[{ id: '', l: 'Tous' }].concat(REC_CATS).map(c => `<button class="chip${cat === c.id ? ' on' : ''}" data-act="rec-cat" data-v="${c.id}">${c.l}</button>`).join('')}</div>`;
   return `<div class="page wide">${hdr('Repas', '', { extra: mealSeg() })}<div class="content">${catChips}
     <div class="card"><h3>${ico('heart', 18)}Mes plats<span class="sp"></span><button class="lk" data-act="rec-new">Ajouter</button></h3>
-      ${list.length ? list.map(r => { const n = (r.ingredients || []).length, cl = (REC_CATS.find(c => c.id === r.cat) || {}).l || 'Autre'; return `<div class="rrow"><button class="main" data-act="rec-edit" data-id="${esc(r.id)}"><span class="ic" style="--pc:var(--sage)">${REC_EMO[r.cat] || '🍽️'}</span><span class="grow"><div class="t" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</div><div class="s sm mut">${esc(cl)}${r.time ? ' · ' + r.time + ' min' : ''}${n ? ` · ${n} ingrédient${n > 1 ? 's' : ''}` : ''}</div></span></button><button class="hb${r.fav ? ' on' : ''}" data-act="rec-fav" data-id="${esc(r.id)}" aria-label="Favori">${ico('heart', 22)}</button></div>`; }).join('')
+      ${list.length ? list.map(r => { const n = (r.ingredients || []).length, cl = (REC_CATS.find(c => c.id === r.cat) || {}).l || 'Autre'; return `<div class="rrow"><button class="main" data-act="rec-edit" data-id="${esc(r.id)}"><span class="ic" style="--pc:var(--sage)">${r.photo && typeof phImg === 'function' ? phImg(phThumbOf(r.photo), 'cover') : (REC_EMO[r.cat] || '🍽️')}</span><span class="grow"><div class="t" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</div><div class="s sm mut">${esc(cl)}${r.time ? ' · ' + r.time + ' min' : ''}${n ? ` · ${n} ingrédient${n > 1 ? 's' : ''}` : ''}</div></span></button><button class="hb${r.fav ? ' on' : ''}" data-act="rec-fav" data-id="${esc(r.id)}" aria-label="Favori">${ico('heart', 22)}</button></div>`; }).join('')
         : emptyH('meal', cat ? 'Aucun plat dans cette catégorie' : 'Votre bibliothèque est vide', 'Ajoutez les plats que vous cuisinez souvent, avec leurs ingrédients. Les courses se génèrent toutes seules.', `<br><button class="btn btn-p" data-act="rec-new">${ico('plus', 20)}Ajouter un plat</button>`)}</div>
     <div class="card tint"><h3>Régimes et allergies<span class="sp"></span><button class="lk" data-act="diet-edit">${hasDiet ? 'Modifier' : 'Ajouter'}</button></h3>${hasDiet ? PIDS.filter(p => diet[p]).map(p => `<div class="row" style="margin-top:6px">${av(p, 24)}<span>${esc(diet[p])}</span></div>`).join('') : '<p class="mut sm">Facultatif. Note ce que vous évitez pour y penser en choisissant un plat.</p>'}</div></div></div>`;
 }
 function openRecipe(id) {
   const r = id ? D.recipes[id] : null;
   resetF({ id: id || '', cat: r ? r.cat || 'autre' : 'pates', fav: r ? !!r.fav : false });
+  if (typeof phInit === 'function') phInit(r ? r.photo : '');
   openSheet(() => `<div class="st">${r ? 'Modifier le plat' : 'Nouveau plat'}</div>
     ${lbl('Nom')}<input class="inp" id="rc-name" maxlength="60" value="${esc(r ? r.name : '')}" placeholder="Ex. Gratin dauphinois" autocomplete="off">
     ${lbl('Catégorie')}${chipsH('cat', REC_CATS, F.cat)}
@@ -1508,6 +1617,7 @@ function openRecipe(id) {
     ${lbl('Ingrédients')}<textarea class="inp" id="rc-ing" style="min-height:130px" placeholder="Un par ligne&#10;200 g pâtes&#10;2 oignons&#10;1 pot crème">${esc(r && r.ingredients ? r.ingredients.map(ingText).join('\n') : '')}</textarea>
     <p class="mut sm" style="margin-top:6px">Quantité, unité puis nom. Les courses se rangent par rayon automatiquement.</p>
     ${lbl('Note')}<input class="inp" id="rc-note" maxlength="120" placeholder="Facultatif" value="${esc(r ? r.note || '' : '')}">
+    ${typeof phField === 'function' ? phField() : ''}
     <div style="margin-top:8px">${swH('fav', 'Plat favori', F.fav)}</div>
     <div class="btns ${r ? 'two' : ''}">${r ? `<button class="btn btn-d" data-act="rec-del">Supprimer</button>` : ''}<button class="btn btn-p" data-act="rec-save">Enregistrer</button></div>`, { focus: r ? '' : 'rc-name' });
 }
@@ -1518,6 +1628,9 @@ ACT['rec-save'] = async () => {
   const name = val('rc-name').trim(); if (!name) return toast('Donne un nom au plat', 'err');
   const ings = val('rc-ing').split('\n').map(parseIng).filter(Boolean), t = num(val('rc-time')), fid = F.id, id = fid || uid();
   const o = { name, cat: F.cat, time: isFinite(t) ? Math.round(t) : 0, ingredients: ings, note: val('rc-note').trim(), fav: !!F.fav, ts: Date.now() };
+  if (typeof phCommit === 'function' && PH.ok) {
+    try { toast(F.phBlob ? 'Envoi de la photo…' : 'Enregistrement…'); o.photo = await phCommit('recipes/' + id, 'recipes/' + id); } catch (e) { console.error(e); return toast(phErr(e), 'err', 4500); }
+  }
   closeSheet(); await act(() => put('recipes', id, o), fid ? 'Plat modifié' : 'Plat ajouté');
 };
 ACT['rec-del'] = async () => { const id = F.id; closeSheet(); await act(() => del('recipes', id), 'Plat supprimé'); };
@@ -2035,6 +2148,7 @@ const tplChips = () => { const l = tplList(); return l.length ? `${lbl('Ou appli
 
 /* --- Tâches du foyer --- */
 const CH_EVERY = [{ id: '1', l: 'Chaque jour' }, { id: '3', l: 'Tous les 3 jours' }, { id: '7', l: 'Chaque semaine' }, { id: '14', l: '2 semaines' }, { id: '30', l: 'Chaque mois' }];
+const CH_ICONS = ['✨', '🗑️', '🧹', '🧺', '🚿', '🍽️', '🪴', '🛒', '🐾', '🪟', '🛏️', '🔧', '🧽', '🚗'];
 const CH_SUGG = [['🗑️', 'Sortir les poubelles', 3], ['🧹', 'Passer l’aspirateur', 7], ['🧺', 'Faire la lessive', 7], ['🚿', 'Nettoyer la salle de bain', 14], ['🍽️', 'Vider le lave-vaisselle', 2], ['🛏️', 'Changer les draps', 14]];
 const chWho = c => c.who === 'rotate' ? (c.turn || PIDS[0]) : (c.who || PIDS[0]);
 const chDue = c => (c.last && c.last.date) ? addDays(c.last.date, c.every || 7) : (c.start || today());
@@ -2064,14 +2178,16 @@ ACT['chores-open'] = () => {
 ACT['chore-edit'] = d => {
   const c = d.id ? D.chores[d.id] : null;
   resetF({ id: d.id || '', every: String(c ? c.every : 7), who: c ? c.who : 'rotate', icon: c ? c.icon || '✨' : '✨' });
+  F._onpick = (k, v) => { if (k === 'icon') { const n = document.getElementById('emp-cur'); if (n) n.textContent = v; } };
   openSheet(() => `<div class="st">${c ? 'Modifier la tâche' : 'Nouvelle tâche'}</div>
     ${!c ? `<div class="chips scroll" style="margin-top:10px">${CH_SUGG.map(s => `<button type="button" class="chip" data-act="chore-sugg" data-t="${esc(s[1])}" data-i="${esc(s[0])}" data-e="${s[2]}">${s[0]} ${esc(s[1])}</button>`).join('')}</div>` : ''}
     ${lbl('Tâche')}<input class="inp" id="ch-title" maxlength="50" placeholder="Ex. Sortir les poubelles" value="${esc(c ? c.title : '')}" autocomplete="off">
+    ${lbl('Icône')}${emojiPicker(F.icon, CH_ICONS)}
     ${lbl('Fréquence')}${chipsH('every', CH_EVERY, F.every).replace('class="chips"', 'class="chips scroll"')}
     ${lbl('Qui ?')}${segH('who', [{ id: 'rotate', l: 'Tour à tour' }, { id: A.me, l: 'Moi' }, { id: otherP(A.me), l: NAMES[otherP(A.me)] }], F.who)}
     <div class="btns ${c ? 'two' : ''}">${c ? `<button class="btn btn-d" data-act="chore-del" data-id="${esc(d.id)}">Supprimer</button>` : ''}<button class="btn btn-p" data-act="chore-save">Enregistrer</button></div>`, { focus: c ? '' : 'ch-title' });
 };
-ACT['chore-sugg'] = d => { const n = document.getElementById('ch-title'); if (n) n.value = d.t; F.icon = d.i; F.every = d.e; $$('[data-pick="every"]').forEach(x => x.classList.toggle('on', x.dataset.val === String(d.e))); };
+ACT['chore-sugg'] = d => { const n = document.getElementById('ch-title'); if (n) n.value = d.t; F.icon = d.i; { const n = document.getElementById('emp-cur'); if (n) n.textContent = d.i; } F.every = d.e; $$('[data-pick="every"]').forEach(x => x.classList.toggle('on', x.dataset.val === String(d.e))); };
 ACT['chore-save'] = async () => {
   const title = val('ch-title').trim(); if (!title) return toast('Donne un nom à la tâche', 'err');
   const old = F.id ? D.chores[F.id] : null, id = F.id || uid();
@@ -2256,6 +2372,237 @@ document.addEventListener('keydown', e => {
   const typing = e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
   if (((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') || (e.key === '/' && !typing && !SH)) { if (!A.ready || !A.me) return; e.preventDefault(); ACT['search-open'](); }
 });
+/* ---------- Photos (repas, plats) + Album partagé ----------
+   Stockage : Supabase Storage, bucket privé « media » (voir supabase/media.sql). Actif seulement dans la version autonome (PH.ok). */
+const PH = { ok: false, sb: null, bucket: 'media', max: 50 * 1048576, quota: 1024 * 1048576 };
+const PHC = {};                                   // chemin -> { url, exp }
+const phKey = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const phThumbOf = p => p.replace(/\.[a-z0-9]+$/i, '') + '_t.jpg';
+const PH_BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+function phErr(e) {
+  const m = String((e && (e.message || e.error)) || e || '');
+  if (/bucket not found|not found/i.test(m)) return 'Le stockage photos n’est pas encore activé : lance le fichier media.sql dans Supabase.';
+  if (/row-level|policy|unauthor|403|not allowed/i.test(m)) return 'Envoi refusé : vérifie media.sql et que ton adresse est dans « members ».';
+  if (/exceed|too large|413|payload|size/i.test(m)) return 'Fichier trop lourd (50 Mo maximum).';
+  if (/quota|storage limit|insufficient/i.test(m)) return 'Le stockage gratuit est plein (1 Go).';
+  return 'Envoi impossible. Réessaie avec du réseau.';
+}
+async function phUpload(path, blob, type) {
+  const { error } = await PH.sb.storage.from(PH.bucket).upload(path, blob, { upsert: true, contentType: type || blob.type || 'application/octet-stream', cacheControl: '31536000' });
+  if (error) throw error;
+}
+async function phRemove(paths) {
+  paths = (paths || []).filter(Boolean); if (!paths.length || !PH.ok) return;
+  try { await PH.sb.storage.from(PH.bucket).remove(paths); } catch (e) { console.error(e); }
+  paths.forEach(p => { delete PHC[p]; });
+}
+async function phUrls(paths) {
+  if (!PH.ok) return paths.map(() => '');
+  const need = [...new Set(paths)].filter(p => p && !(PHC[p] && PHC[p].exp > Date.now()));
+  if (need.length) {
+    try {
+      const { data, error } = await PH.sb.storage.from(PH.bucket).createSignedUrls(need, 21600);
+      if (!error && data) data.forEach(r => { if (r && r.signedUrl) PHC[r.path] = { url: r.signedUrl, exp: Date.now() + 5 * 3600000 }; });
+    } catch (e) { console.error(e); }
+  }
+  return paths.map(p => (PHC[p] && PHC[p].url) || '');
+}
+const phImg = (path, cls) => {
+  if (!path) return '';
+  const c = PHC[path] && PHC[path].exp > Date.now() ? PHC[path].url : '';
+  return `<img class="phi ${cls || ''}" data-ph="${esc(path)}" src="${c ? esc(c) : PH_BLANK}" alt="" loading="lazy" draggable="false">`;
+};
+let phTimer = 0, phBusy = false;
+function phHydrate() {
+  if (phBusy || !PH.ok) return;
+  const imgs = [...document.querySelectorAll('img[data-ph]:not([data-bad])')].filter(i => !/^https?:/.test(i.getAttribute('src') || ''));
+  if (!imgs.length) return;
+  phBusy = true;
+  phUrls(imgs.map(i => i.dataset.ph)).then(us => { imgs.forEach((i, k) => { if (us[k]) i.src = us[k]; else i.dataset.bad = '1'; }); })
+    .finally(() => { phBusy = false; });
+}
+new MutationObserver(() => { clearTimeout(phTimer); phTimer = setTimeout(phHydrate, 40); }).observe(document.documentElement, { childList: true, subtree: true });
+const phBlobOf = (file, max, q) => compressImg(file, max, q);
+
+/* --- Photo d'un repas / d'un plat (champ dans la feuille) --- */
+const phBox = () => {
+  const has = F.phPrev || F.photo;
+  const pic = F.phPrev ? `<img class="phi" src="${esc(F.phPrev)}" alt="">` : phImg(F.photo ? phThumbOf(F.photo) : '', '');
+  return has
+    ? `<div class="phprev">${pic}</div><div class="row" style="gap:8px;margin-top:8px"><button type="button" class="btn btn-s btn-sm" data-act="ph-pick">${ico('camera', 18)}Changer</button><button type="button" class="btn btn-g btn-sm" data-act="ph-clear">Retirer</button></div>`
+    : `<button type="button" class="phadd" data-act="ph-pick">${ico('camera', 22)}<span>Ajouter une photo</span></button>`;
+};
+const phField = photo => {
+  if (!PH.ok) return '';
+  return `${lbl('Photo')}<input type="file" id="ph-file" accept="image/*" hidden><div id="ph-box">${phBox()}</div>`;
+};
+function phInit(photo) { F.photo = photo || ''; F.phOld = photo || ''; F.phBlob = null; F.phThumb = null; F.phPrev = ''; }
+function phRefresh() { const b = document.getElementById('ph-box'); if (b) { b.innerHTML = phBox(); phHydrate(); } }
+ACT['ph-pick'] = () => { const f = document.getElementById('ph-file'); if (f) f.click(); };
+ACT['ph-clear'] = () => { if (F.phPrev) { try { URL.revokeObjectURL(F.phPrev); } catch (e) { /* */ } } F.photo = ''; F.phBlob = null; F.phThumb = null; F.phPrev = ''; phRefresh(); };
+document.addEventListener('change', async e => {
+  const t = e.target; if (!t || t.id !== 'ph-file' || !t.files[0]) return;
+  const box = document.getElementById('ph-box'); if (box) box.innerHTML = '<p class="mut sm">Préparation de la photo…</p>';
+  try {
+    const f = t.files[0]; F.phBlob = await phBlobOf(f, 1600, .8); F.phThumb = await phBlobOf(f, 420, .7);
+    if (F.phPrev) { try { URL.revokeObjectURL(F.phPrev); } catch (x) { /* */ } }
+    F.phPrev = URL.createObjectURL(F.phThumb);
+  } catch (er) { F.phBlob = null; F.phThumb = null; F.phPrev = ''; toast('Photo illisible', 'err'); }
+  t.value = ''; phRefresh();
+});
+/* utilisée par un autre repas / plat ? (pour ne pas supprimer un fichier encore référencé) */
+function phRefs(p, skip) {
+  let n = 0;
+  Object.entries(D.meals || {}).forEach(([d, m]) => ['lunch', 'dinner'].forEach(k => { if (m && m[k] && m[k].photo === p && 'meals/' + d + '/' + k !== skip) n++; }));
+  Object.entries(D.recipes || {}).forEach(([id, r]) => { if (r && r.photo === p && 'recipes/' + id !== skip) n++; });
+  return n;
+}
+/* envoie la photo choisie et renvoie le chemin à enregistrer ('' si aucune). skip = identifiant de l'objet édité */
+async function phCommit(prefix, skip) {
+  if (!PH.ok) return F.photo || '';
+  if (F.phBlob) {
+    const p = prefix + '_' + phKey() + '.jpg';
+    await phUpload(p, F.phBlob, 'image/jpeg'); await phUpload(phThumbOf(p), F.phThumb, 'image/jpeg');
+    if (F.phOld && !phRefs(F.phOld, skip)) phRemove([F.phOld, phThumbOf(F.phOld)]);
+    return p;
+  }
+  if (!F.photo && F.phOld) { if (!phRefs(F.phOld, skip)) phRemove([F.phOld, phThumbOf(F.phOld)]); return ''; }
+  return F.photo || '';
+}
+
+/* ======================= ALBUM ======================= */
+const AL = { up: null, cur: -1, list: [] };
+const albList = () => Object.entries(D.album || {}).map(([id, x]) => Object.assign({ id }, x)).filter(x => x.path).sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.ts || 0) - (a.ts || 0));
+const albUsed = () => Object.values(D.album || {}).reduce((s, x) => s + ((x && x.size) || 0), 0);
+const phMo = n => n < 1048576 ? Math.max(1, Math.round(n / 1024)) + ' Ko' : n >= 1048576 * 100 ? Math.round(n / 1048576) + ' Mo' : (n / 1048576).toFixed(1).replace('.', ',') + ' Mo';
+const ymdOf = ms => { const d = new Date(ms || Date.now()), p = n => String(n).padStart(2, '0'); return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); };
+
+function vAlbum() {
+  const items = albList(); AL.list = items;
+  const used = albUsed(), pct = Math.min(100, Math.round(used / PH.quota * 100));
+  const up = AL.up ? `<div class="card"><div class="row" style="align-items:center;gap:10px"><div class="grow"><b>Envoi en cours… ${AL.up.i}/${AL.up.n}</b><div class="sm mut" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(AL.up.name)}</div></div></div><div class="pg" style="margin-top:10px"><i style="width:${Math.round((AL.up.i - 1) / AL.up.n * 100)}%"></i></div></div>` : '';
+  const groups = []; items.forEach((x, i) => { const key = (x.date || '').slice(0, 7) || 'x'; let g = groups[groups.length - 1]; if (!g || g.key !== key) { g = { key, items: [] }; groups.push(g); } g.items.push([x, i]); });
+  const lab = k => { if (k === 'x') return 'Sans date'; const t = fmtD(k + '-01', { month: 'long', year: 'numeric' }); return t.charAt(0).toUpperCase() + t.slice(1); };
+  const tile = ([x, i]) => `<button class="alt" data-act="alb-open" data-i="${i}" aria-label="${x.kind === 'video' ? 'Vidéo' : 'Photo'}${x.cap ? ' : ' + esc(x.cap) : ''}">${x.thumb ? phImg(x.thumb, 'cover') : `<span class="alph">${ico('film', 30)}</span>`}${x.kind === 'video' ? `<span class="albdg">${ico('play', 14, 2)}</span>` : ''}</button>`;
+  const body = items.length
+    ? groups.map(g => `<div class="albm"><h3 class="albh">${esc(lab(g.key))}<span class="mut sm">${g.items.length}</span></h3><div class="albg">${g.items.map(tile).join('')}</div></div>`).join('')
+    : emptyH('photo', 'Votre album est vide', 'Ajoutez les photos et vidéos de vos moments à deux. Vous les voyez tous les deux.', `<button class="btn btn-p" style="margin-top:14px" data-act="alb-add">${ico('plus', 18, 2.2)}Ajouter des photos</button>`);
+  return `<div class="page wide">${hdr('Album', items.length ? items.length + ' souvenir' + (items.length > 1 ? 's' : '') : 'Vos souvenirs à deux', {})}<div class="content">${up}${body}
+    <div class="card tint albq"><div class="row sm" style="justify-content:space-between"><span>Stockage gratuit</span><b>${phMo(used)} / 1 Go</b></div><div class="pg" style="margin-top:8px"><i style="width:${pct}%${pct > 85 ? ';background:var(--warn)' : ''}"></i></div><p class="mut sm" style="margin-top:8px">Vidéos : 50 Mo maximum chacune. Les photos sont réduites automatiquement (environ 300 Ko), il y a de la place pour des milliers.</p></div></div></div>`;
+}
+ACT['alb-add'] = () => albPick();
+function albPick() {
+  if (!PH.ok) return;
+  if (AL.up) return toast('Un envoi est déjà en cours');
+  const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*,video/*'; i.multiple = true; i.hidden = true; document.body.appendChild(i);
+  i.addEventListener('change', () => { const fs = [...i.files]; setTimeout(() => i.remove(), 500); albUpload(fs); });
+  i.click();
+}
+function videoThumb(file) {
+  return new Promise(res => {
+    const u = URL.createObjectURL(file), v = document.createElement('video'); let done = false;
+    const fin = b => { if (done) return; done = true; try { URL.revokeObjectURL(u); } catch (e) { /* */ } res(b); };
+    v.muted = true; v.playsInline = true; v.preload = 'metadata'; v.src = u;
+    v.addEventListener('error', () => fin(null));
+    v.addEventListener('loadedmetadata', () => { try { v.currentTime = Math.min(0.5, (v.duration || 1) / 4); } catch (e) { fin(null); } });
+    v.addEventListener('seeked', () => {
+      try { const k = Math.min(1, 420 / Math.max(v.videoWidth, v.videoHeight, 1)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(v.videoWidth * k)); c.height = Math.max(1, Math.round(v.videoHeight * k)); c.getContext('2d').drawImage(v, 0, 0, c.width, c.height); c.toBlob(b => fin(b), 'image/jpeg', .7); } catch (e) { fin(null); }
+    });
+    setTimeout(() => fin(null), 7000);
+  });
+}
+async function albUpload(files) {
+  if (!files.length) return;
+  let used = albUsed(), ok = 0; const bad = [];
+  AL.up = { n: files.length, i: 0, name: '' }; schedule();
+  for (const f of files) {
+    AL.up.i++; AL.up.name = f.name; schedule();
+    const isV = /^video\//.test(f.type) || /\.(mp4|mov|m4v|webm|3gp)$/i.test(f.name);
+    try {
+      if (isV && f.size > PH.max) { bad.push(f.name + ' : plus de 50 Mo'); continue; }
+      if (used + (isV ? f.size : 400000) > PH.quota) { bad.push(f.name + ' : stockage plein'); continue; }
+      const id = phKey() + Math.random().toString(36).slice(2, 5), base = 'album/' + id;
+      let doc;
+      if (isV) {
+        const ext = ((f.name.match(/\.([a-z0-9]+)$/i) || [])[1] || 'mp4').toLowerCase(), path = base + '.' + ext, tb = await videoThumb(f);
+        await phUpload(path, f, f.type || (ext === 'mov' ? 'video/quicktime' : 'video/mp4'));
+        if (tb) await phUpload(phThumbOf(path), tb, 'image/jpeg');
+        doc = { kind: 'video', path, thumb: tb ? phThumbOf(path) : '', size: f.size + (tb ? tb.size : 0), vt: f.type || '' };
+      } else {
+        const full = await phBlobOf(f, 2000, .8), th = await phBlobOf(f, 420, .7), path = base + '.jpg';
+        await phUpload(path, full, 'image/jpeg'); await phUpload(phThumbOf(path), th, 'image/jpeg');
+        doc = { kind: 'photo', path, thumb: phThumbOf(path), size: full.size + th.size };
+      }
+      doc.date = ymdOf(f.lastModified); doc.by = A.me; doc.ts = Date.now(); doc.cap = '';
+      await put('album', id, doc); used += doc.size; ok++;
+    } catch (e) {
+      console.error(e); bad.push(f.name + ' : ' + (/createImageBitmap|image/i.test(String(e && e.message)) ? 'format non lu' : phErr(e)));
+      if (/pas encore activé|refusé/.test(phErr(e))) break;
+    }
+  }
+  AL.up = null; schedule();
+  if (ok) toast(ok + (ok > 1 ? ' éléments ajoutés' : ' élément ajouté') + ' à l’album');
+  if (bad.length) toast(bad[0] + (bad.length > 1 ? ' (+' + (bad.length - 1) + ')' : ''), 'err', 5000);
+}
+
+/* --- visionneuse plein écran --- */
+function albEl() {
+  let v = document.getElementById('albv');
+  if (!v) { v = document.createElement('div'); v.id = 'albv'; v.setAttribute('role', 'dialog'); v.setAttribute('aria-modal', 'true'); document.body.appendChild(v); }
+  return v;
+}
+async function albShow(i) {
+  const items = AL.list; if (!items.length) return albClose();
+  i = (i + items.length) % items.length; AL.cur = i; const x = items[i], v = albEl(); v.classList.add('on'); document.body.classList.add('albopen');
+  const who = x.by && NAMES[x.by] ? NAMES[x.by] : '';
+  v.innerHTML = `<div class="albtop"><button class="ib flat" data-act="alb-close" aria-label="Fermer">${ico('x', 24)}</button><span class="albcnt">${i + 1} / ${items.length}</span><span class="sp"></span><button class="ib flat" data-act="alb-dl" aria-label="Enregistrer">${ico('download', 22)}</button><button class="ib flat" data-act="alb-del" aria-label="Supprimer">${ico('trash', 22)}</button></div>
+    <div class="albmed" id="albmed"><div class="albspin"></div></div>
+    ${items.length > 1 ? `<button class="albnav l" data-act="alb-prev" aria-label="Précédent">${ico('chevL', 28)}</button><button class="albnav r" data-act="alb-next" aria-label="Suivant">${ico('chevR', 28)}</button>` : ''}
+    <div class="albcap"><input id="albv-cap" class="inp" maxlength="120" placeholder="Ajouter une légende" value="${esc(x.cap || '')}" data-id="${esc(x.id)}" autocomplete="off"><div class="sm">${who ? esc(who) + ' · ' : ''}${esc(x.date ? fmtD(x.date, { day: 'numeric', month: 'long', year: 'numeric' }) : '')}${x.size ? ' · ' + phMo(x.size) : ''}</div></div>`;
+  const [u, tu] = await phUrls([x.path, x.thumb || '']);
+  if (AL.cur !== i || !document.getElementById('albmed')) return;
+  const m = document.getElementById('albmed');
+  if (!u) { m.innerHTML = '<p class="albmsg">Impossible de charger ce média.</p>'; return; }
+  m.innerHTML = x.kind === 'video' ? `<video src="${esc(u)}" ${tu ? `poster="${esc(tu)}"` : ''} controls playsinline preload="metadata"></video>` : `<img src="${esc(u)}" alt="${esc(x.cap || '')}">`;
+  [items[(i + 1) % items.length], items[(i - 1 + items.length) % items.length]].forEach(n => { if (n && n.kind !== 'video') phUrls([n.path]).then(r => { if (r[0]) new Image().src = r[0]; }); });
+}
+function albClose() { const v = document.getElementById('albv'); if (v) { v.querySelectorAll('video').forEach(x => x.pause()); v.classList.remove('on'); v.innerHTML = ''; } document.body.classList.remove('albopen'); AL.cur = -1; }
+ACT['alb-open'] = d => albShow(+d.i);
+ACT['alb-close'] = () => albClose();
+ACT['alb-prev'] = () => albShow(AL.cur - 1);
+ACT['alb-next'] = () => albShow(AL.cur + 1);
+ACT['alb-del'] = () => {
+  const x = AL.list[AL.cur]; if (!x) return;
+  confirmSheet({ title: x.kind === 'video' ? 'Supprimer cette vidéo ?' : 'Supprimer cette photo ?', text: 'Elle disparaît de l’album pour vous deux. C’est définitif.', ok: 'Supprimer', danger: true, onOk: async () => {
+    const ok = await act(async () => { await phRemove([x.path, x.thumb]); await del('album', x.id, true); }, 'Supprimé');
+    if (ok) { const n = albList(); AL.list = n; if (!n.length) albClose(); else albShow(Math.min(AL.cur, n.length - 1)); }
+  } });
+};
+ACT['alb-dl'] = async () => {
+  const x = AL.list[AL.cur]; if (!x) return;
+  try {
+    const [u] = await phUrls([x.path]); if (!u) throw new Error('url');
+    toast('Préparation…');
+    const r = await fetch(u), b = await r.blob(), ext = (x.path.match(/\.([a-z0-9]+)$/i) || [])[1] || 'jpg', name = 'chez-nous-' + (x.date || 'souvenir') + '.' + ext, file = new File([b], name, { type: b.type || (x.kind === 'video' ? 'video/mp4' : 'image/jpeg') });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file] }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  } catch (e) { console.error(e); toast('Téléchargement impossible', 'err'); }
+};
+document.addEventListener('change', e => {
+  const t = e.target; if (!t || t.id !== 'albv-cap') return;
+  const id = t.dataset.id; if (!id) return; const cap = t.value.trim();
+  act(() => patch('album', id, { cap }), 'Légende enregistrée');
+});
+document.addEventListener('keydown', e => {
+  if (AL.cur < 0 || document.getElementById('sheetRoot').classList.contains('open')) return;
+  if (e.target && e.target.id === 'albv-cap') { if (e.key === 'Enter') e.target.blur(); return; }
+  if (e.key === 'Escape') albClose(); else if (e.key === 'ArrowLeft') albShow(AL.cur - 1); else if (e.key === 'ArrowRight') albShow(AL.cur + 1);
+});
+(function () {
+  let sx = 0, sy = 0, on = false;
+  document.addEventListener('touchstart', e => { const m = e.target.closest && e.target.closest('#albmed'); on = !!m && e.touches.length === 1 && !e.target.closest('video'); if (on) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; } }, { passive: true });
+  document.addEventListener('touchend', e => { if (!on) return; on = false; const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) albShow(AL.cur + (dx < 0 ? 1 : -1)); else if (dy > 110 && Math.abs(dy) > Math.abs(dx) * 1.5) albClose(); }, { passive: true });
+})();
 
 /* ---------- Supabase : adaptateur qui imite l'interface « db » utilisée par l'appli ----------
    Table unique `docs` (path, col, id, data jsonb). Temps réel via postgres_changes.        */
@@ -2363,6 +2710,7 @@ async function startApp(session) {
   caps.downloads = { async save({ filename, data }) { const u = URL.createObjectURL(new Blob([data], { type: 'text/csv;charset=utf-8' })); const a = document.createElement('a'); a.href = u; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); } };
   RC.upload = async (id, blob) => { const { error } = await SB.storage.from('receipts').upload(id + '.jpg', blob, { upsert: true, contentType: 'image/jpeg' }); if (error) throw error; };
   RC.url = async id => { const { data, error } = await SB.storage.from('receipts').createSignedUrl(id + '.jpg', 600); return error ? null : data.signedUrl; };
+  PH.sb = SB; PH.ok = true;
   loadLocal();
   try { await Promise.race([subscribeAll(), sleep(8000)]); } catch (e) { console.error(e); }
   if (!A.me) { const p = D.priv.profile; if (p && (p.me === 'maxym' || p.me === 'sasha')) { A.me = p.me; lsSet('cn-me', A.me); } }
@@ -2406,7 +2754,7 @@ ACT['push-pref'] = async d => { PUSH.prefs[d.k] = !PUSH.prefs[d.k]; schedule(); 
 
 (async function bootPwa() {
   A.hide = lsGet('cn-hide') === '1';
-  const tb = lsGet('cn-tab'); if (['home', 'plan', 'meal', 'bud'].includes(tb)) A.tab = tb;
+  const tb = lsGet('cn-tab'); if (['home', 'plan', 'meal', 'album', 'bud'].includes(tb)) A.tab = tb;
   const me = lsGet('cn-me'); A.me = me === 'maxym' || me === 'sasha' ? me : null;
   renderSkel();
   if (!window.supabase || !CFG.url || /VOTRE|xxxx/i.test(CFG.url)) { authView('login', 'Configuration manquante : renseigne config.js (voir le guide).'); return; }
