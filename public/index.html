@@ -2198,6 +2198,7 @@ function makeDB(sb) {
   const subs = new Set();      // { match(rec) -> bool, reload() }
   let ch = null, wasUp = false;
   const reloadAll = () => subs.forEach(s => s.reload());
+  const local = (t, rec) => subs.forEach(s => s.apply(t, rec));   // affichage immédiat, sans attendre le temps réel
   function hub() {
     if (ch) return;
     ch = sb.channel('docs-all').on('postgres_changes', { event: '*', schema: 'public', table: 'docs' }, pl => {
@@ -2214,13 +2215,13 @@ function makeDB(sb) {
     doc(path) {
       const { col, id } = split(path);
       return {
-        async set(data) { const { error } = await sb.from('docs').upsert({ path, col, id, data }); if (error) throw fail(error); },
+        async set(data) { const { error } = await sb.from('docs').upsert({ path, col, id, data }); if (error) throw fail(error); local('INSERT', { path, col, id, data }); },
         async update(data) {
           const { data: row, error } = await sb.from('docs').select('data').eq('path', path).maybeSingle(); if (error) throw fail(error);
           if (!row) { const x = new Error('absent'); x.code = 'invalid_argument'; throw x; }
-          const { error: e2 } = await sb.from('docs').upsert({ path, col, id, data: dm(row.data || {}, data) }); if (e2) throw fail(e2);
+          const nd = dm(row.data || {}, data); const { error: e2 } = await sb.from('docs').upsert({ path, col, id, data: nd }); if (e2) throw fail(e2); local('UPDATE', { path, col, id, data: nd });
         },
-        async delete() { const { error } = await sb.from('docs').delete().eq('path', path); if (error) throw fail(error); },
+        async delete() { const { error } = await sb.from('docs').delete().eq('path', path); if (error) throw fail(error); local('DELETE', { path, col, id }); },
         onSnapshot(cb, errCb) {
           let cur = null;
           const emit = () => cb({ exists: cur != null, metadata: { fromCache: false }, data: () => cur });
