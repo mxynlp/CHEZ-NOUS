@@ -33,6 +33,7 @@ const num = v => { const n = parseFloat(String(v == null ? '' : v).replace(/\s/g
 const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
 const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
 const clean = o => JSON.parse(JSON.stringify(o));
+const clone = clean;
 const isObj = o => o && typeof o === 'object' && !Array.isArray(o);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 try { document.documentElement.dataset.bg = localStorage.getItem('cn-bg') || 'menthe'; } catch (e) { document.documentElement.dataset.bg = 'menthe'; }
